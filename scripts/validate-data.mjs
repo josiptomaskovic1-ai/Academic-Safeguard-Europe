@@ -153,7 +153,7 @@ function checkResults(file, safeguards, { label }) {
       if (r.confidence != null && !CONFIDENCE.has(r.confidence)) err(file, `${where}: invalid confidence`);
     }
     if (r.confidence === 'low') warn(file, `${where}: low-confidence finding`);
-    if (result === '0' && r.verification === 'verified' && !str(r.second_reviewer)) warn(file, `${where}: verified "0" without second_reviewer recorded`);
+    if (r.verification === 'verified' && !str(r.second_reviewer)) err(file, `${where}: verified finding must record second_reviewer`);
     if (r.verification === 'disputed' && !(Array.isArray(r.dispute_ids) && r.dispute_ids.length)) err(file, `${where}: disputed result must list dispute_ids`);
   }
   return counts;
@@ -206,6 +206,10 @@ for (const file of ymlFiles(path.join(ROOT, 'data/institutions'))) {
   else if (!METHOD_VERSIONS.has(String(i.methodology_version))) err(file, `unknown methodology version "${i.methodology_version}"`);
   if (!validDate(i.last_reviewed)) err(file, 'last_reviewed must be YYYY-MM-DD');
   if (!['none', 'open', 'resolved'].includes(i.correction_status)) err(file, 'invalid correction_status');
+  for (const r of i.replies ?? []) {
+    if (!validDate(r.received) || !str(r.submitted_by) || !str(r.text)) err(file, 'reply needs received (YYYY-MM-DD), submitted_by and text');
+    else if (r.text.trim().split(/\s+/).length > 300) err(file, 'statement of reply exceeds 300 words');
+  }
   checkResults(file, i.safeguards, { label });
 }
 for (const [iso, c] of countries) {

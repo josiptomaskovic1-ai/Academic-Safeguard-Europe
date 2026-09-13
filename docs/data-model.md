@@ -55,6 +55,7 @@ S02:
     What was not found or remains uncertain.
   reviewed: "2026-09-13"
   dispute_ids: []                 # correction IDs, required when verification is disputed
+  second_reviewer: null           # contributor ID of the verifier, required when verification is verified
 ```
 
 Rules the validator enforces:
@@ -82,6 +83,8 @@ Rules the validator enforces:
 | `safeguards` | yes, all 12 | Safeguard results, as above. |
 | `correction_status` | yes | `none`, `open`, `resolved` |
 | `research_method` | no | |
+| `evidence_gaps` | no | List of text. |
+| `replies` | no | Statements of reply: `{ received, submitted_by, text }`, max 300 words. |
 
 ## Source record — `data/sources/<scope>.yml`
 

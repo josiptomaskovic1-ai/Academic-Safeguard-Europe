@@ -45,7 +45,7 @@ const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`
       <p><strong>What this profile shows.</strong> Results describe the institution's published university-wide rules, reviewed against the <a href={url('/standard/')}>Standard</a>. Faculty-level rules may add protections. A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists.</p>
     </div>
     {cov.provisional > 0 && <div class="notice provisional"><p><strong>{cov.provisional} of {cov.researched} findings are provisional.</strong> They have not yet been independently verified by a second reviewer and may change.</p></div>}
-    {i.research_method && <p class="small muted"><strong>Research method:</strong> {i.research_method}</p>}
+    {i.research_method && <p class="small muted"><strong>Research method:</strong> {i.research_method}{i.research_dossier && <> <a href={repoFile(i.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
 
     {i.evidence_note && <section aria-labelledby="summary"><h2 id="summary">Summary of published safeguards</h2><p class="prose">{i.evidence_note}</p></section>}
 
@@ -61,6 +61,13 @@ const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`
       <h2 id="src">Sources</h2>
       <ul class="source-list prose">{sourceIds.map((id) => <li><SourceCitation id={id} full /></li>)}</ul>
     </section>
+
+    {i.replies?.length ? (
+      <section aria-labelledby="replies">
+        <h2 id="replies">Statement of reply</h2>
+        {i.replies.map((r) => <blockquote class="prose"><p>{r.text}</p><footer class="small muted">{r.submitted_by}, received {r.received}. Published unedited under the <a href={url('/corrections/')}>right of reply</a>.</footer></blockquote>)}
+      </section>
+    ) : null}
 
     <div style="margin-top:3rem"><CorrectionBanner target={i.id} name={i.canonical_name} /></div>
   </div>

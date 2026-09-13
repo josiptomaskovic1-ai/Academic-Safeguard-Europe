@@ -1,0 +1,541 @@
+verifier: agent-verifier-hr
+verification_date: "2026-09-13"
+method_note: >-
+  Every source cited in both dossiers was re-downloaded independently with curl on 2026-09-13 and read in full text,
+  without relying on the researchers' summaries. HTML legislation came from narodne-novine.nn.hr (Act on Higher
+  Education and Scientific Activity NN 119/22, Student Council Act NN 71/07, Whistleblower Act NN 46/22) and from
+  zakon.hr (consolidations of the Student Council Act, Anti-Discrimination Act, Gender Equality Act and General
+  Administrative Procedure Act; the NN 136/2025 whistleblower amendment). It was converted to text, and every cited
+  article was extracted and read verbatim. Text-layer PDFs were extracted with pdftotext: the AZVO re-accreditation
+  standards, the UNIZG Statute 2023, the Code of Ethics (2009 print), the Ethics Council appeal guidelines, the Study
+  Regulations 2024 and the Doctoral Regulations 2024. Scanned PDFs were rendered to images with PyMuPDF and read
+  visually: all of the 2018 Code amendment decision (2 pages), and pages 1 and 22-24 of the Gender Equality Plan
+  (the rest of the Plan was rendered but not read). Currency was checked against the zakon.hr status lines (database
+  updated to NN 95/26 on 2026-09-07; no amendments shown for the Higher Education Act, Student Council Act,
+  Anti-Discrimination Act, Gender Equality Act or Administrative Procedure Act), the UNIZG regulations, statute and
+  rulebook index pages (fetched the same day), and web searches for a newer Student Council Act, a newer UNIZG Code of
+  Ethics, the National Council's minimum ethical principles and newer AZVO standards (none found). One source not
+  opened by the national researcher, the National University, Scientific and Artistic Criteria (NN 42/2026), was also
+  opened and searched for S12. Limits: the People's Ombudsperson Act, the Labour Act, the Quality Assurance Act
+  (NN 151/22), UNIZG staff employment and disciplinary rulebooks, the Student Council Statute and faculty-level acts
+  were not reviewed. Case law on whether grades or complaint outcomes are administrative acts was not reviewed. Only
+  pages 1 and 22-24 of the Gender Equality Plan were read.
+dossiers:
+  - file: research/pending/hr-national.yml
+    findings:
+      - safeguard: S01
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZVOZD Art. 3(3) (relations based on mutual trust and respect for the dignity of every person), Art. 55(1)-(4)
+          and ZSD Arts. 3 and 8(2) were verified verbatim. ZRS Art. 8 was also verified: harassment and sexual harassment
+          constitute discrimination. Note that Art. 55(1) frames the ethics committee's remit as the conduct of "teachers,
+          scientists, associates and other employees", i.e. staff conduct, which is consistent with the finding. The
+          ZSD definition of harassment (Art. 3(1)) is tied to the discrimination grounds in Art. 1(1); it is not a
+          general prohibition of abuse by teachers. Borderline: the rubric's own level-2 examples ("discriminatory
+          assessment, harassment by teachers") are literally prohibited by horizontal anti-discrimination law as applied
+          to education (ZSD Art. 8(2)). A reviewer could therefore argue for "2". The researcher's use of the
+          lower-level rule is legitimate because the rubric does not say whether horizontal equality legislation counts
+          for S01. See overall_concerns on cross-jurisdiction consistency.
+        wording_fixes: >-
+          In evidence_summary, "define harassment and sexual harassment as discrimination" should read "define
+          harassment (linked to the protected grounds) and sexual harassment and treat them as discrimination" (ZSD
+          Art. 3(3); ZRS Art. 8(1)). In rationale, add that ZSD harassment is ground-based, which is the substantive
+          reason it does not amount to a prohibition of misuse of academic authority as such.
+      - safeguard: S02
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZSD Art. 7 (victimisation protection for those who reported in good faith, witnessed, refused an instruction or
+          participated in proceedings) and Art. 8(2) (education and science) were verified verbatim. ZZPN Art. 6 points
+          3, 5 and 9 and Art. 9 were verified. The "work-related context" is defined as professional activities and
+          lists employees, the self-employed, volunteers and paid or unpaid trainees; retaliation in Art. 9 is framed
+          around the employer. The NN 136/2025 amendment was read in full: it adds scope items (Art. 4), protection for
+          reports to police or the State Attorney, court deadlines and euro fines, and does not touch Art. 6 or Art. 9.
+          This matches the source note. Level 1 ("general whistleblower or anti-victimisation protection ... application
+          to students unclear or indirect") fits.
+        wording_fixes: null
+      - safeguard: S03
+        proposed_score: "2"
+        verdict: confirmed
+        recommended_score: "2"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZSZSO Art. 17 was verified verbatim in both the zakon.hr consolidation and the official NN 71/2007 text. The
+          student ombudsperson is appointed by the student council for one year, renewable once, from among students;
+          receives student complaints about their rights and discusses them with the institution's competent bodies;
+          advises; and may take part in disciplinary proceedings against students. ZVOZD Art. 77(1) point 8 (complaint
+          about violations of rights) and Art. 55(1) were verified, as were ZSD Art. 12 and ZRS Art. 19. The rubric names
+          a student ombudsperson as a level-2 example. Level 3 is clearly not met: there are no independence guarantees,
+          no investigative or decision powers, the mandate covers "rights" rather than staff-student conduct, and the
+          office holder is a student. AZVO Standard 1.4 also lists the student ombudsperson and a "defined and functional
+          system of competence for resolving conflicts and irregularities at all levels" as evaluation elements, which
+          corroborates but does not raise the score. The researcher's gap about the ombudsperson possibly sitting at a
+          faculty is well taken.
+        wording_fixes: null
+      - safeguard: S04
+        proposed_score: "?"
+        verdict: adjust
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZVOZD Art. 5(3) and ZUP Art. 24(1)-(6) were verified verbatim. The summary is accurate: mandatory exclusion
+          where the official is a party, witness, expert, representative or close relative (24(1)); mandatory exclusion
+          from second instance of anyone who took part at first instance (24(2)); discretionary exclusion for close
+          personal or business relations, discriminatory treatment or other doubts about impartiality (24(3)); a duty to
+          report grounds (24(4)); and a decision by the head of body, or by the second-instance or supervisory body for
+          the head, including on a party's request (24(5)). The uncertainty the researcher identifies is real, but it
+          concerns only whether the level is higher than 1, not whether any score can be assigned. Under ZVOZD Art. 5(3),
+          a statutory recusal regime indisputably applies to procedures deciding on students' rights and obligations. What
+          is not established is its application to complaint, assessment and appeal decisions. That is exactly the
+          rubric's level-1 description ("general conflict-of-interest duty without application to complaint, assessment
+          or appeal decisions"). Level 0 is not plausible. Under the general rule to assign the lower of the plausible
+          levels, "1" should be recorded with the uncertainty explained, rather than "?", which discards an established
+          floor. Keep confidence low.
+        wording_fixes: >-
+          In rationale, replace the final sentence with: "At minimum, a general statutory recusal regime applies to
+          decisions on students' rights (level 1). Whether it extends to complaints about staff conduct, ethics
+          proceedings or grade reviews, which would support level 2 or 3, is not established by the national texts, so
+          the lower level is assigned."
+      - safeguard: S05
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZSD Art. 19(1)-(2) was verified: the court may order interim measures on a party's proposal; the applicant must
+          make a violation of equal treatment probable and show that the measure is needed to avert irreparable harm or
+          prevent violence. ZUP Art. 100(3) was verified (temporary decision). Neither is academic-specific, and nothing in
+          ZVOZD provides interim measures. Level 0 is not literally met because a provision exists, and level 2 requires
+          specific academic measures, so "1" is right. Note that ZSD interim measures do have criteria; the "general
+          terms" characterisation rests on their non-academic, court-only nature.
+        wording_fixes: null
+      - safeguard: S06
+        proposed_score: "?"
+        verdict: adjust
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZUP Art. 101(1)-(3) was verified: 30 days for a direct decision, 60 days where an examination procedure is
+          conducted, and a right to appeal or bring an administrative dispute if the deadline is missed. ZSD Art. 16(3) was
+          verified: courts and other bodies conducting proceedings must act urgently. The ZSD urgency duty applies to
+          discrimination and harassment proceedings regardless of whether ZUP reaches staff-conduct complaints. That alone
+          meets level 1 ("only a general duty to act without delay or promptly"). The unresolved ZUP question affects only
+          whether level 2 or 3 is reached. Because a floor of "1" is established by a cited, verified provision, the
+          lower-level rule points to "1" with the uncertainty explained, not "?". Keep confidence low.
+        wording_fixes: >-
+          In rationale, state: "A general duty of urgency exists for discrimination proceedings (ZSD Art. 16(3)), which
+          meets level 1. Binding ZUP deadlines with an escalation route would support a higher level if staff-conduct
+          complaints are administrative matters, which is not established."
+      - safeguard: S07
+        proposed_score: "?"
+        verdict: confirmed
+        recommended_score: "?"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZUP Arts. 96, 97(1) and 98(1), (5) and (6) were verified verbatim: written form, a statement of reasons with
+          established facts and reasons for assessing evidence, and an instruction on legal remedies stating the body,
+          deadline and manner. ZVOZD Art. 55(3) was verified: the ethics committee decision is delivered to the head of
+          institution, not to the complainant. Unlike S04 and S06, no national provision establishes a floor for the
+          complainant. If ZUP does not apply, the complainant receives nothing (0); if it applies, level 3 would be met.
+          Recording "0" would be a misleading absence claim given ZUP, so "?" is a responsible result here.
+        wording_fixes: null
+      - safeguard: S08
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          The following were verified verbatim: ZSD Art. 12(2) (People's Ombudsperson receives and examines reports and
+          conducts mediation); ZSD Art. 17 (claims for a declaration, prohibition or removal of discrimination, damages
+          and publication); ZRS Art. 19(2); ZUP Art. 105 (appeal to the second-instance body, including where no decision
+          was issued in time) and Art. 122(4); and the AZVO Standard 3.2 element "there is a formally defined appeal
+          procedure of which students are informed in time and which is consistently applied". The ombudsperson routes
+          examine discrimination reports; they are not a review of an institutional complaint outcome. "2" is arguable
+          only for discrimination, so the lower level is defensible. The general mandate of the People's Ombudsperson
+          over public higher education institutions was not verified by either reviewer; if confirmed, it could support
+          "2" and should be researched before publication.
+        wording_fixes: null
+      - safeguard: S09
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZVOZD Arts. 55(3) and 56(1)-(5) were verified verbatim: liability for breach of work duties and damage to
+          reputation; a disciplinary committee; a rulebook fixing composition, offences, sanctions and procedure; possible
+          termination of the employment contract; and legality of offences and sanctions. There is no national scale, no
+          proportionality criteria and no link to misconduct towards students. The researcher's reasoning that this is
+          more than bare employment law but short of level 2 is sound. The rubric has no intermediate level, and "1" is
+          the better fit.
+        wording_fixes: null
+      - safeguard: S10
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZVOZD Art. 71(6) was verified: the institution regulates by general act the rules on exams, "prigovoru na
+          ocjenu", the procedure for repeating an exam and the right to inspect results. ZSD Art. 17(1) point 2 was
+          verified (removal of discrimination or its consequences). The mentor-change right mentioned in the gaps
+          (ZVOZD, staff collaborators: "na vlastiti zahtjev jednom promijeniti mentora") was located and is indeed
+          staff-only. Correctly not relied on.
+        wording_fixes: null
+      - safeguard: S11
+        proposed_score: "0"
+        verdict: confirmed
+        recommended_score: "0"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          This absence claim was checked adversarially. ZVOZD contains no training provision on boundaries or harassment
+          (full-text search for training terms). AZVO Standard 3.2 was verified: assessors are supported in assessment
+          methods. AZVO Standard 4.3 on teacher professional development concerns teaching and digital competences. ZRS
+          Art. 14(1)-(2) was verified: equal access to professional development for education workers, and gender-equality
+          content in curricula and lifelong learning. The closest item is AZVO Standard 1.4. Its list of sources for
+          verification includes "a report on the results of implementing measures and applying education and tools to
+          prevent unethical behaviour, intolerance and discrimination", and the standard expects institutions to
+          "effectively implement measures to prevent" such conduct. This implies that prevention education is an expected
+          institutional measure. However, it appears only as an example source (the standards state that sources are
+          examples only), it does not target staff with authority over students, and it does not mention boundaries,
+          harassment or retaliation. Between 0 and 1, the lower level applies. The 0 is confirmed as the second-review
+          verification the rubric requires, provided the wording is corrected so that it does not claim the absence of
+          any recommendation.
+        wording_fixes: >-
+          In evidence_summary, replace "No national requirement or recommendation ... was identified" with "No national
+          requirement, and no express recommendation directed at staff with authority over students, ... was identified".
+          Also state that the AZVO Standard 1.4 evidence list refers to "education (edukacije) ... to prevent unethical
+          behaviour, intolerance and discrimination" as an example source, and that this was considered and judged
+          insufficient for level 1.
+      - safeguard: S12
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          ZVOZD Arts. 39(1), 40(6), 42(1)-(5), 43(5) and 62(6) were verified verbatim. The verifier also opened the
+          National University, Scientific and Artistic Criteria (NN 42/2026, narodne-novine.nn.hr/clanci/sluzbeni/2026_04_42_506.html),
+          which the researcher had not. Art. 4(9) makes positive results of the institution's teaching-quality
+          evaluation or student surveys a mandatory criterion for promotion and re-election. No criterion concerning
+          ethical record, upheld complaints or conduct was found (full-text search for ethics, disciplinary and conduct
+          terms). Student-survey results measure teaching quality rather than professional conduct as defined for level 2,
+          so "1" stands. The finding should add this provision so the gap about NN 42/2026 is closed.
+        wording_fixes: >-
+          Add the National University, Scientific and Artistic Criteria (NN 42/2026) as a source and cite Art. 4(9) in the evidence_summary: "Promotion and re-election also
+          require positive teaching-quality evaluation or student survey results; no criterion concerns ethical record or
+          upheld complaints." Remove the corresponding gap.
+    source_issues:
+      - source_id: hr-zszso-2007
+        issue: >-
+          publication_date is null. The official gazette text (NN 71/2007) was opened by the verifier and its Art. 17
+          matches the zakon.hr consolidation. Recommend citing the official URL as the primary source.
+      - source_id: hr-azvo-reaccreditation-standards-2023
+        issue: >-
+          Verified: KLASA 602-04/23-02/169, dated 14 September 2023, adopted 6 July 2023. No newer version was found by
+          search. The evidence lists in the standards are expressly "only examples", which should be stated wherever the
+          evidence lists are relied on (S11) or quoted (S03, S08).
+      - source_id: hr-zzpn-2022
+        issue: >-
+          The note on NN 136/2025 was verified accurate against the amendment text. Consider adding NN 136/2025 to
+          official_reference.
+      - source_id: hr-zvozd-2022
+        issue: >-
+          No issue with the text. zakon.hr shows NN 119/22 only. The National Council's minimum ethical principles
+          (Art. 55(4)) could not be located by the verifier either.
+  - file: research/pending/hr-unizg.yml
+    findings:
+      - safeguard: S01
+        proposed_score: "2"
+        verdict: confirmed
+        recommended_score: "2"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          The following Code of Ethics provisions were verified verbatim. Art. 7(2): "ne smiju zlouporabiti svoj
+          autoritet". Art. 12(1): all harassment between community members is prohibited, which covers harassment by
+          teachers. Art. 12(3): demanding sexual favours in exchange for an act or omission "s pozicije autoriteta".
+          Art. 12(4): hierarchical relations involving assessment or decisions on status and advancement. Art. 14(g),
+          (h) and (k): the text of (k) refers to conditions bringing the teacher "osobnu ekonomsku i drugu korist".
+          Art. 27(2)(a): misuse of a position of authority to create privileged positions. Art. 2(3) and (5) were also
+          verified. Statute Art. 10(2) and (5) and Art. 108 were verified. Art. 1(2) confirms that the Code applies to
+          students "na odgovarajući način", and Art. 3 defines "members of the university community" to include students,
+          so students are protected parties. Level 2 is met (specific abuses prohibited, including harassment by teachers
+          and unfair assessment). Level 3 fails for the reasons given (no enumerated coverage of supervision and
+          progression, and no binding link to discipline). The currency caveat is significant; see overall_concerns.
+        wording_fixes: null
+      - safeguard: S02
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          Code Art. 12(5) was verified verbatim, and the quotation is exact. Borderline. The provision is express and
+          applies directly to students ("svaka osoba"), which does not really match level 1's description ("application
+          to students unclear or indirect"). But it covers only people who rejected or reported harassment, not
+          complainants or witnesses generally, and it prohibits "pressure" rather than retaliation as such. Level 2 speaks
+          of an express prohibition covering student complainants or witnesses. Given the narrow scope, it is reasonable
+          to treat both levels as plausible and apply the lower-level rule. Gender Equality Plan p. 23 was verified: it
+          cites Art. 12(5) in a paragraph about employees' dignity, as the researcher said.
+        wording_fixes: >-
+          In rationale, make the reason for the lower level explicit: "the protection is express and applies to students,
+          but only to those who reject or report harassment; it does not reach complainants about other misuse of
+          authority or witnesses, so the core of level 2 (protection of student complainants and witnesses) is only
+          partly met." Avoid implying that application to students is unclear.
+      - safeguard: S03
+        proposed_score: "2"
+        verdict: confirmed
+        recommended_score: "2"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          The following Code articles were verified. Arts. 29(3), 30 (faculty committee appointed by the dean with the
+          council's consent; two student members added for student-related questions), 31, 32, 33(2) (request by the
+          dean or rector), 33(3) (initiative concerning a dean or rector goes to the faculty council or Senate), 33(4)
+          (30-day escalation to the Ethics Council) and 10(5). Statute Art. 65(3) point 23 was verified ("pritužbu i
+          druge pravne lijekove"). The Student Ombudsperson web page was verified: public call; principles of
+          independence, equality and confidentiality; receives complaints and discusses them with competent bodies; does
+          not represent students before state bodies. Two points are missing from the dossier, and neither changes the
+          score. (a) The 2018 amendment (item II) changed Art. 34(6). The committee no longer decides "exclusively" on the
+          submitted material and "is obliged to verify the allegations in the request to establish the relevant facts".
+          This gives it a fact-finding duty, which is relevant to "powers". (b) The web page says the faculty-level
+          student ombudspersons are primarily competent. The university ombudsperson acts only where the matter cannot be
+          resolved at faculty level or no faculty ombudsperson has been appointed, so access to the body outside the unit
+          is subsidiary. Also note that under Art. 33(4) the Ethics Council may start proceedings "kod nadležnog etičkog
+          povjerenstva", i.e. before the faculty committee, not before itself. Level 2 stands because bodies or officers
+          outside the faculty exist (Ethics Council as gatekeeper and appeal body, university ad hoc committees, the
+          university Student Ombudsperson). Level 3 fails on documented independence and direct student access.
+        wording_fixes: >-
+          In evidence_summary, change "the Ethics Council, which may start proceedings itself (Art. 33(4))" to "the
+          Ethics Council, which may itself initiate proceedings before the competent (faculty) ethics committee
+          (Art. 33(4))". Add that, since the 2018 amendment, the committee must verify the allegations to establish the
+          relevant facts (Art. 34(6) as amended). Add that the university Student Ombudsperson acts only where a matter
+          cannot be resolved by the faculty ombudsperson (web page).
+      - safeguard: S04
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          Code Art. 22 (conflicts caused by family ties, close friendship, intimate relationships, antagonisms; nepotism)
+          and Art. 12(4) were verified. Doctoral Regulations Art. 2(1)(9) was verified: "Mentor ne može biti član ovih
+          povjerenstava". It also requires at least one of three (two of five) committee members from outside the study
+          provider. Study Regulations Art. 44 was verified: re-examination or re-marking by an exam committee whose
+          appointment and composition are set by faculty general act. No recusal rule for ethics bodies was found anywhere
+          in the Code, as amended, or in the Guidelines. The mentor exclusion and the external-member rule are structural
+          safeguards for doctoral assessment. One could argue they amount to recusal "for assessment" (level 2), but they
+          are fixed incompatibility rules limited to doctoral theses, with no conflict-based recusal and no request
+          procedure. Treating 1 and 2 as both plausible and choosing 1 is defensible. The Study Regulations also bar
+          the thesis mentor from the committee assessing a proposal to revoke an academic title; that is not
+          student-protective recusal.
+        wording_fixes: >-
+          Mention in evidence_summary that Doctoral Regulations Art. 2(1)(9) also requires external committee members,
+          and in rationale that level 2 was considered because of the doctoral assessment exclusion but not assigned
+          because the rule is limited to one assessment type and is not conflict-based.
+      - safeguard: S05
+        proposed_score: "0"
+        verdict: confirmed
+        recommended_score: "0"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          This absence claim was checked adversarially. The full Code, the 2018 amendment and the Guidelines contain no
+          interim measures. Study Regulations Art. 49 was verified: during the course teacher's "spriječenost"
+          (inability), the dean temporarily assigns the exam to another teacher or a committee. Nothing links this to
+          complaints. Doctoral Regulations Art. 11(2) (change of mentor on written request with the mentor's statement)
+          was verified. Statute Art. 65(3) point 12 (choice of teacher where several exist) was also checked; it is
+          unrelated to complaints. The rubric's level 1 requires that interim measures be "mentioned", and none are. The
+          0 is confirmed as the second-review verification, limited to university-wide instruments (faculty acts not
+          reviewed). This limitation should stay prominent.
+        wording_fixes: null
+      - safeguard: S06
+        proposed_score: "2"
+        verdict: confirmed
+        recommended_score: "2"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          The following were verified verbatim. Code Art. 34(1): convene within 30 days. Art. 35(3): written opinion
+          within 60 days, at most 90 if clarifications were sought; the deadlines do not run during holidays or inactive
+          periods. Art. 35(7): the chair must notify within that deadline if no opinion can or will be given; the Council
+          decides under Art. 29(3). Art. 33(4). Amendment Decision item III: Art. 35(8), 15-day appeal deadline.
+          Guidelines 4.4 (documentation within 30 days) and 4.8 (appeal procedure to end within 90 days of receipt of
+          documentation, including at most 60 days for the reporting committee). Level 3 would need a consequence or
+          escalation when the opinion deadline itself is missed, and none exists. Assigning "2" is correct.
+        wording_fixes: null
+      - safeguard: S07
+        proposed_score: "2"
+        verdict: confirmed
+        recommended_score: "2"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          The following were verified. Code Art. 35(1): the opinion is delivered to the requester, with a copy to the
+          Ethics Council. Art. 35(3): written. Art. 35(4) points a-e: description, provisions considered, position,
+          reasons, unanimity. Art. 33(2): the requester is the dean or rector. Art. 39(2): opinions are public and may be
+          shortened or anonymised. There is no requirement to state the appeal route in the opinion (the 2018 amendment
+          adds an appeal right but no instruction requirement). This matches level 2's second limb exactly (written, but
+          the complainant is not entitled to receive it).
+        wording_fixes: null
+      - safeguard: S08
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          The scanned Amendment Decision was read visually. Item III, Art. 35(8): the "podnositelj zahtjeva" and the
+          member whose ethics was assessed may appeal within 15 days of receiving the opinion, and the Ethics Council
+          decides. Art. 35(9): dismissal if late or filed by an unauthorised person, rejection, or upholding with
+          amendment or remittal. Art. 35(10). Item IV: Art. 36 point K (decides appeals) and a new point L. Guidelines
+          4.1-4.9 were verified and mirror these provisions. Because the formal requester is the dean or rector
+          (Art. 33(2)), a student initiator's standing is doubtful. The floor is 1: Statute Art. 65(3) point 23 refers to
+          "pritužbu i druge pravne lijekove", and Code Art. 10(4) acknowledges external bodies, i.e. general external
+          remedies are recognised. Assigning the lower of 1 and 2 with low confidence is appropriate.
+        wording_fixes: >-
+          Consider adding Statute Art. 65(3) point 23 to the locator as the basis for "general external or legal
+          remedies" at level 1.
+      - safeguard: S09
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          Statute Art. 110(1)-(2) was verified: disciplinary liability for breach of work obligations and damaging the
+          reputation, only for a prescribed offence. The Statute lists no offences or sanctions. Code Arts. 2(3)-(5) and
+          35(5) were verified. The university rulebook index (fetched 2026-09-13) lists no staff disciplinary rulebook at
+          university level; the only disciplinary rulebook listed concerns misuse of student ID cards. ZVOZD Art. 56(3)
+          nevertheless requires each institution to adopt one, so an unpublished or faculty-level rulebook probably
+          exists. This is a research gap that could change the score and should be pursued before publication.
+        wording_fixes: null
+      - safeguard: S10
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          The following were verified. Study Regulations Art. 43(4): objection to continuous assessment under faculty
+          act. Art. 44(1)-(3): grade objection; repeat of an oral exam before an exam committee; re-marking of a written
+          exam by an exam committee. Statute Art. 82(12)-(13). Doctoral Regulations Art. 11(2). None is linked to a
+          misconduct finding. Level 1 is exact.
+        wording_fixes: null
+      - safeguard: S11
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          Doctoral Regulations Art. 8(4) was verified: before a first mentorship, a mentoring workshop organised by
+          faculties, the University or recognised international schools is mandatory. The content and frequency are not
+          specified. Gender Equality Plan p. 23, "Mjere i aktivnosti za Sveučilište" point 2, was verified visually: the
+          University (Rectorate) "will carry out" awareness-raising and education for all employees, heads of services and
+          management on bullying, harassment and sexual harassment. Level 0 ("no training provision identified") is not
+          literally met because a mandatory mentor training exists. Level 2 cannot be confirmed because nothing shows the
+          workshop covers the safeguard's subject matter. "1" is the lowest level consistent with the evidence. Low
+          confidence is appropriate.
+        wording_fixes: >-
+          On pp. 22-24 the Plan's measures are worded as commitments ("Sveučilište će ... provesti", "the University
+          will carry out"), and the Plan bears the rector's signature. The word "prijedlog" does not appear on the pages
+          read. Describe the harassment education as "a planned measure adopted in the Rectorate Gender Equality Plan"
+          rather than as "proposes" or a proposal, unless the researcher can cite the page where "prijedlog" appears. The
+          substantive point (Rectorate staff, not teaching staff; implementation undocumented) stands.
+      - safeguard: S12
+        proposed_score: "1"
+        verdict: confirmed
+        recommended_score: "1"
+        source_checked: true
+        locator_checked: true
+        notes: >-
+          Doctoral Regulations Art. 8(1)-(3) (rank; active researcher with outputs in the last five years; Senate
+          appointment) and Art. 16(3)-(4) (application states the proposed mentor's competencies; the committee proposes
+          the mentor) were verified. Code Art. 19(5) (originality statement on election or re-election) was verified. No
+          conduct-related criterion was found. Note that the national NN 42/2026 criteria, which UNIZG elections apply,
+          add student-survey or teaching-quality results (Art. 4(9)); this is teaching quality, not conduct, and does not
+          change the level.
+        wording_fixes: null
+    source_issues:
+      - source_id: hr-unizg-ethics-code-2007
+        issue: >-
+          Currency risk is larger than the dossier states. Statute 2023 Art. 129(1) provides that aligned university
+          general acts must enter into force by 1 October 2024, and that acts adopted under the 2005 Statute apply "until
+          1 October 2024", except for parts contrary to the Statute. The Code was adopted under the 2005 Statute (Art. 79
+          of that Statute) and has not been re-adopted. Statute Art. 108(7) now requires the Code to be adopted on the
+          rector's proposal with the prior opinion of the university ethics body. Read literally, the continued legal
+          force of the 2007 Code after 1 October 2024 is uncertain, even though it remains published on the regulations
+          page (verified 2026-09-13) and no successor was found. This caveat should appear in the rationale of every
+          finding that depends on the Code (S01-S08), and confidence should not exceed medium.
+      - source_id: hr-unizg-ethics-code-amend-2018
+        issue: >-
+          The dossier describes items III-IV but not item II, which substantively changed Art. 34(6). Committees must now
+          verify the allegations to establish relevant facts; before, they had no investigative powers. Item I adds
+          representation by proxy for the person whose conduct is examined (Art. 34(2)). The consolidated reading of the
+          Code used in findings should reflect item II.
+      - source_id: hr-unizg-gender-equality-plan-2023
+        issue: >-
+          The source note calls the measures proposals ("prijedlog"). The pages read (22-24) word them as commitments
+          and the Plan is signed by the rector. Only partial reading was possible for both reviewers (scanned PDF).
+      - source_id: hr-unizg-student-ombudsperson-page
+        issue: >-
+          This is an informational page and not a regulation. It also states that faculty ombudspersons are primarily
+          competent and the university ombudsperson is subsidiary, which the dossier omits. The page contains the names
+          and contact details of individual office holders; these must not be copied into any ASE publication (the
+          dossier correctly omits them).
+      - source_id: hr-unizg-regulations-index
+        issue: >-
+          Verified. Note that the rulebook index does not itself list the Code of Ethics; it is linked from the parent
+          "Propisi" page, together with the 2018 amendment and the appeal guidelines. The index lists a new "Pravilnik o
+          sustavu osiguravanja kvalitete" in force from 4 December 2025, which was not reviewed and could be relevant to
+          S03 or S11.
+overall_concerns:
+  - >-
+    National "?" results. For S04 and S06, verified national provisions establish at least level 1 regardless of the
+    unresolved question of whether the General Administrative Procedure Act applies (ZUP Art. 24 via ZVOZD Art. 5(3);
+    ZSD Art. 16(3)). The general rule to choose the lower plausible level points to "1" rather than "?". "?" should be
+    reserved for cases like S07, where no floor exists and the plausible outcomes span 0 to 3. The methodology would
+    benefit from an explicit rule distinguishing "uncertain above a floor" (score the floor) from "uncertain at the
+    root" ("?").
+  - >-
+    Currency of the UNIZG Code of Ethics. Under Statute 2023 Art. 129(1), acts adopted under the 2005 Statute were to be
+    replaced or aligned by 1 October 2024. The 2007 Code (amended 2018) is still published, but its legal status after
+    that date is uncertain. Seven UNIZG findings (S01-S08 except S05) rest mainly on it. Before publication, confirm with
+    the University (for example through a Senate decision or a written query) whether the Code remains in force or a
+    replacement is in preparation.
+  - >-
+    Horizontal equality legislation. Whether national anti-discrimination and gender-equality laws count toward S01
+    level 2 ("harassment by teachers", "discriminatory assessment") and S08 level 2 ("specialised external body") is not
+    settled by the rubric. The Croatian researcher resolved it conservatively. Because every EU state has comparable
+    transposed legislation, a methodology-level decision is needed to keep national S01, S02 and S08 scores consistent
+    across jurisdictions.
+  - >-
+    Institution-level scope. Many student-protective rules (grade-objection committees and deadlines, harassment
+    procedures, staff disciplinary rulebooks) are delegated to UNIZG faculties, and search results indicate that
+    faculty-level harassment rules exist. The UNIZG scores, especially the S05 "0" and S09 "1", describe the
+    university-wide layer only. Public presentation should say so clearly.
+  - >-
+    Unreviewed sources that could move scores upward: the People's Ombudsperson Act (national S03 and S08); the UNIZG or
+    faculty staff disciplinary rulebooks required by ZVOZD Art. 56(3) (UNIZG S09); the UNIZG Quality Assurance Rulebook
+    in force from 4 December 2025 (S03, S11); the Student Council of the University of Zagreb Statute (UNIZG S03).
+  - >-
+    Neutrality and personal data. Both dossiers use neutral wording, evaluate published rules only, and contain no
+    personal names. Several source documents do contain names (signatories of the 2018 amendment and the Gender Equality
+    Plan; the gazette promulgation; ombudsperson office holders and contact e-mails on the web page). They must not be
+    reproduced in any derived publication.

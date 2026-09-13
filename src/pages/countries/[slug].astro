@@ -43,7 +43,7 @@ const complete = cov.researched === cov.total && cov.verified === cov.total;
         {cov.provisional > 0 && <p>Findings marked <em>provisional</em> have not yet been independently verified by a second reviewer and may change.</p>}
       </div>
     )}
-    {c.research_method && <p class="small muted"><strong>Research method:</strong> {c.research_method}</p>}
+    {c.research_method && <p class="small muted"><strong>Research method:</strong> {c.research_method}{c.research_dossier && <> <a href={repoFile(c.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
 
     <section aria-labelledby="nf">
       <h2 id="nf">National framework</h2>

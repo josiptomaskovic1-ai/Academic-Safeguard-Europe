@@ -21,6 +21,7 @@ export interface SafeguardResult {
   gaps?: string;
   reviewed?: string;
   dispute_ids?: string[];
+  second_reviewer?: string;
   notes?: string;
 }
 
@@ -62,6 +63,7 @@ export interface Country {
   evidence_gaps: string[];
   researcher_notes: string | null;
   research_method?: string;
+  research_dossier?: string;
 }
 
 export interface Institution {
@@ -80,6 +82,8 @@ export interface Institution {
   correction_status: 'none' | 'open' | 'resolved';
   evidence_gaps?: string[];
   research_method?: string;
+  research_dossier?: string;
+  replies?: { received: string; submitted_by: string; text: string }[];
 }
 
 export interface Source {

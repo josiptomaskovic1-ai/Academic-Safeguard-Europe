@@ -1,0 +1,285 @@
+# Source register — HR. IDs are stable and must never be reused. See docs/data-model.md.
+sources:
+  - id: hr-azvo-reaccreditation-standards-2023
+    title: Standardi kvalitete za vrednovanje u postupku reakreditacije visokih učilišta
+    title_en: Quality standards for evaluation in the re-accreditation procedure of higher education institutions
+    issuing_body: Accreditation Council, Agency for Science and Higher Education (Agencija za znanost i visoko
+      obrazovanje, AZVO)
+    url: https://www.azvo.hr/wp-azvo-files/uploads/2024/05/Standardi-kvalitete-za-vrednovanje-u-postupku-reakreditacije-visokih-ucilista.pdf
+    document_type: standard
+    country: HR
+    institution: null
+    publication_date: 2023-09-14
+    official_reference: KLASA 602-04/23-02/169
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Adopted by the Accreditation Council on 2023-07-06 under Article 8(3) of the Act on Quality Assurance
+      in Higher Education and Science (NN 151/22); document dated 2023-09-14. The Quality Assurance Act itself
+      was not opened. Standards are evaluation criteria for re-accreditation rather than directly binding
+      conduct rules. The evidence lists attached to each standard are expressly examples only.
+  - id: hr-nsuzk-2026
+    title: Nacionalni sveučilišni, znanstveni i umjetnički kriteriji
+    title_en: National University, Scientific and Artistic Criteria
+    issuing_body: National Council for Higher Education, Science and Technological Development (Nacionalno vijeće
+      za visoko obrazovanje, znanost i tehnološki razvoj)
+    url: https://narodne-novine.nn.hr/clanci/sluzbeni/2026_04_42_506.html
+    document_type: regulation
+    country: HR
+    institution: null
+    publication_date: 2026-04-21
+    official_reference: NN 42/2026
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Opened during verification. Article 4(9) makes positively evaluated teaching quality or student survey
+      results a mandatory criterion for promotion and re-election.
+  - id: hr-unizg-doctoral-regulations-2024
+    title: Pravilnik o doktorskim studijima na Sveučilištu u Zagrebu
+    title_en: Regulations on Doctoral Studies at the University of Zagreb
+    issuing_body: University of Zagreb (Senate)
+    url: https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/Pravilnici/2024_final_Pravilnik_o_doktorskim_studijima.pdf
+    document_type: regulation
+    country: HR
+    institution: hr-unizg
+    publication_date: null
+    official_reference: null
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Adopted by the Senate on 24 September 2024. The regulations list gives 1 October 2024 as its date. It
+      sets minimum conditions, and study providers may add further conditions (Art. 1(2)).
+  - id: hr-unizg-ethics-appeal-guidelines-2019
+    title: Smjernice za postupanje etičkih tijela po zaprimljenoj žalbi na mišljenje doneseno u etičkom postupku
+    title_en: Guidelines for ethics bodies on handling appeals against opinions issued in ethics proceedings
+    issuing_body: University of Zagreb (Ethics Council)
+    url: https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/Pravilnici/Smjernice-za-postupanje-po-zalbi.pdf
+    document_type: guidance
+    country: HR
+    institution: hr-unizg
+    publication_date: null
+    official_reference: "KLASA: 602-04/19-17/05, URBROJ: 380-106/334-19-1"
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Accepted at the 29th session of the Ethics Council on 5 March 2019. This is guidance issued by the
+      Ethics Council, not a Senate regulation, so its binding force is uncertain.
+  - id: hr-unizg-ethics-code-2007
+    title: Etički kodeks Sveučilišta u Zagrebu
+    title_en: Code of Ethics of the University of Zagreb
+    issuing_body: University of Zagreb (Senate)
+    url: https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/Pravilnici/Eticki_kodeks.pdf
+    document_type: code_of_ethics
+    country: HR
+    institution: hr-unizg
+    publication_date: 2007-05-18
+    official_reference: "KLASA: 012-03/07-03/2, URBROJ: 380-07/1-09-5"
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: "Adopted by the Senate on 15 May 2007 under the 2005 Statute. Article 41 says it entered into force on
+      publication, 18 May 2007. The published file is the 2009 print edition. It is still linked from the
+      university regulations page, but it predates the 2023 Statute. No re-adopted or consolidated version was
+      found, so currency relative to the 2023 Statute is not confirmed. The 2018 amendments are published
+      separately (see hr-unizg-ethics-code-amend-2018). Currency caveat: the Code was adopted under the 2005
+      Statute. Article 129(1) of the 2023 Statute provides that acts adopted under the previous Statute apply
+      until 1 October 2024; no re-adopted Code was found, although the 2007 text remains published on the
+      University's regulations page (checked 2026-09-13). Its continued legal force after that date could not
+      be confirmed."
+  - id: hr-unizg-ethics-code-amend-2018
+    title: Odluka o izmjenama i dopunama Etičkog kodeksa Sveučilišta u Zagrebu
+    title_en: Decision on Amendments to the Code of Ethics of the University of Zagreb
+    issuing_body: University of Zagreb (Senate)
+    url: https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/Pravilnici/odluka-o-izmjenama-i-dopunama-Etickog-kodeksa-Sveucilista-u-Zagrebu_13_11_2018.pdf
+    document_type: regulation
+    country: HR
+    institution: hr-unizg
+    publication_date: 2018-11-14
+    official_reference: "Klasa: 012-03/18-03/12, Urbroj: 380-020/173-18-3"
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Adopted on 13 November 2018, published 14 November 2018, in force 22 November 2018. The PDF is a
+      scanned image; its two pages were read visually after rendering. It amends Art. 34(2) and (6), adds Art.
+      35(8)-(10) on appeals, and amends Art. 36. Item I adds representation by proxy for the person whose
+      conduct is examined (Art. 34(2)); item II amends Art. 34(6) so that committees must verify the
+      allegations to establish the relevant facts; items III–IV introduce the appeal to the Ethics Council.
+  - id: hr-unizg-gender-equality-plan-2023
+    title: Plan za ravnopravnost Sveučilišta u Zagrebu (Rektorat)
+    title_en: Gender Equality Plan of the University of Zagreb (Rectorate)
+    issuing_body: University of Zagreb (Rector)
+    url: https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/Pravilnici/Plan_za_ravnopravnost_2023.pdf
+    document_type: policy
+    country: HR
+    institution: hr-unizg
+    publication_date: null
+    official_reference: null
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Scanned PDF without a text layer; the table of contents and pp. 22–24 were read as rendered pages. On
+      those pages the measures are worded as commitments of the University and the Plan bears the rector's
+      signature.
+  - id: hr-unizg-regulations-index
+    title: Propisi Sveučilišta u Zagrebu; Pravilnici
+    title_en: University of Zagreb regulations index pages (regulations and rulebooks)
+    issuing_body: University of Zagreb
+    url: https://www.unizg.hr/o-sveucilistu/dokumenti-i-javnost-informacija/propisi/pravilnici/
+    document_type: other
+    country: HR
+    institution: hr-unizg
+    publication_date: null
+    official_reference: null
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Index pages used to identify university-wide instruments. The parent page is
+      https://www.unizg.hr/o-sveucilistu/dokumenti-i-javnost-informacija/propisi/. The only university-level
+      student disciplinary rulebook listed concerns misuse of student ID cards (2015). No university-wide
+      harassment rulebook or protocol was listed.
+  - id: hr-unizg-statute-2023
+    title: Statut Sveučilišta u Zagrebu
+    title_en: Statute of the University of Zagreb
+    issuing_body: University of Zagreb (Senate)
+    url: https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Dokumenti/Strateski_dokumenti/statut/Statut_SUZG_ZAVRSNO_fin_fin_travanj2023.pdf
+    document_type: statute
+    country: HR
+    institution: hr-unizg
+    publication_date: null
+    official_reference: null
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Adopted by the Senate on 21 March 2023 under the Act on Higher Education and Scientific Activity (NN
+      119/22). The regulations web page lists it as the current statute. Article 129 required university
+      general acts to be aligned with it by 1 October 2024. Text was read via local text extraction of the PDF
+      fetched from unizg.hr.
+  - id: hr-unizg-student-ombudsperson-page
+    title: Studentski pravobranitelj
+    title_en: Student Ombudsperson (web page)
+    issuing_body: University of Zagreb
+    url: https://www.unizg.hr/studiji-i-studiranje/podrska-studentima/studentski-pravobranitelj/
+    document_type: guidance
+    country: HR
+    institution: hr-unizg
+    publication_date: null
+    official_reference: null
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Informational web page, not a regulation. States that faculty student ombudspersons are primarily
+      competent and the university Student Ombudsperson acts where a matter cannot be resolved at faculty
+      level. The page lists office holders; ASE does not reproduce personal names.
+  - id: hr-unizg-study-regulations-2024
+    title: Pravilnik o studiranju na prijediplomskim i diplomskim studijima Sveučilišta u Zagrebu
+    title_en: Regulations on Undergraduate and Graduate Studies of the University of Zagreb
+    issuing_body: University of Zagreb (Senate)
+    url: https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/Pravilnici/Pravilnik_o_studiranju-najnovije_lektorirano-final-19062024.pdf
+    document_type: regulation
+    country: HR
+    institution: hr-unizg
+    publication_date: null
+    official_reference: null
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Adopted by the Senate on 24 May 2024. The regulations list gives 1 October 2024 as its date. Many
+      details, such as grade-objection deadlines and exam committee composition, are left to faculty general
+      acts, which were not reviewed.
+  - id: hr-zrs-2008
+    title: Zakon o ravnopravnosti spolova
+    title_en: Gender Equality Act
+    issuing_body: Croatian Parliament (Hrvatski sabor)
+    url: https://www.zakon.hr/z/388/zakon-o-ravnopravnosti-spolova
+    document_type: legislation
+    country: HR
+    institution: null
+    publication_date: null
+    official_reference: NN 82/2008, 69/2017
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Unofficial consolidated text on zakon.hr (NN 82/08, 69/17; in force from 2017-07-22). Official gazette
+      versions not opened. Whether a newer gender equality act has been adopted was not separately checked
+      beyond the zakon.hr status shown on the access date.
+  - id: hr-zsd-2008
+    title: Zakon o suzbijanju diskriminacije
+    title_en: Anti-Discrimination Act
+    issuing_body: Croatian Parliament (Hrvatski sabor)
+    url: https://www.zakon.hr/z/490/zakon-o-suzbijanju-diskriminacije
+    document_type: legislation
+    country: HR
+    institution: null
+    publication_date: null
+    official_reference: NN 85/2008, 112/2012
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Unofficial consolidated text on zakon.hr (NN 85/08, 112/12). Official gazette versions not opened.
+  - id: hr-zszso-2007
+    title: Zakon o studentskom zboru i drugim studentskim organizacijama
+    title_en: Act on the Student Council and Other Student Organisations
+    issuing_body: Croatian Parliament (Hrvatski sabor)
+    url: https://narodne-novine.nn.hr/clanci/sluzbeni/2007_07_71_2182.html
+    document_type: legislation
+    country: HR
+    institution: null
+    publication_date: null
+    official_reference: NN 71/2007
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Official gazette text (NN 71/2007), opened by the verifier; Article 17 matches the unofficial zakon.hr
+      consolidation, which lists no amendments. Legislative proposals for a new student council act were seen
+      in search results but not verified as enacted.
+  - id: hr-zup-2009
+    title: Zakon o općem upravnom postupku
+    title_en: General Administrative Procedure Act
+    issuing_body: Croatian Parliament (Hrvatski sabor)
+    url: https://www.zakon.hr/z/65/zakon-o-opcem-upravnom-postupku
+    document_type: legislation
+    country: HR
+    institution: null
+    publication_date: null
+    official_reference: NN 47/2009, 110/2021
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Unofficial consolidated text on zakon.hr (NN 47/09, 110/21; consolidated version in force from
+      2022-01-01). Relevant to higher education only through Article 5(3) of the Act on Higher Education and
+      Scientific Activity.
+  - id: hr-zvozd-2022
+    title: Zakon o visokom obrazovanju i znanstvenoj djelatnosti
+    title_en: Act on Higher Education and Scientific Activity
+    issuing_body: Croatian Parliament (Hrvatski sabor)
+    url: https://narodne-novine.nn.hr/clanci/sluzbeni/2022_10_119_1834.html
+    document_type: legislation
+    country: HR
+    institution: null
+    publication_date: 2022-10-14
+    official_reference: NN 119/2022
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Official gazette text. The unofficial consolidated version on zakon.hr
+      (https://www.zakon.hr/z/3328/zakon-o-visokom-obrazovanju-i-znanstvenoj-djelatnosti), whose database was
+      stated to be updated to NN 95/26 on 2026-09-07, lists only NN 119/22 (in force from 2022-10-22), i.e. no
+      amendments were shown. Article numbers below are from the official text.
+  - id: hr-zzpn-2022
+    title: Zakon o zaštiti prijavitelja nepravilnosti
+    title_en: Act on the Protection of Whistleblowers (Reporters of Irregularities)
+    issuing_body: Croatian Parliament (Hrvatski sabor)
+    url: https://narodne-novine.nn.hr/clanci/sluzbeni/2022_04_46_572.html
+    document_type: legislation
+    country: HR
+    institution: null
+    publication_date: 2022-04-15
+    official_reference: NN 46/2022, 136/2025
+    accessed: 2026-09-13
+    language: hr
+    archived_url: null
+    notes: Official gazette text of the original act. Amended by NN 136/2025 (text viewed at
+      https://www.zakon.hr/c/nn/671302/nn-136-2025-%285.11.2025.%29%2C-zakon-o-izmjenama-i-dopunama-zakona-o-zastiti-prijavitelja-nepravilnosti);
+      the amendment extends material scope, adds protection for reports made directly to police or the State
+      Attorney, sets court deadlines and converts fines to euro, but does not change the Article 6 definitions
+      of reporter and work-related context.

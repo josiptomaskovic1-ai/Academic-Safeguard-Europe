@@ -1,37 +1,342 @@
-# Croatia — country record
-# Structural metadata below is safe to publish. Everything under "research" fields
-# must come from recorded sources. See docs/data-model.md and docs/researcher-guide.md.
-
+# Croatia — country record. Findings are provisional until verified. See docs/data-model.md.
 iso_code: HR
 slug: croatia
 name: Croatia
-local_name: "Hrvatska"
+local_name: Hrvatska
 eu_status: member_state
 eu_accession_year: 2013
-
 methodology_version: "0.1"
-research_status: not_researched
-last_reviewed: null
-confidence: null
-
+research_status: institution_research_available
+last_reviewed: 2026-09-13
+confidence: medium
 national_framework:
-  summary: null
-
-# NR = not researched. Never replace NR with 0 unless research was carried out.
+  summary: Croatia's Act on Higher Education and Scientific Activity (NN 119/2022) sets general duties for
+    members of the academic community to respect the dignity of every person, and requires each higher
+    education institution to establish an ethics committee, adopt an ethics code defining ethical offences and
+    sanctioning procedures, establish a disciplinary committee and adopt a disciplinary rulebook for staff;
+    the content of these instruments is left to institutions. Students have a statutory right to complain
+    about violations of their rights and each institution must have a student ombudsperson (a student
+    appointed by the student council under the 2007 Student Council Act), whose role is advisory and
+    mediating. The Act declares the General Administrative Procedure Act applicable to procedures deciding on
+    students' rights and obligations, which would bring recusal, deadline, reasoned-decision and appeal rules,
+    but whether complaints about staff conduct fall within that route is not settled by the texts reviewed.
+    Horizontal anti-discrimination and gender equality legislation prohibits harassment and sexual harassment
+    (including in education), protects against victimisation for reporting discrimination and provides
+    external routes to the People's Ombudsperson, the Gender Equality Ombudsperson and the courts. The
+    national re-accreditation standards of the Agency for Science and Higher Education expect institutions to
+    prevent and sanction unethical behaviour and discrimination through fair and impartial procedures and to
+    operate a formal appeals procedure on assessment.
 safeguards:
-  S01: { result: "NR" }
-  S02: { result: "NR" }
-  S03: { result: "NR" }
-  S04: { result: "NR" }
-  S05: { result: "NR" }
-  S06: { result: "NR" }
-  S07: { result: "NR" }
-  S08: { result: "NR" }
-  S09: { result: "NR" }
-  S10: { result: "NR" }
-  S11: { result: "NR" }
-  S12: { result: "NR" }
-
-institutions_researched: []
-evidence_gaps: []
-researcher_notes: null
+  S01:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zvozd-2022
+      - hr-zsd-2008
+      - hr-zrs-2008
+    locator: ZVOZD Articles 3(3), 55(1)-(4); ZSD Articles 3 and 8(2); ZRS Article 8
+    evidence: The Act on Higher Education requires members of the academic community (teachers and students) to
+      base their relations on mutual trust and respect for the dignity of every person ("poštovanju
+      dostojanstva svake osobe" - respect for the dignity of every person). Each institution must set up an
+      ethics committee covering, among other things, teaching and mutual relations, and adopt an ethics code
+      that defines ethical offences and the procedure for preventing and sanctioning unethical conduct; a
+      National Council issues minimum ethical principles that form part of each code. Separately, the
+      Anti-Discrimination Act and the Gender Equality Act define harassment (linked to the protected grounds)
+      and sexual harassment and treat them as discrimination, and the Anti-Discrimination Act applies
+      expressly to the field of education and science.
+    rationale: The national framework contains general ethics and dignity duties and delegates the definition of
+      ethical offences to institutions. It does not itself name misuse of academic authority over students
+      (assessment, supervision, progression) as misconduct. The horizontal prohibition of harassment in
+      education could support a "2" (specific abuses prohibited), but it is not specific to teacher-student
+      relations or to academic authority; as two levels are plausible, the lower level is assigned. Harassment
+      under the Anti-Discrimination Act is tied to protected grounds, which is the substantive reason it does
+      not amount to a prohibition of misuse of academic authority as such.
+    gaps: The National Council's minimum ethical principles referred to in Article 55(4) were not located or
+      reviewed; they may contain more specific content. The Criminal Code (e.g. provisions on sexual
+      harassment) was not reviewed.
+    reviewed: 2026-09-13
+  S02:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zsd-2008
+      - hr-zzpn-2022
+    locator: ZSD Articles 7 and 8(2); ZZPN Article 6(3), 6(5), 6(9) and Article 9
+    evidence: The Anti-Discrimination Act provides that no one may be placed in a less favourable position for
+      having reported discrimination in good faith, witnessed it, refused a discriminatory instruction, or
+      participated in discrimination proceedings; the Act applies to the field of education and science. The
+      Whistleblower Act prohibits retaliation against reporters, but defines a reporter as a person reporting
+      irregularities learned of in their work-related context, described as professional activities
+      (employees, self-employed, volunteers, trainees and similar).
+    rationale: General anti-victimisation protection exists and would cover a student reporting discrimination or
+      harassment, but it is limited to discrimination-related reports, does not address academic retaliation
+      (grades, supervision, references) and is not a higher-education-specific rule. The whistleblower regime
+      appears not to reach students acting as students (only possibly those in a work-related context such as
+      trainees or employed assistants). No express national prohibition of retaliation against student
+      complainants in general was identified, so "2" is not met.
+    gaps: No provision in the Act on Higher Education or the Student Council Act on retaliation against
+      complainants was identified. Whether student trainees or teaching assistants fall within the
+      Whistleblower Act's personal scope in particular situations was not analysed.
+    reviewed: 2026-09-13
+  S03:
+    result: "2"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zszso-2007
+      - hr-zvozd-2022
+      - hr-zsd-2008
+      - hr-zrs-2008
+    locator: ZSZSO Article 17; ZVOZD Articles 55(1), 77(1)(8); ZSD Article 12; ZRS Article 19
+    evidence: Each higher education institution must have a student ombudsperson, appointed by the student council
+      for one year (renewable once) from among students; the ombudsperson receives student complaints about
+      their rights and discusses them with the competent bodies of the institution, advises students and may
+      take part in disciplinary proceedings against students. Students have a statutory right to complain
+      about violations of rights under the Act and institutional acts. Each institution must also establish an
+      ethics committee. For discrimination, including harassment and sexual harassment, the People's
+      Ombudsperson and the Gender Equality Ombudsperson receive and examine individual reports.
+    rationale: A complaint officer that does not depend on the academic unit's line management exists at every
+      institution (student ombudsperson, appointed by the student council), and specialised external bodies
+      exist for discrimination. However, the ombudsperson's independence guarantees, investigative powers and
+      mandate over staff-student conduct complaints are not set out (the role is to receive complaints and
+      discuss them with institutional bodies), and the procedure for the statutory right to complain is not
+      defined nationally, so "3" is not met.
+    gaps: Because a faculty can itself be a "visoko učilište", the ombudsperson may sit within the same unit as
+      the staff member complained about; separation is by appointment route rather than by level. The
+      Ombudsperson Act (general maladministration mandate) was not opened, so that route is not scored here.
+    reviewed: 2026-09-13
+  S04:
+    result: "1"
+    verification: needs_review
+    confidence: low
+    source_ids:
+      - hr-zvozd-2022
+      - hr-zup-2009
+      - hr-azvo-reaccreditation-standards-2023
+    locator: ZVOZD Article 5(3); ZUP Article 24(1)-(6); AZVO Standard 1.4
+    evidence: The Act on Higher Education applies the General Administrative Procedure Act to procedures deciding
+      on the rights and obligations of students. That Act requires exclusion of an official who is a party,
+      witness or close relative, requires exclusion from second-instance proceedings of anyone who took part
+      at first instance, allows exclusion for close personal or business relationships, discriminatory
+      treatment or other doubts about impartiality, and provides that the head of the body (or the
+      second-instance or supervisory body for the head) decides, including on a party's request. The AZVO
+      re-accreditation standard expects fair and impartial conduct of procedures sanctioning unethical
+      behaviour and discrimination.
+    rationale: At minimum, a general statutory recusal regime applies to decisions on students' rights through
+      Article 5(3) of the Act on Higher Education (level 1). Whether it extends to complaints about staff
+      conduct, ethics proceedings or grade reviews, which would support level 2 or 3, is not established by
+      the national texts, so the lower level is assigned.
+    gaps: No express recusal rule for examiners, ethics committee members or disciplinary committee members in the
+      Act on Higher Education was identified. Case law of the administrative courts on whether exam grades and
+      complaint outcomes are administrative acts was not reviewed.
+    reviewed: 2026-09-13
+  S05:
+    result: "1"
+    verification: needs_review
+    confidence: low
+    source_ids:
+      - hr-zsd-2008
+      - hr-zup-2009
+    locator: ZSD Article 19(1)-(2); ZUP Article 100(3)
+    evidence: In anti-discrimination court proceedings the court may, on a party's proposal, order interim
+      measures before or during proceedings where the applicant makes a violation of equal treatment probable
+      and the measure is needed to avert irreparable harm or prevent violence. The General Administrative
+      Procedure Act allows a temporary decision regulating disputed matters before a procedure ends.
+    rationale: Interim protection is available only in general terms (court measures in discrimination cases; a
+      generic power to issue temporary administrative decisions). No specific academic interim measures
+      (change of examiner, supervisor or group) were identified in the higher education legislation, so "2" is
+      not met.
+    gaps: No interim-measures provision in the Act on Higher Education, the Student Council Act or the AZVO
+      standards was identified. Whether court interim measures could order academic arrangements in practice
+      was not examined.
+    reviewed: 2026-09-13
+  S06:
+    result: "1"
+    verification: needs_review
+    confidence: low
+    source_ids:
+      - hr-zvozd-2022
+      - hr-zup-2009
+      - hr-zsd-2008
+    locator: ZVOZD Article 5(3); ZUP Article 101(1)-(3); ZSD Article 16(3)
+    evidence: Under the General Administrative Procedure Act a decision on a party's request must be issued and
+      delivered within 30 days (direct decision) or 60 days (where an examination procedure is conducted), and
+      if the deadline is missed the party may appeal or bring an administrative dispute. The
+      Anti-Discrimination Act requires courts and other bodies conducting proceedings to act urgently on
+      discrimination claims.
+    rationale: A general duty of urgency exists for discrimination proceedings (Anti-Discrimination Act Article
+      16(3)), which meets level 1. Binding deadlines with an escalation route under the General Administrative
+      Procedure Act would support a higher level if staff-conduct complaints are administrative matters, which
+      is not established by the texts reviewed.
+    gaps: No deadline specific to student complaints, ethics committee or disciplinary procedures was identified
+      in national higher education legislation. Whether the administrative procedure deadlines apply to such
+      complaints is unresolved.
+    reviewed: 2026-09-13
+  S07:
+    result: "?"
+    verification: needs_review
+    confidence: low
+    source_ids:
+      - hr-zvozd-2022
+      - hr-zup-2009
+    locator: ZVOZD Article 5(3); ZUP Articles 96, 97(1), 98(1), 98(5)-(6)
+    evidence: Administrative decisions must be in writing and contain a statement of reasons (facts established,
+      reasons for assessing evidence and for rejecting requests) and an instruction on legal remedies stating
+      whether an appeal or administrative dispute is available, to which body, by when and how.
+    rationale: These requirements would meet the elements of "3" for decisions in which the student is a party,
+      but the sources reviewed do not establish that the outcome of a complaint about staff conduct (e.g. an
+      ethics committee finding forwarded to the head of institution under ZVOZD Article 55(3)) is an
+      administrative decision delivered to the complainant. The level cannot be responsibly assigned.
+    sources_reviewed:
+      - hr-zvozd-2022
+      - hr-zup-2009
+      - hr-zszso-2007
+      - hr-azvo-reaccreditation-standards-2023
+    gaps: No national provision on informing a student complainant of the outcome of an ethics or disciplinary
+      procedure was identified.
+    reviewed: 2026-09-13
+  S08:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zsd-2008
+      - hr-zrs-2008
+      - hr-zup-2009
+      - hr-azvo-reaccreditation-standards-2023
+    locator: ZSD Articles 12(2), 17; ZRS Article 19(2); ZUP Articles 105, 122(4); AZVO Standard 3.2
+    evidence: "External routes exist: the People's Ombudsperson and the Gender Equality Ombudsperson examine
+      discrimination reports and may conduct mediation; a person claiming discrimination may sue for a
+      declaration, cessation and removal of consequences, and damages. Where administrative procedure applies,
+      a first-instance decision may be appealed to a second-instance body and an administrative dispute
+      brought. The AZVO standard on assessment expects a formally defined appeals procedure of which students
+      are informed."
+    rationale: Nationally there is no defined internal appeal to a different body against the outcome of a
+      complaint about staff conduct; available routes are general external remedies (courts) and ombudspersons
+      limited to discrimination. The AZVO appeals element concerns assessment and is an evaluation expectation
+      rather than a defined route. A "2" (specialised external body) is arguable for discrimination cases
+      only; the lower level is assigned.
+    gaps: Applicability of the administrative appeal route to complaint outcomes is unresolved (see S04, S06,
+      S07). The general mandate of the People's Ombudsperson over public higher education institutions was not
+      verified.
+    reviewed: 2026-09-13
+  S09:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zvozd-2022
+    locator: ZVOZD Articles 55(3), 56(1)-(5)
+    evidence: Staff are disciplinarily liable for breaches of work duties and for damaging the institution's
+      reputation. Each institution must establish a disciplinary committee and adopt a rulebook setting out
+      disciplinary offences, sanctions and procedure; disciplinary liability may lead to termination of the
+      employment contract, and only offences and sanctions prescribed in the rulebook at the time may be
+      punished. An ethics committee decision finding a breach of the ethics code is sent to the head of
+      institution, who must act under the disciplinary rulebook.
+    rationale: The national framework mandates a disciplinary system and links ethics breaches to it, but does not
+      itself set a graduated scale, proportionality criteria or any express link to misconduct towards
+      students; these are left entirely to institutional rulebooks. It is more than bare employment law, but
+      the "2" element (a scale applying to misconduct towards students) is not provided at national level, so
+      the lower level is assigned.
+    gaps: The Labour Act and collective agreements were not reviewed. No national power to restrict a staff
+      member's authority over affected students was identified.
+    reviewed: 2026-09-13
+  S10:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zvozd-2022
+      - hr-zsd-2008
+    locator: ZVOZD Article 71(6); ZSD Article 17(1)(2)
+    evidence: Institutions must regulate by general act the rules on exams, complaints against a grade ("prigovoru
+      na ocjenu" - objection to a grade), the procedure for repeating an exam, and the right to inspect exam
+      results. In discrimination cases a court may order actions removing discrimination or its consequences.
+    rationale: A general right to challenge a grade and repeat an exam exists (with details delegated to
+      institutions), but it is not linked to misconduct findings and no listed remedies (re-assessment by a
+      different examiner, annulment, extension, change of supervisor) were identified. Court-ordered removal
+      of consequences is general and not academic-specific, so "2" is not met.
+    gaps: A right to change mentor was seen in the Act's provisions on staff collaborators (suradnici); it applies
+      to employees, not students, and was not relied on. No national rule on changing a doctoral student's
+      supervisor after misconduct was identified.
+    reviewed: 2026-09-13
+  S11:
+    result: "0"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zvozd-2022
+      - hr-azvo-reaccreditation-standards-2023
+      - hr-zrs-2008
+    locator: ZVOZD Articles 55-56; AZVO Standards 1.4 and 3.2; ZRS Article 14
+    evidence: No national requirement, and no express recommendation directed at staff with authority over
+      students, to receive training on professional boundaries, harassment or fair use of authority was
+      identified. AZVO Standard 3.2 expects support for those who assess students in developing assessment
+      skills. The evidence list for Standard 1.4 refers to reports on education ("edukacije") to prevent
+      unethical behaviour, intolerance and discrimination as an example source; these lists are expressly
+      examples only. The Gender Equality Act makes gender-equality content part of higher education curricula.
+    rationale: The references found concern assessment methodology, curriculum content, or examples of evidence an
+      institution may present. The AZVO example was considered and judged insufficient for level 1, because it
+      neither requires nor expressly recommends training on boundaries, harassment or anti-retaliation for
+      staff with authority over students. No qualifying provision was identified in the sources reviewed.
+    sources_reviewed:
+      - hr-zvozd-2022
+      - hr-zszso-2007
+      - hr-zsd-2008
+      - hr-zrs-2008
+      - hr-azvo-reaccreditation-standards-2023
+    gaps: The National Council's minimum ethical principles, the Quality Assurance Act and any national ethics
+      guidance were not reviewed. An independent cross-check agreed with this result; human second review is
+      still required before it can be treated as verified.
+    reviewed: 2026-09-13
+  S12:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-zvozd-2022
+      - hr-nsuzk-2026
+    locator: ZVOZD Articles 39(1), 40(6), 42(1)-(5), 43(5), 62(6); National Criteria (NN 42/2026) Article 4(9)
+    evidence: Appointment of teachers and scientists depends on the required degree, the National University,
+      Scientific and Artistic Criteria (or national college criteria) and institutional additional criteria,
+      assessed by an expert committee. Re-election every five years requires fulfilling half of the national
+      and additional criteria for promotion since the last election. The procedure for application, assessment
+      and defence of doctoral theses is left to university statutes or general acts. Under the National
+      University, Scientific and Artistic Criteria, promotion and re-election also require positively
+      evaluated teaching quality or student survey results (Article 4(9)); no criterion concerns ethical
+      record or upheld complaints.
+    rationale: National appointment and re-election criteria refer to academic, scientific and teaching
+      qualifications, including teaching quality or student survey results. These measure teaching quality
+      rather than professional conduct as defined for level 2, and no national rule requires review of conduct
+      (e.g. upheld complaints or ethical record) for roles with authority over students, including doctoral
+      supervision. This matches level 1.
+    gaps: Institutional additional criteria and doctoral supervisor rules are outside national scope.
+    reviewed: 2026-09-13
+institutions_researched:
+  - hr-unizg
+evidence_gaps:
+  - The National Council's minimum ethical principles (ZVOZD Article 55(4)) were not located; whether they
+    have been adopted and what they contain is unknown.
+  - The Act on Quality Assurance in Higher Education and Science (NN 151/22) was not opened; only the AZVO
+    re-accreditation standards adopted under it were reviewed.
+  - The People's Ombudsperson Act and the Gender Equality Ombudsperson's general mandate over public higher
+    education institutions were not opened.
+  - The Labour Act (worker dignity and harassment procedures) was not reviewed; such procedures typically
+    protect employees rather than students and would not raise scores under the rubric's student-complainant
+    rule.
+  - The Criminal Code provisions on sexual harassment and abuse of position were not reviewed.
+  - Official gazette versions of the Student Council Act, Anti-Discrimination Act, Gender Equality Act and
+    General Administrative Procedure Act were not opened; unofficial zakon.hr consolidations were used.
+  - Administrative and constitutional court case law on whether exam grades and complaint outcomes are
+    administrative acts was not reviewed.
+researcher_notes: "Unresolved questions: (1) whether Article 5(3) of the Act on Higher Education brings
+  student complaints about staff conduct, ethics proceedings and grade reviews under the General
+  Administrative Procedure Act, which determines S07 and could raise S04, S06 and S08; (2) whether the student
+  ombudsperson is sufficiently separate from the academic unit where the institution is a faculty; (3) whether
+  the Whistleblower Act can cover students in any capacity; (4) how general anti-discrimination law should
+  count towards S01 and S08 across countries — a methodology question for v0.2."
+research_method: Researched with AI assistance from official sources, with an independent automated
+  cross-check. All findings await verification by a human second reviewer.
+research_dossier: research/pending/hr-national.yml

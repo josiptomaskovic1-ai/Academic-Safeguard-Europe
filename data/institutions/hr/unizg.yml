@@ -1,0 +1,388 @@
+# University of Zagreb — institution record. Findings are provisional until verified.
+id: hr-unizg
+canonical_name: University of Zagreb
+local_name: Sveučilište u Zagrebu
+country: HR
+website: https://www.unizg.hr
+institution_type: public_university
+research_status: researched
+last_reviewed: 2026-09-13
+methodology_version: "0.1"
+confidence: medium
+evidence_note: The University of Zagreb's university-wide safeguards rest mainly on its Code of Ethics (2007,
+  amended 2018), which prohibits harassment and misuse of authority. It sets out a procedure before ethics
+  committees, with deadlines, written reasoned opinions and an appeal to the university Ethics Council.
+  However, ethics opinions are expressly non-binding. Proceedings are formally requested by the dean or
+  rector, not directly by a student, and the Code does not itself set disciplinary consequences. A Student
+  Ombudsperson, appointed by the Student Council, receives complaints about student rights and mediates, but
+  it has no decision-making powers set out in the sources reviewed. No university-wide rules were identified
+  on interim academic protective measures, retaliation beyond harassment reports, remedies for academic harm
+  linked to misconduct findings, or conduct review for supervisory roles. Most of these findings depend on the
+  2007 Code of Ethics, whose continued legal force after 1 October 2024 could not be confirmed.
+correction_status: none
+safeguards:
+  S01:
+    result: "2"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-statute-2023
+    locator: Code of Ethics Art. 7(2), Art. 12(2)-(4), Art. 14(g),(h),(k), Art. 27(2)(a); Statute Art. 10(2),(5),
+      Art. 108
+    evidence: "The Code of Ethics states that members of the university community must not misuse their authority:
+      \"ne smiju zlouporabiti svoj autoritet\" (\"must not misuse their authority\") (Art. 7(2)). It prohibits
+      harassment and defines sexual harassment to include demanding sexual favours in return for an act or
+      omission from a position of authority (Art. 12(3)). It warns that relationships in direct hierarchical
+      relations involving assessment or decisions on status and advancement may breach the rules on
+      objectivity and conflict of interest (Art. 12(4)). Teachers must ensure valid, fair, objective and
+      timely assessment and transparent exams (Art. 14(g),(h)). They must not make exam access conditional on
+      requirements outside the curriculum, especially ones bringing them personal gain (Art. 14(k)). Misuse of
+      a position of authority to create privileged positions is also disapproved (Art. 27(2)(a)). The 2023
+      Statute requires members to respect each person's dignity and follow academic ethics (Art. 10(2),(5);
+      Art. 108)."
+    rationale: "Specific abuses by teachers are expressly prohibited: quid-pro-quo harassment from a position of
+      authority, unfair assessment, and improper conditions on exam access. That meets level 2. It is not
+      level 3 because there is no single definition or enumerated list covering misuse of assessment,
+      supervisory and progression powers together. The Code also expressly says its procedures do not decide
+      rights or responsibilities and that opinions do not bind other bodies (Art. 2(3),(5)). Breaches are
+      therefore not directly linked to a disciplinary procedure. Currency caveat: this finding relies on the
+      2007 Code of Ethics, whose continued legal force after 1 October 2024 could not be confirmed (2023
+      Statute Art. 129(1))."
+    gaps: Supervision of theses and doctoral candidates is not addressed as a distinct area of possible abuse. The
+      Code dates from 2007, and whether it has been aligned with the 2023 Statute is not confirmed.
+    reviewed: 2026-09-13
+  S02:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-ethics-code-2007
+    locator: Code of Ethics Art. 12(5)
+    evidence: 'Any person may report harassment committed by a member of the university community. The Code
+      states: "Na osobu koja je odbila uznemirivanje ili prijavila takvu vrstu ponašanja ne smije se vršiti
+      nikakav pritisak." ("No pressure may be exerted on a person who rejected harassment or reported such
+      behaviour.")'
+    rationale: "The protection is express and applies to students, but only to those who reject or report
+      harassment; it does not reach complainants about other misuse of authority or witnesses, so the core of
+      level 2 (protection of student complainants and witnesses) is only partly met. It does not address
+      academic retaliation (grades, supervision, references), treat retaliation as a separate offence, or give
+      a route to report retaliation. Currency caveat: this finding relies on the 2007 Code of Ethics, whose
+      continued legal force after 1 October 2024 could not be confirmed (2023 Statute Art. 129(1))."
+    gaps: No university-wide anti-retaliation rule was identified for student complainants or witnesses in
+      general, and none that addresses academic forms of retaliation. The Gender Equality Plan's reference to
+      this rule (section 2.5) is framed around employees.
+    reviewed: 2026-09-13
+  S03:
+    result: "2"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-ethics-code-amend-2018
+      - hr-unizg-student-ombudsperson-page
+      - hr-unizg-statute-2023
+    locator: Code of Ethics Art. 10(5), 29-33, 36; Amendment Decision item III (Art. 35(8)-(10)); Statute Art.
+      65(3)(23); Student Ombudsperson web page
+    evidence: Each faculty has an ethics committee appointed by its dean with the consent of the faculty council.
+      When a question concerns students, two student members are added (Art. 30). A university Ethics Council
+      of nine members, including at least one student, is appointed by the rector on the Senate's proposal
+      (Art. 31). University ethics committees may act where a faculty committee does not exist or cannot or
+      will not act (Art. 29(3), 32). Proceedings are started by a request from the dean or rector, on their
+      own initiative or on the proposal of community members (Art. 33(2)). If the dean or rector does not
+      forward a member's proposal within 30 days, the member may go to the Ethics Council, which may itself
+      initiate proceedings before the competent (faculty) ethics committee (Art. 33(4)). Since the 2018
+      amendment, the committee must verify the allegations to establish the relevant facts (Art. 34(6) as
+      amended). Competent bodies must investigate all reports raising ethical concerns (Art. 10(5)). The
+      Student Ombudsperson, appointed by the Student Council for one-year terms after a public call, works on
+      principles of independence, equal treatment and confidentiality. It receives student complaints, raises
+      them with competent bodies, advises students and may take part in disciplinary proceedings; it acts
+      where a matter cannot be resolved by the faculty student ombudsperson (web page). The Statute gives
+      students a right to complain and to other legal remedies when their rights are violated (Art.
+      65(3)(23)).
+    rationale: "Bodies outside the academic unit exist: the university Ethics Council and ad hoc university
+      committees, as well as the Student Ombudsperson. That meets level 2. It is not level 3 because the
+      first-instance body sits within the faculty and is appointed by the dean. Students cannot formally file
+      a request themselves; the dean or rector does, with Ethics Council escalation only after 30 days. Ethics
+      bodies issue non-binding opinions (Art. 2(5)). The Ombudsperson's powers and independence rules are
+      described only on an informational web page. Currency caveat: this finding relies on the 2007 Code of
+      Ethics, whose continued legal force after 1 October 2024 could not be confirmed (2023 Statute Art.
+      129(1))."
+    gaps: No university-wide body with documented independence and a defined mandate to decide staff-student
+      conduct complaints was identified. The rules on the Student Ombudsperson (Student Council Statute) were
+      not reviewed.
+    reviewed: 2026-09-13
+  S04:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-doctoral-regulations-2024
+      - hr-unizg-study-regulations-2024
+    locator: Code of Ethics Art. 12(4), Art. 22; Doctoral Regulations Art. 2(1)(9); Study Regulations Art. 44
+    evidence: The Code of Ethics requires all members to avoid conflicts of interest, giving family ties, close
+      friendship, intimate relationships and antagonisms as examples, and prohibits nepotism (Art. 22). It
+      warns about relationships in hierarchical relations involving assessment (Art. 12(4)). The Doctoral
+      Regulations bar the mentor from sitting on the committees that assess the thesis proposal, assess the
+      thesis and conduct the defence (Art. 2(1)(9)), which also require external committee members. The Study
+      Regulations allow a student dissatisfied with a grade to request re-examination or re-marking before an
+      exam committee, whose composition is left to faculty general acts (Art. 44).
+    rationale: "A general conflict-of-interest duty exists. The only structural exclusion identified is that of
+      the doctoral mentor from thesis assessment committees, which is an incompatibility rule rather than
+      conflict-based recusal. No rule was identified requiring members of ethics committees or the Ethics
+      Council to step aside where conflicted, including where they are the subject of a complaint. No
+      procedure was identified for a student to request recusal. Level 2 was considered because of the
+      doctoral assessment exclusion, but not assigned: the rule is limited to one assessment type and is not
+      conflict-based. Currency caveat: this finding relies on the 2007 Code of Ethics, whose continued legal
+      force after 1 October 2024 could not be confirmed (2023 Statute Art. 129(1))."
+    gaps: No recusal rule was identified for ethics proceedings or appeals, and no rule was identified requiring
+      the original examiner to be excluded from the grade-objection committee. National
+      administrative-procedure recusal rules may apply to formal decisions on student rights, but the
+      university instruments reviewed do not expressly apply them. That question is left to the national-level
+      research.
+    reviewed: 2026-09-13
+  S05:
+    result: "0"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-study-regulations-2024
+      - hr-unizg-doctoral-regulations-2024
+    locator: Code of Ethics Art. 33-39 (no interim measures); Study Regulations Art. 49; Doctoral Regulations Art.
+      11(2)
+    evidence: The ethics procedure (Art. 33-39, as amended in 2018) contains no interim protective measures. The
+      Study Regulations let the dean assign an exam to another teacher when the course teacher is unable to
+      act (Art. 49), but this is not linked to complaints. The Doctoral Regulations give doctoral candidates a
+      general right to change mentor on written request, with the current mentor's statement, decided by the
+      competent body and the Senate (Art. 11(2)). This is not framed as an interim measure during a complaint.
+    rationale: No provision was identified that allows measures to protect a student's education while a complaint
+      is handled. The substitute-examiner and change-of-mentor provisions are general administrative
+      mechanisms that do not refer to complaints, so they do not reach level 1.
+    sources_reviewed:
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-ethics-code-amend-2018
+      - hr-unizg-ethics-appeal-guidelines-2019
+      - hr-unizg-statute-2023
+      - hr-unizg-study-regulations-2024
+      - hr-unizg-doctoral-regulations-2024
+      - hr-unizg-student-ombudsperson-page
+      - hr-unizg-gender-equality-plan-2023
+    gaps: No qualifying provision was identified in the sources reviewed. The change-of-mentor right could in
+      practice serve a protective function, but it has no link to complaints, no criteria and no timeframe.
+      Faculty-level rules were not reviewed.
+    reviewed: 2026-09-13
+  S06:
+    result: "2"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-ethics-code-amend-2018
+      - hr-unizg-ethics-appeal-guidelines-2019
+    locator: Code of Ethics Art. 33(4), 34(1), 35(3), 35(7); Amendment Decision item III (Art. 35(8)); Guidelines
+      points 4.2, 4.4, 4.8
+    evidence: The committee chair must convene the committee within 30 days of receiving a request (Art. 34(1)). A
+      written opinion is due within 60 days of the request, or at most 90 days where further information was
+      sought. These deadlines do not run during holidays and other periods of inactivity (Art. 35(3)). If a
+      committee cannot or will not give an opinion, the chair must inform the requester and the Ethics Council
+      within that deadline, and the Council decides whether to appoint a university committee (Art. 35(7),
+      Art. 29(3)). If the dean or rector does not forward a member's proposal within 30 days, the member may
+      go to the Ethics Council (Art. 33(4)). An appeal must be lodged within 15 days (Art. 35(8)). Under the
+      Guidelines, the appeal procedure should end within 90 days of receiving the documentation, which must be
+      supplied within 30 days (points 4.4, 4.8).
+    rationale: "Binding deadlines exist for convening the committee and for the written opinion, and there is an
+      escalation route when a request is not forwarded or a committee declines to act. That clearly meets
+      level 2. Level 3 is plausible, but the rules state no consequence or escalation when a committee simply
+      misses the opinion deadline. The deadlines are also suspended during inactive periods, and the
+      appeal-stage deadline appears only in guidance. The lower level is assigned. Currency caveat: this
+      finding relies on the 2007 Code of Ethics, whose continued legal force after 1 October 2024 could not be
+      confirmed (2023 Statute Art. 129(1))."
+    gaps: The deadlines govern a procedure that produces non-binding opinions. No deadlines were identified for
+      any disciplinary follow-up or for Student Ombudsperson handling. Deadlines for grade objections are left
+      to faculty acts.
+    reviewed: 2026-09-13
+  S07:
+    result: "2"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-ethics-code-amend-2018
+    locator: Code of Ethics Art. 35(1),(3),(4), Art. 39(2); Art. 33(2)
+    evidence: The opinion must be in writing (Art. 35(3)). It must contain the description of the request, the
+      provisions considered, the committee's position on compliance, the reasons, and whether it was unanimous
+      (Art. 35(4)). It is delivered to the requester, with a copy to the Ethics Council (Art. 35(1)). The
+      formal requester is the dean or rector (Art. 33(2)). Opinions are public and may be shortened or
+      anonymised to protect privacy (Art. 39(2)).
+    rationale: "Written, reasoned opinions are required. However, the student who raised the concern is not the
+      formal requester and has no express right to receive the opinion; public release of opinions is not
+      delivery to the complainant. The opinion is not required to state the available appeal route. Level 3 is
+      therefore not met. Currency caveat: this finding relies on the 2007 Code of Ethics, whose continued
+      legal force after 1 October 2024 could not be confirmed (2023 Statute Art. 129(1))."
+    gaps: No express right for the student initiator to receive the reasoned opinion, and no requirement to state
+      the appeal route and its 15-day deadline in the opinion.
+    reviewed: 2026-09-13
+  S08:
+    result: "1"
+    verification: needs_review
+    confidence: low
+    source_ids:
+      - hr-unizg-ethics-code-amend-2018
+      - hr-unizg-ethics-appeal-guidelines-2019
+      - hr-unizg-ethics-code-2007
+      - hr-unizg-student-ombudsperson-page
+    locator: Amendment Decision items III-IV (Code Art. 35(8)-(10), Art. 36(k)); Guidelines points 4.1-4.9; Code
+      Art. 10(4), Art. 33(2); Statute Art. 65(3)(23)
+    evidence: Since 22 November 2018, the requester and the community member whose conduct was assessed may appeal
+      to the university Ethics Council within 15 days (Art. 35(8)). The Council may dismiss the appeal as late
+      or filed by an unauthorised person, reject it as unfounded, or uphold it and amend the opinion or return
+      it for a new procedure (Art. 35(9); Guidelines 4.5). The Council appoints a three-member reporting
+      committee (Guidelines 4.6). The Code asks members to try to resolve disputes first within the
+      university, and to go to external bodies only where appropriate and necessary (Art. 10(4)). The Student
+      Ombudsperson web page states that the office does not represent students before external state bodies.
+    rationale: 'An appeal to a different internal body (the Ethics Council) exists with a stated deadline and
+      outcomes, which would point to level 2. However, standing is limited to the formal requester, the dean
+      or rector (Art. 33(2)), and the person assessed. A student complainant who proposed the proceedings has
+      no express right to appeal, and "unauthorised person" is a stated ground for dismissal. No external
+      route is set out in the university rules. Because it is uncertain whether the complainant can use the
+      internal appeal at all, the lower level is assigned, with low confidence. Currency caveat: this finding
+      relies on the 2007 Code of Ethics, whose continued legal force after 1 October 2024 could not be
+      confirmed (2023 Statute Art. 129(1)).'
+    gaps: No express appeal right for student complainants and no external route set out in university
+      instruments. National remedies (courts, ombudsperson institutions) are left to the national-level
+      research. Grade objections (Study Regulations Art. 44) are an academic-review route, not an appeal
+      against a misconduct outcome.
+    reviewed: 2026-09-13
+  S09:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-statute-2023
+      - hr-unizg-ethics-code-2007
+    locator: Statute Art. 110; Code of Ethics Art. 2(3)-(5), Art. 35(5)
+    evidence: The Statute makes employees subject to disciplinary liability for breaches of work obligations and
+      for damaging the university's reputation, for prescribed disciplinary offences (Art. 110). The Code of
+      Ethics says its procedures are not an alternative to civil, criminal, administrative or disciplinary
+      proceedings (Art. 2(3)). Where a breach of the Code entails disciplinary liability under the Statute,
+      general acts may require the ethics committee's opinion to be sought in disciplinary proceedings (Art.
+      2(4)). An ethics opinion "ne veže druga tijela i nije upravni akt" ("does not bind other bodies and is
+      not an administrative act") (Art. 2(5)). An adverse opinion may assess the degree of non-compliance and
+      suggest preventive measures (Art. 35(5)).
+    rationale: Consequences exist through general employment and disciplinary liability. No university-wide
+      disciplinary scale applying specifically to misconduct towards students was identified in the sources
+      reviewed. The Statute does not list offences or sanctions, and ethics opinions carry no sanctions. Level
+      2 is not met.
+    gaps: The university's staff employment/disciplinary rulebook (Pravilnik o radu) was not reviewed. The Gender
+      Equality Plan refers to Art. 127 of the Pravilnik o radu (Rectorate) for employee dignity complaints;
+      that is a staff-only procedure. No power was identified to restrict a staff member's authority over
+      affected students.
+    reviewed: 2026-09-13
+  S10:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-study-regulations-2024
+      - hr-unizg-statute-2023
+      - hr-unizg-doctoral-regulations-2024
+    locator: Study Regulations Art. 43(4), Art. 44; Statute Art. 82(12)-(13); Doctoral Regulations Art. 11(2)
+    evidence: Students may object to a grade under faculty general acts (Statute Art. 82(13); Study Regulations
+      Art. 44(1)). After an oral exam they may ask for it to be repeated before an exam committee, and after a
+      written exam they may ask an exam committee to re-mark it (Art. 44(2)-(3)). They may also object to
+      assessment in continuous monitoring (Art. 43(4)). Students may inspect their marked written exams
+      (Statute Art. 82(12)). Doctoral candidates may request a change of mentor (Doctoral Regulations Art.
+      11(2)).
+    rationale: General rights to grade review, re-examination and change of mentor exist, but none is linked to a
+      finding of misconduct. This matches level 1. No remedies following misconduct findings were identified.
+    gaps: No provision was identified requiring or enabling annulment of tainted grades, re-assessment by a
+      different examiner, extensions or a new supervisor following a misconduct or ethics finding.
+    reviewed: 2026-09-13
+  S11:
+    result: "1"
+    verification: needs_review
+    confidence: low
+    source_ids:
+      - hr-unizg-doctoral-regulations-2024
+      - hr-unizg-gender-equality-plan-2023
+    locator: Doctoral Regulations Art. 8(4); Gender Equality Plan section 2.5, 'Mjere i aktivnosti za Sveučilište'
+      point 2 (pp. 23-24)
+    evidence: Before taking on a first doctoral mentorship, a mentor must complete a mentoring workshop run by
+      faculties, the university or recognised international schools (Doctoral Regulations Art. 8(4)). The
+      workshop's content is not specified. A planned measure adopted in the Rectorate Gender Equality Plan
+      provides for awareness-raising and education for all Rectorate employees, heads of services and
+      management on bullying, harassment and sexual harassment. This is framed as a planned measure for the
+      Rectorate, not a requirement for teaching staff.
+    rationale: A mandatory workshop exists for new doctoral mentors, which on its face resembles level 2. However,
+      nothing in the source indicates that it covers professional boundaries, harassment or fair use of
+      authority. The harassment training in the Gender Equality Plan is a planned measure, limited to
+      Rectorate staff and not required for staff with assessment authority. Since it cannot be confirmed that
+      any required training addresses this safeguard's subject matter, the lower level is assigned, with low
+      confidence.
+    gaps: The mentor workshop's curriculum and frequency are not set out. No university-wide training requirement
+      on boundaries, harassment or anti-retaliation was identified for teachers and examiners. Implementation
+      of the Plan's measures is not documented in the sources reviewed.
+    reviewed: 2026-09-13
+  S12:
+    result: "1"
+    verification: needs_review
+    confidence: medium
+    source_ids:
+      - hr-unizg-doctoral-regulations-2024
+      - hr-unizg-ethics-code-2007
+    locator: Doctoral Regulations Art. 8(1)-(3), Art. 16(3)-(4); Code of Ethics Art. 19(5)
+    evidence: A doctoral mentor must hold at least an assistant professor or research associate position, or an
+      equivalent. The mentor must also be an active researcher or artist in the field, with publications or
+      performed works in the last five years (Art. 8(1)-(2)). The Senate appoints mentors on the proposal of
+      the field council and study provider (Art. 8(3)). The proposal committee assesses the proposed mentor's
+      competencies (Art. 16(3)-(4)). The Code of Ethics requires a statement of originality of work on
+      election or re-election to academic ranks (Art. 19(5)).
+    rationale: The appointment criteria for mentors refer only to academic and research qualifications and
+      activity, which is level 1. The originality statement concerns research integrity, not conduct towards
+      students. No consideration of prior upheld complaints or ethical record was identified for authority
+      roles.
+    gaps: No university-wide procedure was identified for reviewing conduct relevant to supervision or assessment
+      on appointment or periodically, and none for limiting authority where concerns are upheld.
+    reviewed: 2026-09-13
+evidence_gaps:
+  - No university-wide harassment rulebook or protocol applicable to students was identified. The Gender
+    Equality Plan (section 2.5) provides, as planned measures, that a special university committee prepare
+    instructions, an online reporting form and a standing protection mechanism, but no adopted instrument was
+    found in the regulations lists reviewed.
+  - The ethics system produces non-binding opinions (Code Art. 2(5)), and students cannot formally start
+    proceedings themselves (Art. 33(2)).
+  - No interim protective measures, no remedies for academic harm linked to misconduct findings, and no
+    conduct review for supervisory roles were identified at university level.
+  - Anti-retaliation protection is limited to people who reject or report harassment (Code Art. 12(5)).
+  - No recusal rule was identified for members of ethics bodies.
+  - Staff disciplinary offences and sanctions are not set out in the Statute (Art. 110). The relevant
+    employment rulebook was not reviewed.
+  - Many student-protection details (grade-objection deadlines, exam committee composition, harassment
+    procedures) are delegated to faculty general acts. Faculty-level rules exist but were outside scope;
+    search results indicated faculty-level harassment rules at, for example, the Faculty of Law, the Faculty
+    of Humanities and Social Sciences and the Faculty of Mining, Geology and Petroleum Engineering. These were
+    not opened or assessed.
+  - "Unresolved: Currency of the Code of Ethics. The published text is the 2007 Code (2009 print) with
+    separate 2018 amendments. It was adopted under the 2005 Statute, and Statute 2023 Art. 129 required
+    general acts to be aligned by 1 October 2024. Whether a new or consolidated Code has been adopted could
+    not be confirmed from the regulations page."
+  - 'Unresolved: Whether a student who proposes ethics proceedings counts as "podnositelj zahtjeva"
+    (requester) with a right to receive the opinion and to appeal. The text points to the dean or rector as
+    the formal requester (Art. 33(2)); practice was not researched.'
+  - "Unresolved: The Student Ombudsperson's governing rules (Student Council Statute, reported as adopted
+    October 2024; Art. 66 is cited on the Student Council page for the nomination procedure) were not opened.
+    Independence, powers and deadlines are taken only from the university's informational web page."
+  - "Unresolved: The Senate decision appointing the Ethics Council (18 February 2020) and the Ethics Council's
+    annual reports are listed on the Senate decisions page but were not opened."
+  - "Unresolved: The staff rulebook (Pravilnik o radu), including Art. 127 on employee dignity complaints
+    cited in the Gender Equality Plan, was not reviewed. The dignity-complaint procedure described there
+    appears to be staff-only."
+  - "Unresolved: Contents of the mandatory doctoral mentor workshop (Doctoral Regulations Art. 8(4)) are not
+    documented in the sources reviewed."
+  - "Unresolved: The Gender Equality Plan was read only in part (table of contents and pp. 22-24), because it
+    is a scanned PDF with no text layer."
+research_method: Researched with AI assistance from official sources, with an independent automated
+  cross-check. All findings await verification by a human second reviewer.
+research_dossier: research/pending/hr-unizg.yml
