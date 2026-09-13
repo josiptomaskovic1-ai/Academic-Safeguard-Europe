@@ -1,0 +1,22 @@
+{
+  "name": "academic-safeguard-europe",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open-source research infrastructure evaluating published safeguards against abuse of academic authority in European higher education.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run validate-data && astro build",
+    "preview": "astro preview",
+    "validate-data": "node scripts/validate-data.mjs",
+    "check-links": "node scripts/check-internal-links.mjs"
+  },
+  "dependencies": {
+    "astro": "^5.18.2",
+    "yaml": "^2.9.1"
+  }
+}

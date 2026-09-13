@@ -1,0 +1,37 @@
+# Hungary — country record
+# Structural metadata below is safe to publish. Everything under "research" fields
+# must come from recorded sources. See docs/data-model.md and docs/researcher-guide.md.
+
+iso_code: HU
+slug: hungary
+name: Hungary
+local_name: "Magyarország"
+eu_status: member_state
+eu_accession_year: 2004
+
+methodology_version: "0.1"
+research_status: not_researched
+last_reviewed: null
+confidence: null
+
+national_framework:
+  summary: null
+
+# NR = not researched. Never replace NR with 0 unless research was carried out.
+safeguards:
+  S01: { result: "NR" }
+  S02: { result: "NR" }
+  S03: { result: "NR" }
+  S04: { result: "NR" }
+  S05: { result: "NR" }
+  S06: { result: "NR" }
+  S07: { result: "NR" }
+  S08: { result: "NR" }
+  S09: { result: "NR" }
+  S10: { result: "NR" }
+  S11: { result: "NR" }
+  S12: { result: "NR" }
+
+institutions_researched: []
+evidence_gaps: []
+researcher_notes: null

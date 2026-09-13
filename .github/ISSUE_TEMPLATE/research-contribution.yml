@@ -1,0 +1,79 @@
+name: Research contribution
+description: Propose a finding for a country or institution.
+title: "[Research] "
+labels: [research, needs-review]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read the [researcher guide](https://github.com/josiptomaskovic1-ai/Academic-Safeguard-Europe/blob/main/docs/researcher-guide.md) and the rubric first. Never guess legal references. Use NR for not researched, ? for unclear, and 0 only after actually reviewing sources.
+  - type: input
+    id: jurisdiction
+    attributes:
+      label: Jurisdiction (ISO code)
+      placeholder: HR
+    validations:
+      required: true
+  - type: input
+    id: institution
+    attributes:
+      label: Institution (if relevant)
+  - type: dropdown
+    id: safeguard
+    attributes:
+      label: Safeguard
+      options: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12]
+    validations:
+      required: true
+  - type: dropdown
+    id: score
+    attributes:
+      label: Proposed result
+      options: ["3 - Strong", "2 - Substantial", "1 - Limited", "0 - Not identified", "? - Unable to assess"]
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Exact source reference
+      description: Title, issuing body, URL, official reference, article/section/page, date accessed.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence (paraphrase of the provision)
+    validations:
+      required: true
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Rationale against the rubric (why this level and not the next one up)
+    validations:
+      required: true
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: Confidence
+      options: [high, medium, low]
+    validations:
+      required: true
+  - type: input
+    id: contributor
+    attributes:
+      label: Contributor identity or pseudonymous ID
+    validations:
+      required: true
+  - type: textarea
+    id: coi
+    attributes:
+      label: Conflicts of interest (e.g. employed or enrolled at the institution)
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I opened every cited source myself. Methodology version 0.1.
+          required: true
+        - label: This contribution contains no personal data and no allegations about individuals.
+          required: true

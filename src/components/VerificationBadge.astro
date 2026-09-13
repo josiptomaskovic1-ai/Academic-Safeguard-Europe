@@ -1,0 +1,7 @@
+---
+import { VERIFICATION_LABELS, type Verification } from '../lib/data';
+interface Props { status?: Verification }
+const { status } = Astro.props;
+const glyph = { verified: '✓', needs_review: '◔', disputed: '!' } as const;
+---
+{status && <span class:list={['badge', status]}><span aria-hidden="true">{glyph[status]}</span>{VERIFICATION_LABELS[status]}</span>}

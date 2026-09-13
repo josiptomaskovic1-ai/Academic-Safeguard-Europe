@@ -1,0 +1,67 @@
+---
+import Base from '../../layouts/Base.astro';
+import ResearchStatus from '../../components/ResearchStatus.astro';
+import LastReviewed from '../../components/LastReviewed.astro';
+import MethodologyVersion from '../../components/MethodologyVersion.astro';
+import ConfidenceLabel from '../../components/ConfidenceLabel.astro';
+import SafeguardMatrix from '../../components/SafeguardMatrix.astro';
+import SourceCitation from '../../components/SourceCitation.astro';
+import CorrectionBanner from '../../components/CorrectionBanner.astro';
+import { getInstitutions, getCountry, coverage, type Institution } from '../../lib/data';
+import { url, repoFile } from '../../lib/url';
+
+export function getStaticPaths() {
+  return getInstitutions().map((institution) => ({ params: { id: institution.id }, props: { institution } }));
+}
+interface Props { institution: Institution }
+const { institution: i } = Astro.props;
+const country = getCountry(i.country)!;
+const cov = coverage(i.safeguards);
+const sourceIds = [...new Set(Object.values(i.safeguards).flatMap((r) => [...(r.source_ids ?? []), ...(r.sources_reviewed ?? [])]))];
+const typeLabel: Record<string, string> = { public_university: 'Public university', private_university: 'Private university', university_of_applied_sciences: 'University of applied sciences', polytechnic: 'Polytechnic', other: 'Higher-education institution' };
+const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`;
+---
+<Base title={i.canonical_name} description={`Published safeguards at ${i.canonical_name}: safeguard profile with evidence and sources.`} crumbs={[{ label: 'Europe', href: '/europe/' }, { label: country.name, href: `/countries/${country.slug}/` }, { label: i.canonical_name }]}>
+  <div class="container">
+    <p class="eyebrow">{typeLabel[i.institution_type]} · {country.name}</p>
+    <h1>{i.canonical_name}</h1>
+    {i.local_name && <p class="lede" lang={i.country.toLowerCase()} style="margin-top:-.5rem">{i.local_name}</p>}
+
+    <div class="panel" style="margin:1.25rem 0">
+      <dl class="meta-list">
+        <dt>Country</dt><dd><a href={url(`/countries/${country.slug}/`)}>{country.name}</a></dd>
+        <dt>Official website</dt><dd><a href={i.website} rel="noopener">{i.website.replace(/^https?:\/\//, '')}</a></dd>
+        <dt>Research status</dt><dd><ResearchStatus status={i.research_status} kind="institution" /></dd>
+        <dt>Last reviewed</dt><dd><LastReviewed date={i.last_reviewed} /></dd>
+        <dt>Methodology</dt><dd><MethodologyVersion version={i.methodology_version} /></dd>
+        <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
+        {i.confidence && <><dt>Overall confidence</dt><dd><ConfidenceLabel value={i.confidence} /></dd></>}
+        <dt>Corrections</dt><dd>{{ none: 'No correction requests', open: 'Correction request open', resolved: 'Correction request resolved' }[i.correction_status]}</dd>
+        <dt>Data file</dt><dd><a href={repoFile(file)}><code>{file}</code></a></dd>
+      </dl>
+    </div>
+
+    <div class="notice">
+      <p><strong>What this profile shows.</strong> Results describe the institution's published university-wide rules, reviewed against the <a href={url('/standard/')}>Standard</a>. Faculty-level rules may add protections. A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists.</p>
+    </div>
+    {cov.provisional > 0 && <div class="notice provisional"><p><strong>{cov.provisional} of {cov.researched} findings are provisional.</strong> They have not yet been independently verified by a second reviewer and may change.</p></div>}
+    {i.research_method && <p class="small muted"><strong>Research method:</strong> {i.research_method}</p>}
+
+    {i.evidence_note && <section aria-labelledby="summary"><h2 id="summary">Summary of published safeguards</h2><p class="prose">{i.evidence_note}</p></section>}
+
+    <section aria-labelledby="matrix">
+      <h2 id="matrix">Safeguard profile</h2>
+      <p class="muted small">Select a safeguard to see the evidence, source location, rationale and confidence.</p>
+      <SafeguardMatrix safeguards={i.safeguards} />
+    </section>
+
+    {i.evidence_gaps?.length ? <section aria-labelledby="gaps"><h2 id="gaps">Known evidence gaps</h2><ul class="prose">{i.evidence_gaps.map((g) => <li>{g}</li>)}</ul></section> : null}
+
+    <section aria-labelledby="src">
+      <h2 id="src">Sources</h2>
+      <ul class="source-list prose">{sourceIds.map((id) => <li><SourceCitation id={id} full /></li>)}</ul>
+    </section>
+
+    <div style="margin-top:3rem"><CorrectionBanner target={i.id} name={i.canonical_name} /></div>
+  </div>
+</Base>

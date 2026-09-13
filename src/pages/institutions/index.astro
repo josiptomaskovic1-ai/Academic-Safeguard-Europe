@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import InstitutionCard from '../../components/InstitutionCard.astro';
+import { getInstitutions } from '../../lib/data';
+import { url } from '../../lib/url';
+const institutions = getInstitutions();
+---
+<Base title="Institutions" description="Institution-level safeguard profiles." crumbs={[{ label: 'Institutions' }]}>
+  <div class="container">
+    <h1>Institution profiles</h1>
+    <p class="lede">Profiles describe the safeguards in an institution's own published rules. ASE adds a profile only once it has researched the institution; the absence of a profile is not a judgement.</p>
+    <div class="notice"><p>There is no overall ranking. Each profile shows twelve separate safeguard results with evidence. To compare one safeguard across countries, use <a href={url('/compare/')}>Compare safeguards</a>.</p></div>
+    {institutions.length
+      ? <div class="grid grid-2" style="margin-top:1.5rem">{institutions.map((i) => <InstitutionCard institution={i} />)}</div>
+      : <p class="muted">No institution profiles have been published yet.</p>}
+    <h2>Suggest an institution</h2>
+    <p class="prose">Institution research follows the same workflow as national research. See the <a href={url('/contribute/')}>contributor guide</a>.</p>
+  </div>
+</Base>

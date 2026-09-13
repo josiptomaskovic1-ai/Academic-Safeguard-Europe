@@ -1,0 +1,6 @@
+---
+import { url } from '../lib/url';
+interface Props { version: string }
+const { version } = Astro.props;
+---
+<a href={url('/methodology/')}>Methodology v{version}</a>

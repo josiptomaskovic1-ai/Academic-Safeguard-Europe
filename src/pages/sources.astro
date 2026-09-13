@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import SourceCitation from '../components/SourceCitation.astro';
+import { getSources, getCountry } from '../lib/data';
+import { repoTree } from '../lib/url';
+
+const sources = getSources();
+const groups = [...new Set(sources.map((s) => s.country))].sort().map((code) => ({
+  code,
+  name: getCountry(code)?.name ?? code,
+  items: sources.filter((s) => s.country === code).sort((a, b) => a.id.localeCompare(b.id)),
+}));
+---
+<Base title="Sources" description="Every primary source cited in ASE findings, with stable IDs." crumbs={[{ label: 'Sources' }]}>
+  <div class="container">
+    <h1>Source register</h1>
+    <p class="lede">Every source cited in a finding has a stable ID, the date it was accessed and, where available, an archived copy. Citations throughout the site link here.</p>
+    <p class="small"><a href={repoTree('data/sources')}>Source records on GitHub</a></p>
+    {sources.length === 0 && <p class="muted">No sources have been recorded yet.</p>}
+    {groups.map((g) => (
+      <section aria-labelledby={`g-${g.code}`}>
+        <h2 id={`g-${g.code}`}>{g.name}</h2>
+        <ul class="source-list prose">
+          {g.items.map((s) => <li id={s.id}><SourceCitation id={s.id} /><br />{s.notes && <span class="small muted">{s.notes}</span>}</li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>

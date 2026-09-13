@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import SafeguardScore from '../components/SafeguardScore.astro';
+import { Content, frontmatter } from '../../standard/standard-v0.1.md';
+import { getRubric } from '../lib/data';
+import { repoFile, url } from '../lib/url';
+const rubric = getRubric();
+---
+<Base title="Standard" description="The European Academic Safeguarding Standard: twelve safeguards against abuse of academic authority, with observable scoring criteria." crumbs={[{ label: 'Standard' }]}>
+  <div class="container">
+    <p class="eyebrow">Version {frontmatter.version} · {frontmatter.status}</p>
+    <h1>{frontmatter.title}</h1>
+    <p class="lede">Twelve safeguards that allow students to raise concerns about the exercise of academic authority without risking their education. Each is defined by observable features of published rules.</p>
+    <p class="small"><a href={repoFile('standard/standard-v0.1.md')}>Source text</a> · <a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a> · <a href={url('/methodology/')}>Scoring methodology</a> · <a href={url('/methodology/changelog/')}>Changelog</a></p>
+
+    <div class="prose" style="margin-top:2rem"><Content /></div>
+
+    <h2 id="rubric">Rubric: criteria for each level</h2>
+    <p class="prose muted">Every safeguard can also be recorded as <SafeguardScore result="?" /> or <SafeguardScore result="NR" />. Where two levels are plausible, the lower one is assigned.</p>
+    {rubric.safeguards.map((s) => (
+      <section id={s.slug} aria-labelledby={`${s.slug}-h`} style="margin-top:2.25rem">
+        <p class="eyebrow" style="margin-bottom:.2rem">{s.id}</p>
+        <h3 id={`${s.slug}-h`} style="margin-top:0;font-size:1.4rem">{s.name}</h3>
+        <p class="prose"><strong>Question:</strong> {s.question}</p>
+        {s.notes && <p class="prose small muted">{s.notes}</p>}
+        <div class="table-wrap">
+          <table>
+            <caption class="visually-hidden">Levels for {s.name}</caption>
+            <thead><tr><th scope="col" style="width:11rem">Level</th><th scope="col">Observable criteria</th></tr></thead>
+            <tbody>
+              {(['3', '2', '1', '0'] as const).map((lvl) => (
+                <tr><td><SafeguardScore result={lvl} /></td><td>{s.levels[lvl]}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="small" style="margin-top:.5rem"><a href={url(`/compare/${s.slug}/`)}>{s.name} across EU countries →</a></p>
+      </section>
+    ))}
+  </div>
+</Base>

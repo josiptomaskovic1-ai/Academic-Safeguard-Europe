@@ -1,0 +1,43 @@
+name: Methodology proposal / disagreement
+description: Propose a change to the Standard, rubric or methodology, or record disagreement with it.
+title: "[Methodology] "
+labels: [methodology]
+body:
+  - type: markdown
+    attributes:
+      value: Methodological disagreements are recorded publicly and considered for the next version. They do not change findings under the current version.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - A safeguard definition (S01-S12)
+        - Level criteria in the rubric
+        - Result values or verification rules
+        - Research status definitions
+        - Scope of the Standard
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current text or rule
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change or point of disagreement
+    validations:
+      required: true
+  - type: textarea
+    id: reasons
+    attributes:
+      label: Reasons and evidence (e.g. how a national system achieves the same protection differently)
+    validations:
+      required: true
+  - type: textarea
+    id: affected
+    attributes:
+      label: Findings affected (record IDs), if any

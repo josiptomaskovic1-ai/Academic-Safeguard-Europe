@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import ResearchStatus from '../../components/ResearchStatus.astro';
+import LastReviewed from '../../components/LastReviewed.astro';
+import MethodologyVersion from '../../components/MethodologyVersion.astro';
+import ConfidenceLabel from '../../components/ConfidenceLabel.astro';
+import SafeguardMatrix from '../../components/SafeguardMatrix.astro';
+import SourceCitation from '../../components/SourceCitation.astro';
+import InstitutionCard from '../../components/InstitutionCard.astro';
+import CorrectionBanner from '../../components/CorrectionBanner.astro';
+import { getCountries, getInstitutionsFor, coverage, type Country } from '../../lib/data';
+import { url, repoFile } from '../../lib/url';
+
+export function getStaticPaths() {
+  return getCountries().map((country) => ({ params: { slug: country.slug }, props: { country } }));
+}
+interface Props { country: Country }
+const { country: c } = Astro.props;
+const cov = coverage(c.safeguards);
+const institutions = getInstitutionsFor(c.iso_code);
+const sourceIds = [...new Set(Object.values(c.safeguards).flatMap((r) => [...(r.source_ids ?? []), ...(r.sources_reviewed ?? [])]))];
+const complete = cov.researched === cov.total && cov.verified === cov.total;
+---
+<Base title={c.name} description={`Published safeguards against abuse of academic authority in ${c.name}: research status, findings and sources.`} crumbs={[{ label: 'Europe', href: '/europe/' }, { label: c.name }]}>
+  <div class="container">
+    <p class="eyebrow">EU Member State · {c.iso_code}</p>
+    <h1>{c.name} <span class="muted" style="font-size:.55em;font-weight:400" lang={c.iso_code.toLowerCase()}>{c.local_name !== c.name ? c.local_name : ''}</span></h1>
+
+    <div class="panel" style="margin:1.25rem 0">
+      <dl class="meta-list">
+        <dt>Research status</dt><dd><ResearchStatus status={c.research_status} /></dd>
+        <dt>Last reviewed</dt><dd><LastReviewed date={c.last_reviewed} /></dd>
+        <dt>Methodology</dt><dd><MethodologyVersion version={c.methodology_version} /></dd>
+        <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched at national level · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
+        {c.confidence && <><dt>Overall confidence</dt><dd><ConfidenceLabel value={c.confidence} /></dd></>}
+        <dt>Data file</dt><dd><a href={repoFile(`data/countries/${c.slug}.yml`)}><code>data/countries/{c.slug}.yml</code></a></dd>
+      </dl>
+    </div>
+
+    {!complete && (
+      <div class="notice">
+        <p><strong>Research for this jurisdiction is currently incomplete.</strong> Missing data should not be interpreted as absence of safeguards.</p>
+        {cov.provisional > 0 && <p>Findings marked <em>provisional</em> have not yet been independently verified by a second reviewer and may change.</p>}
+      </div>
+    )}
+    {c.research_method && <p class="small muted"><strong>Research method:</strong> {c.research_method}</p>}
+
+    <section aria-labelledby="nf">
+      <h2 id="nf">National framework</h2>
+      {c.national_framework.summary
+        ? <div class="prose"><p>{c.national_framework.summary}</p><p class="small muted">This summary describes published legal and regulatory texts. It does not describe how they are applied in practice.</p></div>
+        : <p class="muted">The national framework for {c.name} has not been reviewed yet. <a href={url('/contribute/')}>Contributors with knowledge of {c.name}'s higher-education law are welcome.</a></p>}
+    </section>
+
+    <section aria-labelledby="matrix">
+      <h2 id="matrix">National safeguard matrix</h2>
+      <p class="muted small">Results describe what the national framework itself provides or requires of higher-education institutions. Institutions may provide more. Select a safeguard to see the evidence.</p>
+      <SafeguardMatrix safeguards={c.safeguards} />
+    </section>
+
+    <section aria-labelledby="inst">
+      <h2 id="inst">Institutions researched</h2>
+      {institutions.length
+        ? <div class="grid grid-2">{institutions.map((i) => <InstitutionCard institution={i} />)}</div>
+        : <p class="muted">No institution in {c.name} has been researched yet.</p>}
+    </section>
+
+    <section aria-labelledby="gaps">
+      <h2 id="gaps">Known evidence gaps</h2>
+      {c.evidence_gaps?.length
+        ? <ul class="prose">{c.evidence_gaps.map((g) => <li>{g}</li>)}</ul>
+        : <p class="muted">{cov.researched === 0 ? 'No research has been carried out yet, so the whole jurisdiction is an evidence gap.' : 'No specific gaps recorded.'}</p>}
+    </section>
+
+    <section aria-labelledby="src">
+      <h2 id="src">Sources</h2>
+      {sourceIds.length
+        ? <ul class="source-list prose">{sourceIds.map((id) => <li><SourceCitation id={id} full /></li>)}</ul>
+        : <p class="muted">No sources recorded yet.</p>}
+    </section>
+
+    {c.researcher_notes && <section aria-labelledby="notes"><h2 id="notes">Researcher notes</h2><p class="prose">{c.researcher_notes}</p></section>}
+
+    <div style="margin-top:3rem"><CorrectionBanner target={`country/${c.iso_code}`} name={`the authorities or institutions of ${c.name}`} /></div>
+  </div>
+</Base>

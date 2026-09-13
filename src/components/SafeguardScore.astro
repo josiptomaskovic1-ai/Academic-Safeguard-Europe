@@ -1,0 +1,17 @@
+---
+import { RESULT_LABELS, type ResultValue, type Verification } from '../lib/data';
+interface Props { result: ResultValue; verification?: Verification; compact?: boolean }
+const { result, verification, compact = false } = Astro.props;
+const label = RESULT_LABELS[result];
+const n = ['1', '2', '3'].includes(result) ? Number(result) : 0;
+const provisional = verification && verification !== 'verified' && result !== 'NR';
+const sr = `${result === 'NR' || result === '?' ? '' : `Score ${result}: `}${label}${provisional ? ' (provisional, not yet verified)' : ''}`;
+---
+<span class:list={['score', { provisional }]} data-result={result}>
+  <span class="visually-hidden">{sr}</span>
+  <span aria-hidden="true" class="score-code">{result}</span>
+  {result !== 'NR' && result !== '?' && (
+    <span class="score-pips" aria-hidden="true"><i class:list={{ on: n >= 1 }}></i><i class:list={{ on: n >= 2 }}></i><i class:list={{ on: n >= 3 }}></i></span>
+  )}
+  {!compact && <span aria-hidden="true">{label}</span>}
+</span>

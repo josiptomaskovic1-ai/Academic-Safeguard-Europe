@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import EuropeTileMap from '../components/EuropeTileMap.astro';
+import ResearchStatus from '../components/ResearchStatus.astro';
+import LastReviewed from '../components/LastReviewed.astro';
+import { getCountries, getInstitutionsFor, coverage } from '../lib/data';
+import { url } from '../lib/url';
+const countries = getCountries();
+---
+<Base title="Europe" description="Research status and safeguard profiles for all 27 EU Member States." crumbs={[{ label: 'Europe' }]}>
+  <div class="container">
+    <h1>European country explorer</h1>
+    <p class="lede">All 27 EU Member States are represented. Each tile shows how far ASE's research has progressed. It does not show how well a country performs.</p>
+    <div class="notice"><p>Most jurisdictions have not been researched yet. <strong>Missing data should not be interpreted as absence of safeguards.</strong> To compare results for one safeguard across countries, use <a href={url('/compare/')}>Compare safeguards</a>.</p></div>
+
+    <div class="explorer" style="margin-top:2rem">
+      <section aria-labelledby="map-h">
+        <h2 id="map-h" style="margin-top:0">Map</h2>
+        <EuropeTileMap />
+      </section>
+      <section aria-labelledby="table-h">
+        <h2 id="table-h" style="margin-top:0">All Member States</h2>
+        <div class="table-wrap">
+          <table>
+            <caption class="visually-hidden">Research status by EU Member State</caption>
+            <thead>
+              <tr><th scope="col">Country</th><th scope="col">Research status</th><th scope="col">Safeguards researched</th><th scope="col">Institutions</th><th scope="col">Last reviewed</th></tr>
+            </thead>
+            <tbody>
+              {countries.map((c) => {
+                const cov = coverage(c.safeguards);
+                const inst = getInstitutionsFor(c.iso_code).length;
+                return (
+                  <tr>
+                    <th scope="row"><a href={url(`/countries/${c.slug}/`)}>{c.name}</a> <span class="source-id">{c.iso_code}</span></th>
+                    <td><ResearchStatus status={c.research_status} /></td>
+                    <td>{cov.researched === 0 ? <span class="muted">—</span> : <>{cov.researched} / {cov.total}<br /><span class="small muted">{cov.verified} verified, {cov.provisional} provisional</span></>}</td>
+                    <td>{inst || <span class="muted">—</span>}</td>
+                    <td class="small"><LastReviewed date={c.last_reviewed} /></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</Base>

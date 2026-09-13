@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCorrections } from '../lib/data';
+import { newIssue, repoFile } from '../lib/url';
+const corrections = [...getCorrections()].sort((a, b) => b.received.localeCompare(a.received));
+const TYPE: Record<string, string> = { factual_correction: 'Factual correction', methodology_disagreement: 'Disagreement with methodology', new_source: 'New or newer source', broken_link: 'Broken link' };
+const STATUS: Record<string, string> = { open: 'Open', under_review: 'Under review', accepted: 'Accepted', partially_accepted: 'Partially accepted', not_accepted: 'Not accepted' };
+---
+<Base title="Corrections and right of reply" description="How universities, researchers and others can correct or challenge ASE findings." crumbs={[{ label: 'Corrections' }]}>
+  <div class="container">
+    <h1>Corrections and right of reply</h1>
+    <p class="lede">Any finding can be challenged. Institutions, researchers, student representatives and members of the public can tell us about missing policies, newer regulations, broken links, incorrect interpretations or errors in our methodology.</p>
+
+    <div class="two-col" style="margin-top:2rem">
+      <section class="panel" aria-labelledby="fact">
+        <h2 id="fact" style="margin-top:0">Factual correction</h2>
+        <p>Use this route if a finding is wrong under ASE's own rubric. For example:</p>
+        <ul>
+          <li>a policy or regulation exists that we did not review;</li>
+          <li>a newer version replaces the document we cited;</li>
+          <li>we misread or mistranslated a provision;</li>
+          <li>a link is broken or points to the wrong document.</li>
+        </ul>
+        <p>If accepted, the finding changes and the change is logged.</p>
+        <p><a class="btn btn-primary" href={newIssue('correction.yml', '[Correction] ')}>Submit a factual correction</a></p>
+      </section>
+      <section class="panel" aria-labelledby="method">
+        <h2 id="method" style="margin-top:0">Disagreement with the methodology</h2>
+        <p>Use this route if you accept that we applied the rubric correctly but think the rubric itself is wrong. For example, a safeguard should be defined differently, or a national system achieves the same protection another way.</p>
+        <p>Disagreements are recorded publicly and considered for the next methodology version. They do not change findings under the current version, but they are shown alongside the finding where relevant.</p>
+        <p><a class="btn btn-secondary" href={newIssue('methodology-proposal.yml', '[Methodology] ')}>Record a methodological disagreement</a></p>
+      </section>
+    </div>
+
+    <section aria-labelledby="process" class="prose">
+      <h2 id="process">What happens next</h2>
+      <ol>
+        <li><strong>Acknowledgement.</strong> The request is logged with an ID such as <code>C-2026-001</code>, normally within 10 working days.</li>
+        <li><strong>Disputed marking.</strong> If the request raises a substantive question, the affected finding is marked <em>disputed</em> and the dispute is shown publicly next to it. The finding is not removed.</li>
+        <li><strong>Review.</strong> A reviewer who did not make the original finding checks the new evidence against the rubric.</li>
+        <li><strong>Outcome.</strong> The request is accepted, partially accepted or not accepted, with written reasons. Any change to data is made in a public commit that references the correction ID.</li>
+        <li><strong>Record.</strong> The earlier finding remains in the public history. Nothing is silently overwritten.</li>
+      </ol>
+      <p>Institutions may also submit a short <strong>statement of reply</strong> (up to 300 words) to be published with their profile, whatever the outcome.</p>
+      <h3>Please do not include</h3>
+      <p>Correction requests are public. Do not include allegations about individuals, names of staff or students, health information, complaint files or private correspondence. ASE cannot investigate individual cases.</p>
+      <p>If you cannot use GitHub, the project maintainers will publish a contact address in the repository README.</p>
+    </section>
+
+    <section aria-labelledby="log">
+      <h2 id="log">Public corrections log</h2>
+      {corrections.length === 0 ? (
+        <p class="muted">No correction requests have been received yet.</p>
+      ) : (
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">ID</th><th scope="col">Received</th><th scope="col">Type</th><th scope="col">Record</th><th scope="col">Summary</th><th scope="col">Status</th></tr></thead>
+            <tbody>
+              {corrections.map((c) => (
+                <tr id={c.id}><th scope="row"><code>{c.id}</code></th><td>{c.received}</td><td>{TYPE[c.type]}</td><td><code>{c.target}</code></td><td>{c.summary}{c.resolution && <><br /><span class="small muted">Resolution: {c.resolution}</span></>}</td><td>{STATUS[c.status]}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      <p class="small muted">Log file: <a href={repoFile('data/corrections.yml')}><code>data/corrections.yml</code></a> · Full policy: <a href={repoFile('docs/correction-policy.md')}>correction-policy.md</a> · <a href={repoFile('docs/right-of-reply.md')}>right-of-reply.md</a></p>
+    </section>
+  </div>
+</Base>

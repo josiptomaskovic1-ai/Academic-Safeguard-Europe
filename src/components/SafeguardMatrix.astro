@@ -1,0 +1,31 @@
+---
+import { getRubric, type SafeguardResult } from '../lib/data';
+import SafeguardScore from './SafeguardScore.astro';
+import VerificationBadge from './VerificationBadge.astro';
+import EvidencePanel from './EvidencePanel.astro';
+
+interface Props { safeguards: Record<string, SafeguardResult>; idPrefix?: string }
+const { safeguards, idPrefix = 'sg' } = Astro.props;
+const { safeguards: defs } = getRubric();
+---
+<ul class="matrix">
+  {defs.map((def) => {
+    const r = safeguards[def.id] ?? { result: 'NR' };
+    return (
+      <li id={`${idPrefix}-${def.id.toLowerCase()}`}>
+        <details>
+          <summary>
+            <span class="sg-id">{def.id}</span>
+            <span class="sg-name">{def.name}</span>
+            <span class="sg-result">
+              <SafeguardScore result={r.result} verification={r.verification} />
+              {r.result !== 'NR' && r.verification !== 'verified' && <VerificationBadge status={r.verification} />}
+              <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+            </span>
+          </summary>
+          <div class="sg-body"><EvidencePanel r={r} def={def} /></div>
+        </details>
+      </li>
+    );
+  })}
+</ul>

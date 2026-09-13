@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { REPO_URL, repoFile, newIssue } from '../lib/url';
+---
+<Base title="Contribute" description="How to contribute research, sources, verification and corrections to Academic Safeguard Europe." crumbs={[{ label: 'Contribute' }]}>
+  <div class="container">
+    <h1>Contribute research</h1>
+    <p class="lede">European coverage depends on people who can read national legislation and university regulations in their original languages. You don't need to write code; research is contributed as small YAML files.</p>
+
+    <div class="grid grid-2" style="margin-top:2rem">
+      <article class="card"><h2 style="font-size:1.2rem;margin:0">Add a source</h2><p>Found an official law, statute, regulation or complaint procedure? Record it once with a stable ID.</p><p><a href={newIssue('source-submission.yml')}>Suggest a source</a> · <a href={repoFile('docs/researcher-guide.md#1-record-a-source')}>Guide</a></p></article>
+      <article class="card"><h2 style="font-size:1.2rem;margin:0">Propose a country finding</h2><p>Assess a safeguard in a national framework against the rubric, with the article, evidence and rationale.</p><p><a href={newIssue('research-contribution.yml')}>Open a research proposal</a> · <a href={repoFile('docs/researcher-guide.md#2-propose-a-finding')}>Guide</a></p></article>
+      <article class="card"><h2 style="font-size:1.2rem;margin:0">Add an institution</h2><p>Research a university's published rules. Start with statutes, study regulations, ethics codes and complaint procedures.</p><p><a href={repoFile('docs/researcher-guide.md#3-add-an-institution')}>Guide</a></p></article>
+      <article class="card"><h2 style="font-size:1.2rem;margin:0">Verify a finding</h2><p>Provisional findings need an independent second reviewer. This is the most valuable contribution for native speakers.</p><p><a href={repoFile('docs/researcher-guide.md#4-verify-a-finding')}>Verification guide</a></p></article>
+    </div>
+
+    <section class="prose" aria-labelledby="workflow">
+      <h2 id="workflow">Research workflow</h2>
+      <ol class="flow" aria-label="Research workflow">
+        <li>Source found</li><li>Source recorded</li><li>Proposed interpretation</li><li>Proposed score</li><li>Methodology check</li><li>Secondary verification</li><li>Verified</li><li class="final">Publication</li>
+      </ol>
+      <p><strong>A search result never becomes a public score directly.</strong></p>
+
+      <h2>What a research pull request contains</h2>
+      <ul>
+        <li>jurisdiction, and institution if relevant;</li>
+        <li>safeguard ID (S01–S12) and proposed result;</li>
+        <li>evidence summary and exact source reference (article, section, page);</li>
+        <li>rationale against the rubric;</li>
+        <li>review date and methodology version;</li>
+        <li>contributor identity or a pseudonymous contributor ID.</li>
+      </ul>
+      <p>Automated validation runs on every pull request, and a PR cannot be merged until it passes.</p>
+
+      <h2>Ground rules</h2>
+      <ul>
+        <li>Never invent or guess legal references, URLs, dates or quotations.</li>
+        <li>Use <code>NR</code> for anything not researched, and <code>?</code> where sources are unclear.</li>
+        <li>Choose the lower level when two are plausible.</li>
+        <li>No personal data, no allegations, no names of individuals.</li>
+        <li>Disclose conflicts of interest, for example if you are employed by the institution you are researching.</li>
+      </ul>
+      <p><a class="btn btn-primary" href={REPO_URL}>Go to the repository</a> <a class="btn btn-secondary" href={repoFile('CONTRIBUTING.md')}>CONTRIBUTING.md</a></p>
+    </section>
+  </div>
+</Base>

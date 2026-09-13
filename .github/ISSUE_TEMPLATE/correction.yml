@@ -1,0 +1,67 @@
+name: Correction / right of reply
+description: Report a factual error, a missing or newer policy, or a misread provision in an ASE finding.
+title: "[Correction] "
+labels: [correction]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping keep ASE accurate. **This issue is public.** Do not include personal data, names of staff or students, or allegations about individuals.
+        If you disagree with the methodology itself rather than how it was applied, use the *Methodology proposal* template instead.
+  - type: input
+    id: record
+    attributes:
+      label: Record ID
+      description: Shown at the bottom of each country or institution page, e.g. hr-unizg or country/HR.
+    validations:
+      required: true
+  - type: dropdown
+    id: safeguard
+    attributes:
+      label: Safeguard(s) affected
+      multiple: true
+      options: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S10, S11, S12, Record-level information, Source record]
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of correction
+      options:
+        - A policy or regulation was not reviewed (new_source)
+        - A newer version of a document applies (factual_correction)
+        - A provision was misread or mistranslated (factual_correction)
+        - A link is broken or wrong (broken_link)
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Document title, issuing body, URL, and the exact article, section or page.
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: You are submitting as
+      options: [The institution concerned, A national authority, A researcher, A student representative, Member of the public, Prefer not to say]
+    validations:
+      required: true
+  - type: textarea
+    id: reply
+    attributes:
+      label: Statement of reply (optional, institutions only, max 300 words)
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: This submission contains no personal data and no allegations about individuals.
+          required: true

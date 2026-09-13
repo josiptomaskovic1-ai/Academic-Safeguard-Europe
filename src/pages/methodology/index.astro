@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Content, frontmatter } from '../../../methodology/methodology-v0.1.md';
+import { getRubric } from '../../lib/data';
+import { repoFile, url } from '../../lib/url';
+const rubric = getRubric();
+---
+<Base title="Methodology" description="How Academic Safeguard Europe assigns, verifies and corrects safeguard findings." crumbs={[{ label: 'Methodology' }]}>
+  <div class="container">
+    <p class="eyebrow">Version {frontmatter.version} · {frontmatter.status}</p>
+    <h1>{frontmatter.title}</h1>
+    <p class="lede">How a score is determined, what evidence it needs, how it is verified, and how it can be challenged.</p>
+    <p class="small"><a href={url('/standard/#rubric')}>Rubric criteria</a> · <a href={repoFile('methodology/scoring-rubric.yml')}>scoring-rubric.yml</a> · <a href={repoFile('methodology/methodology-v0.1.md')}>Source text</a> · <a href={url('/methodology/changelog/')}>Changelog</a></p>
+    <div class="prose" style="margin-top:2rem">
+      <Content />
+      <h2>General rules from the rubric</h2>
+      <ul>{rubric.general_rules.map((r) => <li>{r}</li>)}</ul>
+    </div>
+  </div>
+</Base>

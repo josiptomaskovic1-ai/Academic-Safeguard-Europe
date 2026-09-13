@@ -1,0 +1,253 @@
+# European Academic Safeguarding Standard — scoring rubric
+# This file is the machine-readable source of truth for safeguard IDs and score levels.
+# The site, the validator and the human-readable Standard all derive from it.
+
+methodology_version: "0.1"
+published: "2026-09-13"
+status: draft-for-consultation
+
+# Allowed result values. These are NOT interchangeable.
+# NR must never be converted into 0. "?" must never be converted into 0.
+result_values:
+  - value: "NR"
+    label: Not researched
+    meaning: >-
+      No research has been carried out for this safeguard in this jurisdiction or institution.
+      Says nothing about whether a safeguard exists.
+  - value: "?"
+    label: Unable to assess
+    meaning: >-
+      Research was carried out, but the available sources were insufficient, inaccessible,
+      contradictory or ambiguous, so no score can responsibly be assigned.
+  - value: "0"
+    label: Not identified
+    meaning: >-
+      Research was carried out against the listed sources and no qualifying provision was
+      identified. This is not proof that no safeguard exists. Requires secondary verification
+      before publication.
+  - value: "1"
+    label: Limited
+    meaning: >-
+      A relevant provision exists, but it is general, partial, discretionary, or lacks the
+      operational elements needed to make it usable.
+  - value: "2"
+    label: Substantial
+    meaning: >-
+      An explicit, operational provision exists and covers the core of the safeguard, but one or
+      more elements required for "Strong" are missing.
+  - value: "3"
+    label: Strong
+    meaning: >-
+      An explicit, operational, binding provision exists that meets every element listed for
+      "Strong" for this safeguard.
+
+confidence_levels:
+  - value: high
+    meaning: Primary, current, official source; provision directly on point; interpretation straightforward.
+  - value: medium
+    meaning: Primary source, but interpretation requires some inference, or currency of the document is not confirmed.
+  - value: low
+    meaning: Relies on secondary sources, translations of uncertain quality, or significant interpretive judgement.
+
+verification_statuses:
+  - value: verified
+    meaning: A second reviewer independently checked the source, locator, interpretation and score against this rubric.
+  - value: needs_review
+    meaning: Proposed by a researcher; not yet independently verified. Shown publicly only as provisional.
+  - value: disputed
+    meaning: A correction request or reviewer objection is open. The finding and the dispute are both shown.
+
+# General scoring rules applied to every safeguard.
+general_rules:
+  - Score only what is documented in published sources. Formal policy is not evidence of implementation.
+  - At national level, score what the national framework itself provides or requires of institutions.
+    At institution level, score what the institution's own published rules provide, including national rules
+    the institution's rules expressly apply.
+  - A provision counts only if it applies to students (or doctoral candidates) as potential complainants.
+    Staff-only procedures are recorded in notes but do not raise the score.
+  - Where elements are split across several documents, they may be combined if each document is cited.
+  - Where two levels are plausible, assign the lower level and explain the uncertainty in the rationale.
+  - Every score other than NR must cite at least one source ID and a locator (article, section or page).
+  - A 0 must list which sources were reviewed. A 0 should be verified by a second reviewer before publication.
+
+safeguards:
+  - id: S01
+    slug: authority-abuse-definition
+    name: Definition of abuse of academic authority
+    question: >-
+      Do the rules define misuse of academic authority (assessment, supervision, admission,
+      progression, references, research credit) as a form of misconduct?
+    levels:
+      "0": No provision identified that treats misuse of academic authority as misconduct.
+      "1": >-
+        Only general conduct or ethics duties (e.g. "act with integrity", "respect students") without
+        identifying misuse of authority over students.
+      "2": >-
+        Misuse of authority over students is expressly named as misconduct, or specific abuses
+        (e.g. discriminatory assessment, harassment by teachers) are prohibited, but without a
+        definition covering assessment, supervision and progression decisions together.
+      "3": >-
+        An explicit definition or enumerated list covering misuse of assessment, supervisory and
+        progression powers, in a binding instrument that links breaches to a disciplinary procedure.
+
+  - id: S02
+    slug: anti-retaliation
+    name: Explicit anti-retaliation protection
+    question: >-
+      Are students who report concerns, complain or act as witnesses expressly protected against
+      retaliation, including academic retaliation?
+    levels:
+      "0": No anti-retaliation provision applicable to student complainants identified.
+      "1": >-
+        General whistleblower or anti-victimisation protection exists, but its application to
+        students raising concerns about academic staff is unclear or indirect.
+      "2": >-
+        Retaliation against student complainants or witnesses is expressly prohibited, but
+        academic forms of retaliation (grades, supervision, references) are not addressed, or no
+        mechanism for reporting retaliation is specified.
+      "3": >-
+        Express prohibition covering student complainants and witnesses, expressly including
+        academic retaliation, with retaliation itself treated as a disciplinary offence and a
+        route to report it.
+
+  - id: S03
+    slug: independent-complaint-mechanism
+    name: Independent complaint mechanism
+    question: >-
+      Can a student complain to a body that is independent of the academic unit and of the person
+      complained about?
+    levels:
+      "0": No complaint mechanism for students about staff conduct identified.
+      "1": >-
+        A complaint route exists, but it runs through the line management of the person complained
+        about (e.g. head of department) with no independent alternative.
+      "2": >-
+        A complaint body or officer outside the academic unit exists (e.g. university-level ethics
+        committee, student ombudsperson), but its independence, powers or scope are not fully set out.
+      "3": >-
+        A body or officer with documented independence (appointment and reporting rules), a
+        defined mandate over staff–student conduct complaints, and access for students without
+        prior approval from the unit concerned.
+
+  - id: S04
+    slug: conflict-of-interest-recusal
+    name: Conflict-of-interest and recusal rules
+    question: >-
+      Must people who decide on complaints, assessments or appeals step aside where they have a
+      conflict of interest, including where they are the subject of the complaint?
+    levels:
+      "0": No conflict-of-interest or recusal rule for relevant decisions identified.
+      "1": General conflict-of-interest duty without application to complaint, assessment or appeal decisions.
+      "2": >-
+        Recusal is required for complaint or appeal decisions, or for assessment, but not for both,
+        or there is no procedure for a party to request recusal.
+      "3": >-
+        Recusal required for complaint, appeal and assessment decisions involving a conflict, with a
+        procedure for a student to request recusal and a rule on who decides the request.
+
+  - id: S05
+    slug: interim-protective-measures
+    name: Interim protective measures
+    question: >-
+      While a complaint is being handled, can measures be taken to protect the student's
+      education (e.g. change of examiner, supervisor, group)?
+    levels:
+      "0": No interim measures provision identified.
+      "1": Interim measures are mentioned in general terms or at the discretion of management with no criteria.
+      "2": >-
+        Specific interim measures are available (e.g. alternative examiner or supervisor), but
+        without criteria, a request route for the student, or a timeframe.
+      "3": >-
+        Specific academic interim measures, a route for the student to request them, criteria for
+        granting them, and an explicit statement that they do not presume guilt or disadvantage the student.
+
+  - id: S06
+    slug: procedural-deadlines
+    name: Procedural deadlines
+    question: Are there binding deadlines for acknowledging, investigating and deciding complaints?
+    levels:
+      "0": No deadlines identified.
+      "1": Only a general duty to act "without delay" or "promptly".
+      "2": A binding deadline exists for at least one stage (e.g. decision), but not for the whole procedure.
+      "3": Binding deadlines for acknowledgement or opening, and for decision, with a consequence or escalation route if they are missed.
+
+  - id: S07
+    slug: written-reasoned-decisions
+    name: Written, reasoned decisions
+    question: Does the complainant receive a written decision stating the reasons?
+    levels:
+      "0": No provision on the form of decisions identified.
+      "1": A decision is communicated, but there is no requirement that it be written or reasoned.
+      "2": Written decisions are required, but reasons are not required, or the complainant is not entitled to receive them.
+      "3": Written, reasoned decision delivered to the complainant, including the available review or appeal route.
+
+  - id: S08
+    slug: appeal-independent-review
+    name: Appeal or independent review
+    question: Can the complainant challenge the outcome before a different body?
+    levels:
+      "0": No appeal or review route identified.
+      "1": Review only by the same body that decided, or only general external remedies (e.g. courts) with no internal route.
+      "2": Appeal to a different internal body, or to a specialised external body (e.g. national ombudsperson), but not both, or with restricted grounds.
+      "3": Appeal to a different internal body and an accessible external route (ombudsperson, regulator or court), with grounds and deadlines set out.
+
+  - id: S09
+    slug: proportionate-consequences
+    name: Proportionate consequences for misconduct
+    question: Are there graduated, defined consequences for staff found to have misused academic authority?
+    levels:
+      "0": No consequences for staff misconduct towards students identified.
+      "1": Consequences exist only through general employment law, with no link to misconduct towards students.
+      "2": A disciplinary scale exists and applies to misconduct towards students, but without criteria for proportionality.
+      "3": A graduated scale of consequences, criteria for proportionality, and power to restrict the staff member's authority over the affected students.
+
+  - id: S10
+    slug: remediation-academic-harm
+    name: Remediation of academic harm
+    question: >-
+      Where misconduct affected a student's academic record, can the harm be repaired
+      (e.g. re-assessment, annulment of a tainted grade, extension, new supervisor)?
+    levels:
+      "0": No remediation provision identified.
+      "1": General right to request re-examination or grade review, not linked to misconduct findings.
+      "2": Specific remedies available after a misconduct finding, but at discretion and without listed options.
+      "3": Listed remedies (re-assessment by a different examiner, annulment, extension, change of supervisor) that must be considered after a finding, with the student able to request them.
+
+  - id: S11
+    slug: boundaries-training
+    name: Professional-boundary and safeguarding training
+    question: Are staff with authority over students required to receive training on professional boundaries, harassment and fair use of authority?
+    levels:
+      "0": No training provision identified.
+      "1": Training is recommended or offered, but not required.
+      "2": Training is required for some roles (e.g. doctoral supervisors), or required but without content or frequency specified.
+      "3": Training required for all staff exercising assessment or supervisory authority, with defined content covering boundaries and anti-retaliation, and a frequency.
+
+  - id: S12
+    slug: authority-safeguarding-review
+    name: Academic Authority Safeguarding Review
+    question: >-
+      Before or while holding roles with substantial authority over students (e.g. doctoral
+      supervisor, programme head), is professional conduct relevant to that authority reviewed?
+    notes: >-
+      This concerns professional conduct relevant to positions of authority: supervisory boundaries,
+      conflict management, assessment responsibilities, anti-retaliation obligations. It is not a
+      psychiatric or medical evaluation and never concerns health, political views, protected beliefs
+      or private traits unrelated to professional duties.
+    levels:
+      "0": No review provision identified.
+      "1": Appointment criteria for authority roles refer only to academic or research qualifications.
+      "2": Appointment or reappointment to authority roles considers professional conduct (e.g. prior upheld complaints, ethical record), but without a defined procedure.
+      "3": A defined procedure that reviews professional conduct relevant to supervision and assessment on appointment and periodically, with the ability to limit authority where conduct concerns are upheld.
+
+research_statuses:
+  - value: not_researched
+    label: Not researched
+  - value: research_underway
+    label: Research underway
+  - value: partially_researched
+    label: Partially researched
+  - value: national_framework_reviewed
+    label: National framework reviewed
+  - value: institution_research_available
+    label: Institution-level research available

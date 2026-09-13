@@ -1,0 +1,49 @@
+---
+import type { SafeguardResult, SafeguardDef } from '../lib/data';
+import SourceCitation from './SourceCitation.astro';
+import ConfidenceLabel from './ConfidenceLabel.astro';
+import VerificationBadge from './VerificationBadge.astro';
+import LastReviewed from './LastReviewed.astro';
+import { url } from '../lib/url';
+
+interface Props { r: SafeguardResult; def: SafeguardDef }
+const { r, def } = Astro.props;
+const levelText = ['0', '1', '2', '3'].includes(r.result) ? def.levels[r.result as '0' | '1' | '2' | '3'] : null;
+---
+<div class="evidence-panel">
+  <p class="muted small"><strong>Question:</strong> {def.question}</p>
+
+  {r.result === 'NR' && (
+    <p>This safeguard has not been researched for this jurisdiction or institution yet. This says nothing about whether a safeguard exists. <a href={url('/contribute/')}>Help research it.</a></p>
+  )}
+
+  {r.result !== 'NR' && (
+    <>
+      {r.verification === 'needs_review' && (
+        <div class="notice provisional small"><p><strong>Provisional finding.</strong> This finding has been proposed but not yet independently verified by a second reviewer. It may change.</p></div>
+      )}
+      {r.verification === 'disputed' && (
+        <div class="notice disputed small"><p><strong>Disputed.</strong> A correction request or reviewer objection is open ({r.dispute_ids?.join(', ')}). See the <a href={url('/corrections/')}>corrections log</a>.</p></div>
+      )}
+      <dl>
+        {levelText && <><dt>Rubric level</dt><dd>{levelText}</dd></>}
+        {r.result === '0' && <><dt>What 0 means</dt><dd>No qualifying provision was identified in the sources reviewed. This is not proof that no safeguard exists.</dd></>}
+        {r.result === '?' && <><dt>What ? means</dt><dd>Research was carried out, but the available sources did not allow a responsible score.</dd></>}
+        {r.evidence && <><dt>Evidence</dt><dd>{r.evidence}</dd></>}
+        {r.locator && <><dt>Location</dt><dd>{r.locator}</dd></>}
+        {r.rationale && <><dt>Rationale</dt><dd>{r.rationale}</dd></>}
+        {r.gaps && <><dt>Gaps and uncertainty</dt><dd>{r.gaps}</dd></>}
+        {r.source_ids?.length ? (
+          <><dt>{r.source_ids.length > 1 ? 'Sources' : 'Source'}</dt><dd><ul class="source-list">{r.source_ids.map((id) => <li><SourceCitation id={id} /></li>)}</ul></dd></>
+        ) : null}
+        {r.sources_reviewed?.length && (r.result === '0' || r.result === '?') ? (
+          <><dt>Sources reviewed</dt><dd><ul class="source-list">{r.sources_reviewed.map((id) => <li><SourceCitation id={id} /></li>)}</ul></dd></>
+        ) : null}
+        <dt>Status</dt>
+        <dd style="display:flex;flex-wrap:wrap;gap:.4rem;align-items:center"><VerificationBadge status={r.verification} /><ConfidenceLabel value={r.confidence} /></dd>
+        <dt>Reviewed</dt><dd><LastReviewed date={r.reviewed} /></dd>
+      </dl>
+    </>
+  )}
+  {def.notes && <p class="small muted" style="margin-top:1rem">{def.notes}</p>}
+</div>

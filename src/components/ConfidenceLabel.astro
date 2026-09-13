@@ -1,0 +1,7 @@
+---
+import type { Confidence } from '../lib/data';
+interface Props { value?: Confidence | null }
+const { value } = Astro.props;
+const text = { high: 'High confidence', medium: 'Medium confidence', low: 'Low confidence' } as const;
+---
+{value ? <span class="badge" title="Confidence in the evidence and interpretation, as defined in the methodology">{text[value]}</span> : <span class="muted small">Confidence not stated</span>}

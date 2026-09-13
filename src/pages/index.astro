@@ -1,0 +1,210 @@
+---
+import Base from '../layouts/Base.astro';
+import EuropeTileMap from '../components/EuropeTileMap.astro';
+import ResearchStatus from '../components/ResearchStatus.astro';
+import SafeguardScore from '../components/SafeguardScore.astro';
+import { getCountries, getInstitutions, getRubric, coverage, hasFindings, COUNTRY_STATUS_LABELS } from '../lib/data';
+import { url, REPO_URL } from '../lib/url';
+
+const rubric = getRubric();
+const countries = getCountries();
+const institutions = getInstitutions();
+const researched = countries.filter((c) => hasFindings(c.safeguards));
+const statusCounts = Object.keys(COUNTRY_STATUS_LABELS).map((s) => ({ s, n: countries.filter((c) => c.research_status === s).length }));
+const allResults = [...countries, ...institutions].flatMap((r) => Object.values(r.safeguards)).filter((r) => r.result !== 'NR');
+const verifiedCount = allResults.filter((r) => r.verification === 'verified').length;
+const provisionalCount = allResults.filter((r) => r.verification === 'needs_review').length;
+
+const latest = [
+  ...researched.map((c) => ({ href: `/countries/${c.slug}/`, name: c.name, kind: 'National framework', date: c.last_reviewed ?? '', cov: coverage(c.safeguards), status: c.research_status, k: 'country' as const })),
+  ...institutions.map((i) => ({ href: `/institutions/${i.id}/`, name: i.canonical_name, kind: 'Institution', date: i.last_reviewed, cov: coverage(i.safeguards), status: i.research_status, k: 'institution' as const })),
+].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+---
+<Base title="Home">
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">Open-source European research infrastructure</p>
+      <h1>Academic authority needs accountability.</h1>
+      <p class="lede">
+        Academic Safeguard Europe is an open-source initiative examining how universities and European higher-education systems protect students from abuse of academic authority, retaliation, conflicts of interest and procedural unfairness.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href={url('/europe/')}>Explore Europe</a>
+        <a class="btn btn-secondary" href={url('/standard/')}>Read the Standard</a>
+      </div>
+      <div class="scope-statement">
+        <strong>Scope</strong>
+        ASE evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <section class="section" aria-labelledby="why">
+      <div class="two-col">
+        <div class="prose">
+          <p class="eyebrow">01 · Why academic safeguards matter</p>
+          <h2 id="why">No student should risk their education for reporting abuse.</h2>
+          <p>
+            Academic staff hold real power over students: they assess work, supervise theses and doctorates, write references and influence progression.
+            Most use that authority responsibly. Where it is misused, the student's grades, degree or career can depend on the very person they need to complain about.
+          </p>
+          <p>
+            Whether a student can raise a concern safely depends on institutional design: who hears complaints, whether decision-makers must step aside, whether retaliation is prohibited, and whether academic harm can be repaired.
+            These rules are published, and they can be compared.
+          </p>
+        </div>
+        <div>
+          <p class="eyebrow">Coverage today</p>
+          <div class="panel">
+            <dl class="meta-list">
+              <dt>EU Member States</dt><dd>{countries.length} of 27 represented</dd>
+              <dt>With research findings</dt><dd>{researched.length} {researched.length === 1 ? 'country' : 'countries'}</dd>
+              <dt>Institution profiles</dt><dd>{institutions.length}</dd>
+              <dt>Verified findings</dt><dd>{verifiedCount}</dd>
+              <dt>Provisional findings</dt><dd>{provisionalCount} (awaiting second review)</dd>
+            </dl>
+            <hr style="margin:1rem 0" />
+            <ul class="legend" style="margin:0">
+              {statusCounts.map(({ s, n }) => <li><ResearchStatus status={s} /> <span class="muted">— {n}</span></li>)}
+            </ul>
+          </div>
+          <p class="small muted" style="margin-top:.75rem">Most Member States have not been researched yet. Missing data should not be read as missing safeguards.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="what">
+      <p class="eyebrow">02 · What ASE evaluates</p>
+      <h2 id="what">Systems, rules and procedures — not people</h2>
+      <div class="two-col">
+        <div>
+          <h3>ASE examines</h3>
+          <ul class="check-list">
+            <li>National legislation and regulator requirements for higher education</li>
+            <li>University statutes, regulations, codes of ethics and complaint procedures</li>
+            <li>Whether those rules provide the safeguards defined in the Standard</li>
+            <li>The evidence behind each finding, with exact source locations</li>
+          </ul>
+        </div>
+        <div>
+          <h3>ASE does not</h3>
+          <ul class="cross-list">
+            <li>Rate, name or rank individual academics</li>
+            <li>Accept or publish allegations, or judge whether misconduct occurred</li>
+            <li>Provide legal advice or represent anyone</li>
+            <li>Claim that a written policy is implemented well in practice</li>
+            <li>Produce an overall "safety" ranking of universities</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="explorer">
+      <p class="eyebrow">03 · European country explorer</p>
+      <h2 id="explorer">All 27 EU Member States, with honest research status</h2>
+      <div class="explorer">
+        <EuropeTileMap />
+        <div class="prose">
+          <p>Every Member State has a page from day one. Each shows exactly how far research has progressed: <em>not researched</em>, <em>research underway</em>, <em>partially researched</em>, <em>national framework reviewed</em>, or <em>institution-level research available</em>.</p>
+          <p>Research status is a measure of our work, not of a country's safeguards.</p>
+          <p><a href={url('/europe/')}>Open the full explorer and table →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="standard">
+      <p class="eyebrow">04 · The Safeguarding Standard</p>
+      <h2 id="standard">European Academic Safeguarding Standard v{rubric.methodology_version}</h2>
+      <p class="lede" style="font-size:1.05rem">Twelve safeguards, each defined by observable features of published rules.</p>
+      <ol class="grid grid-3" style="list-style:none;padding:0;margin-top:1.25rem">
+        {rubric.safeguards.map((s) => (
+          <li class="card" style="margin:0"><span class="sg-id source-id">{s.id}</span><a class="stretched" href={url(`/standard/#${s.slug}`)}><h3>{s.name}</h3></a></li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="scoring">
+      <div class="two-col">
+        <div class="prose">
+          <p class="eyebrow">05 · How scoring works</p>
+          <h2 id="scoring">Six values, never interchangeable</h2>
+          <p>Each safeguard receives one value per country or institution. "Not researched" never becomes zero, and failing to find a policy is never presented as proof that no policy exists.</p>
+          <p>ASE publishes <strong>safeguard profiles</strong>, not overall scores. There is no "University X — 43/100".</p>
+          <p><a href={url('/methodology/')}>Read the scoring methodology →</a></p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption>Result values</caption>
+            <thead><tr><th scope="col">Value</th><th scope="col">Meaning</th></tr></thead>
+            <tbody>
+              {rubric.result_values.map((v) => (
+                <tr><td><SafeguardScore result={v.value} /></td><td class="small">{v.meaning}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="evidence">
+      <div class="two-col">
+        <div class="prose">
+          <p class="eyebrow">06 · Evidence-first methodology</p>
+          <h2 id="evidence">Every score is traceable to a document</h2>
+          <p>Each finding records the source, the article or section, a summary of what the provision says, the rationale for the score, and a confidence level. Findings are proposed, checked against the rubric, and independently verified before they count as completed.</p>
+          <p>Until that second review happens, a finding is labelled <strong>provisional</strong>.</p>
+        </div>
+        <ol class="flow" aria-label="Research workflow">
+          <li>Source found</li><li>Source recorded</li><li>Proposed interpretation</li><li>Proposed score</li><li>Methodology check</li><li>Secondary verification</li><li class="final">Verified · published</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="open">
+      <p class="eyebrow">07 · Open-source research model</p>
+      <h2 id="open">The repository is the database</h2>
+      <div class="grid grid-3">
+        <div class="card"><h3>Open data</h3><p>All findings and sources are plain YAML files, licensed CC BY 4.0, with JSON exports.</p><p><a href={url('/data/')}>Download the data</a></p></div>
+        <div class="card"><h3>Public history</h3><p>Every change is a reviewed commit. Methodology changes are versioned and logged.</p><p><a href={url('/methodology/changelog/')}>Methodology changelog</a></p></div>
+        <div class="card"><h3>Validated</h3><p>Automated checks reject scores without sources, unknown safeguards and broken records before publication.</p><p><a href={REPO_URL}>View on GitHub</a></p></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="latest">
+      <p class="eyebrow">08 · Latest research</p>
+      <h2 id="latest">Latest research</h2>
+      {latest.length === 0 ? (
+        <p class="muted">No research findings have been published yet.</p>
+      ) : (
+        <div class="grid grid-3">
+          {latest.map((l) => (
+            <article class="card">
+              <p class="small muted" style="margin:0">{l.kind} · reviewed {l.date}</p>
+              <a class="stretched" href={url(l.href)}><h3>{l.name}</h3></a>
+              <ResearchStatus status={l.status} kind={l.k} />
+              <p class="small muted">{l.cov.researched} of {l.cov.total} safeguards researched · {l.cov.verified} verified · {l.cov.provisional} provisional</p>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+
+    <section class="section" aria-labelledby="contribute">
+      <div class="two-col">
+        <div class="prose">
+          <p class="eyebrow">09 · Contribute research</p>
+          <h2 id="contribute">Research needs people who know each system</h2>
+          <p>Coverage across Europe depends on contributors who read national languages and understand national law and university structures. You can add a source, propose a finding, or verify someone else's work.</p>
+          <p><a class="btn btn-secondary" href={url('/contribute/')}>How to contribute</a></p>
+        </div>
+        <div class="prose">
+          <p class="eyebrow">10 · Corrections and right of reply</p>
+          <h2>Institutions can challenge any finding</h2>
+          <p>Universities, researchers and others can submit missing policies, newer regulations, broken links or disagreements with our interpretation. Factual corrections and methodological disagreements are recorded separately, and nothing is silently overwritten.</p>
+          <p><a class="btn btn-secondary" href={url('/corrections/')}>Corrections process</a></p>
+        </div>
+      </div>
+    </section>
+  </div>
+</Base>

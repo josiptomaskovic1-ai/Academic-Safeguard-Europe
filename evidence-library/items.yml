@@ -1,0 +1,409 @@
+compiled_by: agent-evidence-library
+compiled_date: "2026-09-13"
+items:
+  - id: ehea-esg-2015
+    title: "Standards and Guidelines for Quality Assurance in the European Higher Education Area (ESG)"
+    author_body: "ENQA, ESU, EUA, EURASHE, in cooperation with Education International, BUSINESSEUROPE and EQAR"
+    year: 2015
+    jurisdiction: EHEA
+    categories: [quality-assurance, student-rights, complaint-procedures, institutional-accountability]
+    source_type: standard
+    url: "https://www.enqa.eu/wp-content/uploads/2015/11/ESG_2015.pdf"
+    doi: null
+    summary: >-
+      The shared European framework for internal and external quality assurance in higher education, adopted by
+      EHEA ministers in 2015. Its standard on student-centred learning, teaching and assessment expects mutual
+      respect in the learner-teacher relationship, procedures for student complaints and a formal procedure for
+      student appeals, making it a baseline reference for institutional safeguards.
+    notes: "Adoption context and issuing bodies confirmed on the ENQA ESG page: https://www.enqa.eu/esg-standards-and-guidelines-for-quality-assurance-in-the-european-higher-education-area/"
+
+  - id: eu-charter-fundamental-rights
+    title: "Charter of Fundamental Rights of the European Union"
+    author_body: "European Parliament, Council of the European Union and European Commission"
+    year: 2012
+    jurisdiction: EU
+    categories: [student-rights, academic-freedom, institutional-accountability]
+    source_type: legislation
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:12012P/TXT"
+    doi: null
+    summary: >-
+      The EU's binding catalogue of fundamental rights. Provisions on the right to education (Art. 14),
+      non-discrimination (Art. 21), equality between women and men (Art. 23) and good administration (Art. 41)
+      provide rights-based context for evaluating fair treatment of students; the Charter binds Member States
+      only when implementing EU law.
+    notes: "Year refers to the 2012 Official Journal consolidated version (OJ C 326) opened on EUR-Lex; the Charter was first proclaimed in 2000. Art. 41 formally applies to EU institutions, bodies, offices and agencies, so it is contextual rather than directly applicable to universities."
+
+  - id: eu-directive-2019-1937-whistleblowers
+    title: "Directive (EU) 2019/1937 of the European Parliament and of the Council of 23 October 2019 on the protection of persons who report breaches of Union law"
+    author_body: "European Parliament and Council of the European Union"
+    year: 2019
+    jurisdiction: EU
+    categories: [retaliation, institutional-accountability, complaint-procedures]
+    source_type: legislation
+    url: "https://eur-lex.europa.eu/eli/dir/2019/1937/oj"
+    doi: null
+    summary: >-
+      The EU Whistleblower Directive, requiring internal and external reporting channels and protection against
+      retaliation for persons reporting breaches of specified areas of Union law. It is a useful model for
+      anti-retaliation safeguards, but its protection is tied to work-related contexts.
+    notes: "Scope limit: personal scope covers workers, self-employed persons, shareholders and management, volunteers and paid or unpaid trainees, among others; students as such are not covered unless they report in a work-related capacity (e.g. doctoral candidates employed as researchers). Material scope is limited to breaches of listed areas of Union law."
+
+  - id: eu-directive-2024-1385-violence-against-women
+    title: "Directive (EU) 2024/1385 of the European Parliament and of the Council of 14 May 2024 on combating violence against women and domestic violence"
+    author_body: "European Parliament and Council of the European Union"
+    year: 2024
+    jurisdiction: EU
+    categories: [harassment, remediation]
+    source_type: legislation
+    url: "https://eur-lex.europa.eu/eli/dir/2024/1385/oj"
+    doi: null
+    summary: >-
+      The first EU-wide directive on combating violence against women and domestic violence, setting minimum
+      rules on criminal offences, victim protection, support and prevention. Its recitals and provisions on
+      sexual harassment at work and victim support provide context for institutional harassment responses.
+    notes: "Harassment provisions focus on the employment context; application to student-staff relationships in higher education depends on national transposition. Published in the Official Journal on 24 May 2024."
+
+  - id: coe-istanbul-convention-2011
+    title: "Council of Europe Convention on preventing and combating violence against women and domestic violence"
+    author_body: "Council of Europe"
+    year: 2011
+    jurisdiction: Council of Europe
+    categories: [harassment, remediation]
+    source_type: legislation
+    url: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:22023A0602(01)"
+    doi: null
+    summary: >-
+      The Istanbul Convention, opened for signature in Istanbul on 11 May 2011, is a binding treaty on preventing
+      violence against women, protecting victims and prosecuting perpetrators. Article 40 requires Parties to
+      subject sexual harassment to criminal or other legal sanction, a relevant reference for harassment
+      safeguards in education settings.
+    notes: "Treaty text opened via its EUR-Lex publication (EU accession, OJ 2023). Official Council of Europe pages (rm.coe.int, coe.int) returned HTTP 403 to automated access and could not be opened directly. Ratification status varies by state."
+
+  - id: coe-cm-rec-2012-7-academic-freedom
+    title: "Recommendation CM/Rec(2012)7 of the Committee of Ministers to member States on the responsibility of public authorities for academic freedom and institutional autonomy"
+    author_body: "Council of Europe, Committee of Ministers"
+    year: 2012
+    jurisdiction: Council of Europe
+    categories: [academic-freedom, institutional-accountability]
+    source_type: policy
+    url: "https://bolognaby.org/images/Library/Recommendation_CM_Rec20127.pdf"
+    doi: null
+    summary: >-
+      A Committee of Ministers recommendation, adopted on 20 June 2012, setting out the responsibility of public
+      authorities to protect academic freedom and institutional autonomy. It treats academic freedom of staff and
+      students as intrinsic to higher education and provides a normative frame for protection against undue
+      interference.
+    notes: "Opened via a third-party mirror (bolognaby.org) because Council of Europe servers (coe.int, rm.coe.int) blocked automated access with HTTP 403. Replace URL with the official Council of Europe link after manual verification."
+
+  - id: ehea-rome-communique-2020
+    title: "Rome Ministerial Communiqué"
+    author_body: "EHEA Ministers responsible for higher education"
+    year: 2020
+    jurisdiction: EHEA
+    categories: [academic-freedom, student-rights, institutional-accountability]
+    source_type: policy
+    url: "https://ehea.info/Upload/Rome_Ministerial_Communique.pdf"
+    doi: null
+    summary: >-
+      Communiqué adopted by EHEA ministers at their online conference of 19 November 2020. It commits to
+      institutional autonomy, academic freedom and integrity and student and staff participation in governance,
+      and adopts a definition of academic freedom for staff and students that includes freedom from fear of
+      reprisal, set out in Annex I (Statement on Academic Freedom).
+    notes: "Annexes: I Statement on Academic Freedom; II Principles and Guidelines to Strengthen the Social Dimension of Higher Education in the EHEA; III Recommendations to National Authorities for the Enhancement of Higher Education Learning and Teaching. Conference page: https://ehea.info/page-ministerial-conference-rome-2020"
+
+  - id: ehea-tirana-fundamental-values-2024
+    title: "Annex 1 to the Tirana Communiqué: EHEA Statements on Fundamental Values"
+    author_body: "EHEA Ministerial Conference, Tirana"
+    year: 2024
+    jurisdiction: EHEA
+    categories: [academic-freedom, institutional-accountability, student-rights]
+    source_type: policy
+    url: "https://www.eqar.eu/assets/uploads/2024/06/ANNEX-1-EHEA-STATEMENTS-ON-FUNDAMENTAL-VALUES.pdf"
+    doi: null
+    summary: >-
+      Annex adopted at the EHEA Ministerial Conference of 29-30 May 2024 containing statements on fundamental
+      values of the EHEA, complementing the 2020 statement on academic freedom. It includes a statement on student
+      and staff participation in governance without pressure or undue interference, relevant to accountability
+      and voice safeguards.
+    notes: "PDF opened on the EQAR website; the EHEA official listing (https://ehea.info/ministerial-conferences-and-communiques/) lists 'Tirana Ministerial Communiqué - Annex I - Statements on Fundamental Values'. Exact list of individual statements not recorded here; verify before citing specific statements."
+
+  - id: eu-council-rec-2023-research-talents
+    title: "Council Recommendation of 18 December 2023 on a European framework to attract and retain research, innovation and entrepreneurial talents in Europe"
+    author_body: "Council of the European Union"
+    year: 2023
+    jurisdiction: EU
+    categories: [doctoral-supervision, harassment, academic-freedom, professional-boundaries]
+    source_type: policy
+    url: "https://eur-lex.europa.eu/eli/C/2023/1640/oj"
+    doi: null
+    summary: >-
+      Council Recommendation that annexes the revised European Charter for Researchers, replacing the 2005
+      Charter and Code for Researchers. The Charter addresses rights and responsibilities of researchers and
+      employers, including responsibilities in supervisory roles and prompt responses to discrimination, sexual or
+      moral harassment and unjustified appropriation of data or results.
+    notes: "Published as OJ C/2023/1640 (CELEX 32023H01640). The European Charter for Researchers is also presented on EURAXESS: https://euraxess.ec.europa.eu/jobs/charter/european-charter. Applies to researchers, including doctoral candidates, rather than students generally."
+
+  - id: intl-allea-ecoc-2023
+    title: "The European Code of Conduct for Research Integrity – Revised Edition 2023"
+    author_body: "ALLEA – All European Academies"
+    year: 2023
+    jurisdiction: International
+    categories: [doctoral-supervision, conflicts-of-interest, retaliation, institutional-accountability]
+    source_type: code_of_conduct
+    url: "https://allea.org/wp-content/uploads/2023/06/European-Code-of-Conduct-Revised-Edition-2023.pdf"
+    doi: "10.26356/ECOC"
+    summary: >-
+      A self-regulatory framework for research integrity across European disciplines and research settings. It
+      covers training, supervision and mentoring responsibilities, handling of conflicts of interest, and
+      protection of bona fide whistleblowers during integrity investigations, relevant to doctoral researchers.
+    notes: "DOI as given in the document's own citation line. Landing page: https://allea.org/code-of-conduct/"
+
+  - id: eu-bonn-declaration-2020
+    title: "Bonn Declaration on Freedom of Scientific Research"
+    author_body: "Ministerial Conference on the European Research Area"
+    year: 2020
+    jurisdiction: EU
+    categories: [academic-freedom, institutional-accountability]
+    source_type: policy
+    url: "https://www.bmftr.bund.de/SharedDocs/Downloads/EN/b/bonn_declaration_en.pdf?__blob=publicationFile&v=5"
+    doi: null
+    summary: >-
+      Declaration adopted at the Ministerial Conference on the European Research Area in Bonn on 20 October 2020,
+      setting out a shared definition of freedom of scientific research and the roles of governments and research
+      organisations in protecting it. Relevant as a European reference on protecting researchers from undue
+      interference.
+    notes: "PDF hosted by the German federal research ministry (host of the 2020 Council Presidency conference). Focus is research freedom rather than student protection."
+
+  - id: eu-horizon-europe-gep-guidance-2021
+    title: "Horizon Europe Guidance on Gender Equality Plans"
+    author_body: "European Commission, Directorate-General for Research and Innovation"
+    year: 2021
+    jurisdiction: EU
+    categories: [harassment, institutional-accountability, remediation]
+    source_type: guidance
+    url: "https://erc.europa.eu/sites/default/files/document/file/GEPs_in_HE_guidelines.pdf"
+    doi: "10.2777/876509"
+    summary: >-
+      Commission guidance on the Gender Equality Plan eligibility criterion for public bodies, higher education
+      institutions and research organisations applying to Horizon Europe. It recommends measures against
+      gender-based violence including sexual harassment as a thematic area, linking research funding to
+      institutional safeguards.
+    notes: "Summary of the eligibility criterion also available from EIGE: https://eige.europa.eu/gender-mainstreaming/toolkits/gear/horizon-europe-gep-criterion"
+
+  - id: eu-unisafe-survey-2022
+    title: "Gender-based violence and its consequences in European Academia: First results from the UniSAFE survey"
+    author_body: "UniSAFE project (Lipinsky, A.; Schredl, C.; Baumann, H.; Humbert, A.; Tanwar, J.)"
+    year: 2022
+    jurisdiction: EU
+    categories: [harassment, bullying, academic-harm, complaint-procedures]
+    source_type: report
+    url: "https://unisafe-gbv.eu/wp-content/uploads/2022/11/UniSAFE-survey_prevalence-results_2022.pdf"
+    doi: null
+    summary: >-
+      Report of the UniSAFE survey of staff and students at 46 European universities and research organisations,
+      funded under Horizon 2020. It presents prevalence of forms of gender-based violence, including psychological
+      violence and sexual harassment, and highlights low rates of reporting, relevant to the design of complaint
+      and support systems.
+    notes: "Dated 7 November 2022; the report's recommended citation calls it 'Summary results from the UniSAFE survey'. Grant agreement no. 101006261; survey questionnaire on Zenodo (record 7220636) per the report."
+
+  - id: eu-unisafe-toolkit
+    title: "UniSAFE Toolkit"
+    author_body: "UniSAFE project consortium (coordinated by the European Science Foundation)"
+    year: null
+    jurisdiction: EU
+    categories: [harassment, institutional-accountability, remediation, complaint-procedures]
+    source_type: guidance
+    url: "https://unisafe-toolkit.eu/"
+    doi: null
+    summary: >-
+      An online operational toolkit designed to help higher education and research organisations address
+      gender-based violence, structured around the project's 7P framework (prevalence, prevention, protection,
+      prosecution, provision, partnerships, policy). Offers practical institutional guidance derived from EU-funded
+      research.
+    notes: "Publication year not stated on the page opened; project ran to January 2024 per the UniSAFE website (https://unisafe-gbv.eu/). CORDIS project record: https://cordis.europa.eu/project/id/101006261"
+
+  - id: intl-enohe-network
+    title: "ENOHE – European Network of Ombuds in Higher Education"
+    author_body: "European Network of Ombuds in Higher Education (ENOHE)"
+    year: null
+    jurisdiction: International
+    categories: [ombuds-systems, complaint-procedures, student-rights]
+    source_type: network
+    url: "https://enohe.net/"
+    doi: null
+    summary: >-
+      A European professional network for ombuds working in higher education, focused on protecting and
+      safeguarding rights within higher education. It publishes Occasional Papers, yearbooks and conference
+      materials that document ombuds practice as an independent institutional safeguard.
+    notes: "Formerly the European Network of Ombudsmen in Higher Education; ENOHE Occasional Paper 12 states it was founded in 2003."
+
+  - id: intl-enohe-op12-phd-students-2019
+    title: "PhD Students and Ombuds: How Ombuds Contribute to Civil, Fair and Productive PhD Trajectories"
+    author_body: "Herfs, P.; Brown, J.; Farrell, N.; Meiser, U. (ENOHE Occasional Paper Nr. 12)"
+    year: 2019
+    jurisdiction: International
+    categories: [doctoral-supervision, ombuds-systems, complaint-procedures, academic-authority]
+    source_type: report
+    url: "https://enohe.net/wp-content/uploads/2025/09/occasional_paper_12.pdf"
+    doi: null
+    summary: >-
+      ENOHE occasional paper, first edition April 2019, examining how higher education ombuds support doctoral
+      candidates and help resolve difficulties arising during PhD trajectories. Directly relevant to informal and
+      independent routes for addressing supervision-related conflicts.
+    notes: "Based on contributions linked to the ENOHE 2018 annual conference in Edinburgh, per the paper."
+
+  - id: intl-enohe-op11-2017
+    title: "ENOHE Occasional Paper Nr. 11"
+    author_body: "Leidenfrost, J.; Rothwangl, A.-K.; Herfs, P. (European Network of Ombudsmen in Higher Education)"
+    year: 2017
+    jurisdiction: International
+    categories: [ombuds-systems, student-rights, complaint-procedures]
+    source_type: report
+    url: "https://enohe.net/wp-content/uploads/2025/09/occasional_paper_11.pdf"
+    doi: null
+    summary: >-
+      ENOHE occasional paper (first edition June 2017) containing two contributions: one on the Austrian Student
+      Ombudsman and student rights and obligations in Austrian higher education, and one on ombuds practice at
+      Canadian universities from a Dutch ombudsman's perspective. Useful comparative material on ombuds models.
+    notes: "The paper has no single overall title; the title field uses the series designation. Contributions: 'The Austrian Student Ombudsman, \"student rights\" and \"student obligations\" in the Austrian Higher Education Area' (Leidenfrost/Rothwangl) and 'Ombudsing at Canadian universities through the eyes of a Dutch ombudsman' (Herfs). Editor: Josef Leidenfrost."
+
+  - id: intl-enohe-being-ombudsman-2017
+    title: "Being an Ombudsman in Higher Education: A Comparative Study"
+    author_body: "Behrens, R. (study for the European Network of Ombudsmen in Higher Education)"
+    year: 2017
+    jurisdiction: International
+    categories: [ombuds-systems, complaint-procedures, institutional-accountability]
+    source_type: research
+    url: "https://enohe.net/wp-content/uploads/2017/06/Being-an-ombudsman.pdf"
+    doi: null
+    summary: >-
+      A comparative study, dated June 2017, prepared for ENOHE on the roles and practices of ombuds in higher
+      education across jurisdictions. Relevant for assessing whether ombuds offices are independent, accessible and
+      effective safeguards.
+    notes: null
+
+  - id: ehea-esu-student-rights-charter-2024
+    title: "Student Rights Charter"
+    author_body: "European Students' Union (ESU)"
+    year: 2024
+    jurisdiction: EHEA
+    categories: [student-rights, academic-freedom, complaint-procedures, ombuds-systems]
+    source_type: policy
+    url: "https://esu-online.org/policies/student-rights-charter-2/"
+    doi: null
+    summary: >-
+      ESU's policy charter setting out rights students across Europe should enjoy, including freedom from
+      discrimination, academic freedom and integrity, a fair appeal to an independent body against discriminatory
+      acts, and access to independent advice through student ombuds or similar solutions. A student-led benchmark
+      for institutional safeguards.
+    notes: "Page dated 07.06.2024; secondary search results indicate adoption in May 2024 (not confirmed on the page). It updates ESU's 2008 Students' Rights Charter: https://esu-online.org/policies/students-rights-charter/. Policy position, not legally binding."
+
+  - id: ehea-eua-salzburg-ii-2010
+    title: "Salzburg II Recommendations: European universities' achievements since 2005 in implementing the Salzburg Principles"
+    author_body: "European University Association (EUA)"
+    year: 2010
+    jurisdiction: EHEA
+    categories: [doctoral-supervision, quality-assurance, institutional-accountability]
+    source_type: policy
+    url: "https://www.eua.eu/downloads/publications/salzburg%20ii%20recommendations%202010.pdf"
+    doi: null
+    summary: >-
+      EUA recommendations for continued reform of doctoral education building on the 2005 Salzburg Principles,
+      emphasising transparent admission, high-quality supervision, quality assurance and accountability, and the
+      independence of doctoral candidates. A core European reference for structured doctoral supervision.
+    notes: "Approved by the EUA Council in October 2010 according to secondary sources; the 2005 Salzburg Principles themselves were not separately opened."
+
+  - id: ehea-eua-cde-taking-salzburg-forward-2016
+    title: "Doctoral Education – Taking Salzburg Forward: Implementation and New Challenges"
+    author_body: "European University Association, Council for Doctoral Education (EUA-CDE)"
+    year: 2016
+    jurisdiction: EHEA
+    categories: [doctoral-supervision, ombuds-systems, institutional-accountability]
+    source_type: policy
+    url: "https://ehea.info/Upload/document/consultive/eua/Doctoral_Education_Taking_Salzburg_Forward_638220.pdf"
+    doi: null
+    summary: >-
+      EUA-CDE follow-up to the Salzburg Principles and Salzburg II reviewing implementation of doctoral education
+      reforms and new challenges such as ethics, digitalisation and globalisation. It refers to institutional
+      measures on research integrity and ethics, including appointing an ombudsperson, relevant to doctoral
+      safeguards.
+    notes: "Opened as a PDF on the EHEA website (consultative member documents)."
+
+  - id: ehea-eua-cde-doctoral-survey-2025
+    title: "Doctoral education in Europe today: enhanced structures and practices for the European knowledge society (2025 Survey – Report I)"
+    author_body: "EUA Council for Doctoral Education (authors: Marti, S.; Peneoasu, A.-M.)"
+    year: 2025
+    jurisdiction: EHEA
+    categories: [doctoral-supervision, complaint-procedures, quality-assurance, conflicts-of-interest]
+    source_type: report
+    url: "https://eua-cde.org/downloads/publications/cde%20doctoral%20education%20survey_part%201_web.pdf"
+    doi: null
+    summary: >-
+      EUA-CDE survey report (June 2025) on structures and practices in European doctoral education, including the
+      status of doctoral candidates and supervision practices. It reports on institutional rules for written
+      supervision agreements, handling of supervisor-candidate conflicts, supervisor training and complaint roles
+      of doctoral schools.
+    notes: "Quantitative findings are institution-reported survey data; check figures in the report before citing."
+
+  - id: gb-oia-good-practice-framework-2022
+    title: "Good Practice Framework: Handling complaints and academic appeals"
+    author_body: "Office of the Independent Adjudicator for Higher Education (OIA)"
+    year: 2022
+    jurisdiction: GB
+    categories: [complaint-procedures, student-rights, remediation, ombuds-systems]
+    source_type: guidance
+    url: "https://www.oiahe.org.uk/resources-and-publications/good-practice-framework/handling-complaints-and-academic-appeals/"
+    doi: null
+    summary: >-
+      Third edition (December 2022) of the independent student complaints scheme's guidance for providers in
+      England and Wales on handling complaints and academic appeals. It covers early resolution, timeframes,
+      complaints about the behaviour of staff or other students, and learning from complaints, offering a mature
+      national benchmark for procedural fairness.
+    notes: "Applies to providers in England and Wales that are members of the OIA scheme; ISO code GB used for the United Kingdom."
+
+  - id: intl-levecque-2017-phd-mental-health
+    title: "Work organization and mental health problems in PhD students"
+    author_body: "Levecque, K.; Anseel, F.; De Beuckelaer, A.; Van der Heyden, J.; Gisle, L."
+    year: 2017
+    jurisdiction: BE
+    categories: [doctoral-supervision, academic-harm, academic-authority]
+    source_type: research
+    url: "https://kclpure.kcl.ac.uk/portal/en/publications/work-organization-and-mental-health-problems-in-phd-students/"
+    doi: "10.1016/j.respol.2017.02.008"
+    summary: >-
+      Peer-reviewed study in Research Policy (vol. 46, no. 4) of a representative sample of PhD students in
+      Flanders, Belgium, comparing their mental health with other highly educated groups. It links organisational
+      factors, including the supervisor's leadership style, to mental health problems, supporting attention to
+      supervision practices as a source of harm.
+    notes: "Record opened on King's College London research portal; publisher page (ScienceDirect) blocked automated access. doi.org resolved to the ScienceDirect article. Addresses mental health and work organisation, not abuse of authority specifically."
+
+  - id: intl-nature-phd-survey-2019
+    title: "PhDs: the tortuous truth"
+    author_body: "Woolston, C. (Nature)"
+    year: 2019
+    jurisdiction: International
+    categories: [doctoral-supervision, academic-harm, bullying, harassment]
+    source_type: report
+    url: "https://www.nature.com/articles/d41586-019-03459-7"
+    doi: "10.1038/d41586-019-03459-7"
+    summary: >-
+      Nature career feature (13 November 2019) reporting on Nature's global survey of more than 6,000 graduate
+      students about the experience of doctoral research. Secondary
+      journalistic report of a non-probability survey, useful as international context.
+    notes: "Secondary report, not peer-reviewed research. DOI taken from the article page metadata. Specific findings on bullying and harassment were not verified from the page text retrieved (body partially unavailable); verify before citing figures."
+
+  - id: intl-nowrouzi-kia-2024-gbv-academic-settings
+    title: "Examining the Prevalence and Effects of Gender-based Violence in Academic Settings: A Systematic Review and Meta-analyses"
+    author_body: "Nowrouzi-Kia, B. et al."
+    year: 2024
+    jurisdiction: International
+    categories: [harassment, bullying, academic-harm]
+    source_type: research
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12397552/"
+    doi: "10.1177/15248380241289436"
+    summary: >-
+      Peer-reviewed systematic review and meta-analyses published in Trauma, Violence, & Abuse on the prevalence
+      and effects of gender-based violence, including sexual harassment and workplace bullying, in academic
+      settings, based on studies published between 2013 and 2023. Provides an evidence synthesis on harm in
+      academia.
+    notes: "Published online 23 October 2024; issue citation Trauma Violence Abuse 26(4):755-768 (2025). Focus includes university staff; not Europe-specific."

@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { url, REPO_URL, repoFile } from '../lib/url';
+---
+<Base title="About" description="Mission, scope, limits and privacy of Academic Safeguard Europe." crumbs={[{ label: 'About' }]}>
+  <div class="container prose">
+    <h1>About Academic Safeguard Europe</h1>
+    <p class="lede">An open-source initiative examining how universities and European higher-education systems protect students from abuse of academic authority, retaliation, conflicts of interest and procedural unfairness.</p>
+
+    <h2>Mission</h2>
+    <p>Academic authority needs accountability. Students depend on the people who assess and supervise them, so the rules for raising concerns safely matter. ASE documents those rules, compares them against a public Standard and publishes the evidence, so students, institutions and policymakers can see where safeguards exist and where they do not appear.</p>
+
+    <h2>What ASE is not</h2>
+    <ul>
+      <li>ASE evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.</li>
+      <li>It does not accept allegations or complaints, and it does not investigate cases.</li>
+      <li>It does not provide legal advice or representation. If you need help with a specific situation, contact your student ombudsperson, student union, or a qualified legal adviser in your country.</li>
+      <li>It does not rank universities or countries.</li>
+      <li>It is not affiliated with the European Union or any government.</li>
+    </ul>
+
+    <h2>The limits of documentary research</h2>
+    <p>A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists. ASE describes documented systems. It does not claim to measure how safe any institution is.</p>
+
+    <h2>Audiences</h2>
+    <p>Students and student representatives, researchers, journalists, universities and quality-assurance organisations, policymakers and civil society.</p>
+
+    <h2>Neutrality</h2>
+    <p>ASE is not aligned with any political party or ideology. The Standard is about procedural fairness and accountability of authority, principles recognised across European legal traditions. It assumes neither that academic staff are dangerous nor that complaints are true.</p>
+
+    <h2>Privacy</h2>
+    <p>This website is static. It sets no cookies, runs no analytics or tracking, loads no third-party fonts or scripts, and has no forms that send data to ASE. The research data contains no personal data: no names of staff or students, no allegations, no complaint files, no health or disciplinary information.</p>
+    <p>Correction requests and contributions are made through GitHub, which has its own <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>. Contributors may use a pseudonymous account.</p>
+
+    <h2>Funding and cost</h2>
+    <p>ASE runs on free infrastructure: GitHub for code, data and discussion, and GitHub Pages for hosting. It has no paid services, advertising or sponsors.</p>
+
+    <h2>Licences</h2>
+    <p>Code is released under the <a href={repoFile('LICENSE')}>MIT licence</a>. The Standard, methodology, research data and texts are released under <a href={repoFile('LICENSE-DATA.md')}>Creative Commons Attribution 4.0</a>.</p>
+
+    <h2>Status</h2>
+    <p>Phase 1, v0.1. The methodology is a draft for consultation. Most jurisdictions are not researched yet. See the <a href={url('/europe/')}>explorer</a> for current coverage, and the <a href={REPO_URL}>repository</a> for the roadmap.</p>
+  </div>
+</Base>

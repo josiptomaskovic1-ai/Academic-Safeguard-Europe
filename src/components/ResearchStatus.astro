@@ -1,0 +1,22 @@
+---
+import { COUNTRY_STATUS_LABELS, INSTITUTION_STATUS_LABELS } from '../lib/data';
+interface Props { status: string; kind?: 'country' | 'institution' }
+const { status, kind = 'country' } = Astro.props;
+const label = (kind === 'country' ? COUNTRY_STATUS_LABELS : INSTITUTION_STATUS_LABELS)[status] ?? status;
+// Glyph fill communicates depth of research; the text label always carries the meaning.
+const depth: Record<string, number> = {
+  not_researched: 0, research_underway: 1, partially_researched: 2, national_framework_reviewed: 3,
+  institution_research_available: 4, researched: 4,
+};
+const d = depth[status] ?? 0;
+---
+<span class="status" data-status={status}>
+  <svg class="status-glyph" viewBox="0 0 16 16" aria-hidden="true">
+    <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray={d === 0 ? '2 2' : undefined} />
+    {d === 1 && <path d="M8 1.5A6.5 6.5 0 0 1 14.5 8H8z" fill="currentColor" />}
+    {d === 2 && <path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor" />}
+    {d === 3 && <path d="M8 1.5A6.5 6.5 0 1 1 1.5 8H8z" fill="currentColor" />}
+    {d === 4 && <circle cx="8" cy="8" r="6.5" fill="currentColor" />}
+  </svg>
+  {label}
+</span>

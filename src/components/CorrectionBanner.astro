@@ -1,0 +1,17 @@
+---
+import { newIssue, url } from '../lib/url';
+interface Props { target: string; name: string }
+const { target, name } = Astro.props;
+---
+<aside class="panel" aria-labelledby={`corr-${target}`}>
+  <h2 id={`corr-${target}`} style="margin-top:0;font-size:1.2rem">Corrections and right of reply</h2>
+  <p>
+    If you represent {name}, research this jurisdiction, or know of a policy, regulation or newer version that we missed, you can ask for a correction.
+    Disputed findings are never silently overwritten, and every change is logged publicly.
+  </p>
+  <div class="actions" style="margin-top:.5rem">
+    <a class="btn btn-secondary" href={newIssue('correction.yml', `[Correction] ${target}`)}>Request a correction</a>
+    <a class="btn btn-secondary" href={url('/corrections/')}>How corrections work</a>
+  </div>
+  <p class="small muted" style="margin-top:1rem">Record ID: <code>{target}</code>. Please don't include personal data or allegations about individuals in a correction request.</p>
+</aside>

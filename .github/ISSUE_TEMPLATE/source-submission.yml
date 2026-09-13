@@ -1,0 +1,48 @@
+name: Source submission
+description: Suggest an official document or a background reference.
+title: "[Source] "
+labels: [source]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of source
+      options:
+        - Primary source for scoring (law, statute, regulation, procedure)
+        - Evidence Library item (report, standard, research)
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: Title (original language)
+    validations:
+      required: true
+  - type: input
+    id: body
+    attributes:
+      label: Issuing body or authors
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL
+    validations:
+      required: true
+  - type: input
+    id: jurisdiction
+    attributes:
+      label: Jurisdiction (ISO code, EU, EHEA or International)
+    validations:
+      required: true
+  - type: input
+    id: ref
+    attributes:
+      label: Official reference or publication date (if known)
+  - type: textarea
+    id: relevance
+    attributes:
+      label: Why is it relevant? Which safeguards does it concern?
+    validations:
+      required: true

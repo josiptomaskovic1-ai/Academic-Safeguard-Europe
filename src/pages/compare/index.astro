@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getRubric, getCountries } from '../../lib/data';
+import { url } from '../../lib/url';
+const rubric = getRubric();
+const countries = getCountries();
+---
+<Base title="Compare safeguards" description="Compare individual safeguards across EU Member States." crumbs={[{ label: 'Compare safeguards' }]}>
+  <div class="container">
+    <h1>Compare safeguards across Europe</h1>
+    <p class="lede">ASE compares one safeguard at a time. It does not add results into an overall score or ranking, because different safeguards are not interchangeable and research coverage is uneven.</p>
+    <div class="grid grid-2" style="margin-top:1.5rem">
+      {rubric.safeguards.map((s) => {
+        const researched = countries.filter((c) => c.safeguards[s.id]?.result !== 'NR').length;
+        return (
+          <article class="card">
+            <span class="source-id">{s.id}</span>
+            <a class="stretched" href={url(`/compare/${s.slug}/`)}><h3>{s.name} across EU countries</h3></a>
+            <p class="small muted">Researched in {researched} of {countries.length} Member States</p>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</Base>
