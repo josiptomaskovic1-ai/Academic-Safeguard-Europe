@@ -1,0 +1,16 @@
+---
+// Table of contents for long documents. A sticky sidebar on wide screens and a
+// collapsible list on narrow ones; plain links, so it works without JavaScript.
+interface Item { slug: string; text: string; depth?: number }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+const list = items.filter((i) => (i.depth ?? 2) <= 3);
+---
+<nav class="toc" aria-labelledby="toc-h">
+  <details class="toc-details" open>
+    <summary id="toc-h">On this page</summary>
+    <ol>
+      {list.map((i) => <li class:list={{ sub: (i.depth ?? 2) === 3 }}><a href={`#${i.slug}`}>{i.text}</a></li>)}
+    </ol>
+  </details>
+</nav>

@@ -1,42 +1,54 @@
 ---
 import Base from '../layouts/Base.astro';
 import SafeguardScore from '../components/SafeguardScore.astro';
-import { Content, frontmatter } from '../../standard/standard-v0.1.md';
+import OnThisPage from '../components/OnThisPage.astro';
+import { Content, frontmatter, getHeadings } from '../../standard/standard-v0.1.md';
 import { getRubric } from '../lib/data';
 import { repoFile, url } from '../lib/url';
 const rubric = getRubric();
+const toc = [
+  ...getHeadings().filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: h.text, depth: 2 })),
+  { slug: 'rubric', text: 'Rubric: criteria for each level', depth: 2 },
+  ...rubric.safeguards.map((s) => ({ slug: s.slug, text: `${s.id} ${s.name}`, depth: 3 })),
+];
 ---
 <Base title="Standard" description="The ASE Safeguarding Standard, an independent draft for consultation: twelve safeguards against abuse of academic authority, with observable scoring criteria." crumbs={[{ label: 'Standard' }]}>
   <div class="container">
     <p class="eyebrow">Version {frontmatter.version} · {frontmatter.status}</p>
     <h1>{frontmatter.title}</h1>
     <p class="lede">Twelve safeguards that allow students to raise concerns about the exercise of academic authority without risking their education. Each is defined by observable features of published rules.</p>
-    <div class="notice"><p><strong>An independent draft.</strong> This is ASE's own framework, published for consultation. It is not a legal or regulatory standard and does not replace the Standards and Guidelines for Quality Assurance in the European Higher Education Area (ESG) or national law.</p></div>
-    <p class="small"><a href={repoFile('standard/standard-v0.1.md')}>Source text</a> · <a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a> · <a href={url('/methodology/')}>Scoring methodology</a> · <a href={url('/methodology/changelog/')}>Changelog</a></p>
 
-    <div class="prose" style="margin-top:2rem"><Content /></div>
+    <div class="doc-grid">
+      <OnThisPage items={toc} />
+      <div class="doc-main">
+        <div class="notice" style="margin-top:0"><p><strong>An independent draft.</strong> This is ASE's own framework, published for consultation. It is not a legal or regulatory standard and does not replace the Standards and Guidelines for Quality Assurance in the European Higher Education Area (ESG) or national law.</p></div>
+        <ul class="link-row small" style="margin-bottom:2rem"><li><a href={repoFile('standard/standard-v0.1.md')}>Source text</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a></li><li><a href={url('/methodology/')}>Scoring methodology</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
 
-    <h2 id="rubric">Rubric: criteria for each level</h2>
-    <p class="prose muted">Every safeguard can also be recorded as <SafeguardScore result="?" /> or <SafeguardScore result="NR" />. Where two levels are plausible, the lower one is assigned.</p>
-    {rubric.safeguards.map((s) => (
-      <section id={s.slug} aria-labelledby={`${s.slug}-h`} style="margin-top:2.25rem">
-        <p class="eyebrow" style="margin-bottom:.2rem">{s.id}</p>
-        <h3 id={`${s.slug}-h`} style="margin-top:0;font-size:1.4rem">{s.name}</h3>
-        <p class="prose"><strong>Question:</strong> {s.question}</p>
-        {s.notes && <p class="prose small muted">{s.notes}</p>}
-        <div class="table-wrap" tabindex="0" role="region" aria-labelledby={`${s.slug}-cap`}>
-          <table>
-            <caption class="visually-hidden" id={`${s.slug}-cap`}>Levels for {s.name}</caption>
-            <thead><tr><th scope="col" style="width:11rem">Level</th><th scope="col">Observable criteria</th></tr></thead>
-            <tbody>
-              {(['3', '2', '1', '0'] as const).map((lvl) => (
-                <tr><td><SafeguardScore result={lvl} /></td><td>{s.levels[lvl]}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p class="small" style="margin-top:.5rem"><a href={url(`/compare/${s.slug}/`)}>{s.name} across EU countries →</a></p>
-      </section>
-    ))}
+        <div class="prose doc-body"><Content /></div>
+
+        <h2 id="rubric">Rubric: criteria for each level</h2>
+        <p class="prose muted">Every safeguard can also be recorded as <SafeguardScore result="?" /> or <SafeguardScore result="NR" />. Where two levels are plausible, the lower one is assigned.</p>
+        {rubric.safeguards.map((s) => (
+          <section id={s.slug} class="rubric-item" aria-labelledby={`${s.slug}-h`}>
+            <p class="eyebrow" style="margin-bottom:.2rem">{s.id}</p>
+            <h3 id={`${s.slug}-h`}>{s.name}</h3>
+            <p class="prose"><strong>Question:</strong> {s.question}</p>
+            {s.notes && <p class="prose small muted">{s.notes}</p>}
+            <div class="table-wrap" tabindex="0" role="region" aria-labelledby={`${s.slug}-cap`}>
+              <table class="rubric-table">
+                <caption class="visually-hidden" id={`${s.slug}-cap`}>Levels for {s.name}</caption>
+                <thead><tr><th scope="col">Level</th><th scope="col">Observable criteria</th></tr></thead>
+                <tbody>
+                  {(['3', '2', '1', '0'] as const).map((lvl) => (
+                    <tr><td><SafeguardScore result={lvl} /></td><td>{s.levels[lvl]}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="small" style="margin-top:.5rem"><a href={url(`/compare/${s.slug}/`)}>{s.name} across EU countries →</a></p>
+          </section>
+        ))}
+      </div>
+    </div>
   </div>
 </Base>

@@ -27,7 +27,8 @@ const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`
     <h1>{i.canonical_name}</h1>
     {i.local_name && i.local_name !== i.canonical_name && <p class="lede" lang={primaryLang(i.country)} style="margin-top:-.5rem">{i.local_name}</p>}
 
-    <div class="panel" style="margin:1.25rem 0">
+    <div class="record-head">
+    <div class="panel">
       <dl class="meta-list">
         <dt>Country</dt><dd><a href={url(`/countries/${country.slug}/`)}>{country.name}</a></dd>
         <dt>Official website</dt><dd><a href={i.website} rel="noopener">{i.website.replace(/^https?:\/\//, '')}</a></dd>
@@ -42,6 +43,7 @@ const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`
       </dl>
     </div>
 
+    <div class="record-notes">
     <div class="notice">
       <p><strong>What this profile shows.</strong> Results describe the institution's published university-wide rules, reviewed against the <a href={url('/standard/')}>Standard</a>. Faculty-level rules may add protections. A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists.</p>
     </div>
@@ -52,6 +54,8 @@ const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`
       </div>
     )}
     {cov.provisional === 0 && i.research_method && <p class="small muted"><strong>Research method:</strong> {i.research_method}{i.research_dossier && <> <a href={repoFile(i.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
+    </div>
+    </div>
 
     {i.evidence_note && <section aria-labelledby="summary"><h2 id="summary">Summary of published safeguards</h2><p class="prose">{i.evidence_note}</p></section>}
 

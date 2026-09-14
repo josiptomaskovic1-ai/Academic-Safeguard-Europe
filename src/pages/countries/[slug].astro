@@ -27,7 +27,8 @@ const localParts = c.local_name && c.local_name !== c.name ? localNameParts(c.is
     <p class="eyebrow">EU Member State · {c.iso_code}</p>
     <h1>{c.name}{localParts.length > 0 && <> <span class="muted" style="font-size:.55em;font-weight:400">{localParts.map((p, i) => <>{i > 0 && ' / '}<span lang={p.lang}>{p.text}</span></>)}</span></>}</h1>
 
-    <div class="panel" style="margin:1.25rem 0">
+    <div class="record-head">
+    <div class="panel">
       <dl class="meta-list">
         <dt>Research status</dt><dd><ResearchStatus status={c.research_status} cov={countryCoverageWithInstitutions(c.iso_code)} /></dd>
         <dt>Last reviewed</dt><dd><LastReviewed date={c.last_reviewed} /></dd>
@@ -39,6 +40,7 @@ const localParts = c.local_name && c.local_name !== c.name ? localNameParts(c.is
       </dl>
     </div>
 
+    <div class="record-notes">
     {!complete && (
       <div class="notice">
         <p><strong>Research for this jurisdiction is currently incomplete.</strong> Missing data should not be interpreted as absence of safeguards.</p>
@@ -51,6 +53,8 @@ const localParts = c.local_name && c.local_name !== c.name ? localNameParts(c.is
       </div>
     )}
     {cov.provisional === 0 && c.research_method && <p class="small muted"><strong>Research method:</strong> {c.research_method}{c.research_dossier && <> <a href={repoFile(c.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
+    </div>
+    </div>
 
     <section aria-labelledby="nf">
       <h2 id="nf">National framework</h2>

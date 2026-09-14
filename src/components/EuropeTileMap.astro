@@ -15,7 +15,10 @@ const GRID: Record<string, [col: number, row: number]> = {
   IT: [4, 7], HR: [5, 7], BG: [7, 7],
   MT: [4, 8], GR: [6, 8], CY: [7, 8],
 };
+interface Props { withCounts?: boolean }
+const { withCounts = false } = Astro.props;
 const countries = getCountries().map((c) => ({ c, cov: countryCoverageWithInstitutions(c.iso_code) }));
+const countFor = (s: string) => countries.filter(({ c }) => c.research_status === s).length;
 const statuses = Object.keys(COUNTRY_STATUS_LABELS);
 const anyProvisional = countries.some(({ cov }) => cov.provisional > 0);
 ---
@@ -41,6 +44,7 @@ const anyProvisional = countries.some(({ cov }) => cov.provisional > 0);
       <li>
         <span class="swatch tilemap-swatch" data-status={s} aria-hidden="true"></span>
         <ResearchStatus status={s} />
+        {withCounts && <span class="legend-count">{countFor(s)}<span class="visually-hidden"> {countFor(s) === 1 ? 'country' : 'countries'}</span></span>}
       </li>
     ))}
     {anyProvisional && (

@@ -75,23 +75,32 @@ const basis = (r: SafeguardResult) => {
       </div>
     )}
 
-    <h2 id="by-country">By country</h2>
-    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="by-country">
-      <table>
-        <caption class="visually-hidden">{def.name} by country</caption>
-        <thead><tr><th scope="col">Country</th><th scope="col">Result</th><th scope="col">Verification</th><th scope="col">Basis</th></tr></thead>
-        <tbody>
-          {[...researched, ...notResearched].map(({ c, r }) => (
-            <tr>
-              <th scope="row"><a href={url(`/countries/${c.slug}/#sg-${def.id.toLowerCase()}`)}>{c.name}</a></th>
-              <td><SafeguardScore result={r.result} verification={r.verification} /></td>
-              <td>{r.result === 'NR' ? <span class="muted">—</span> : <VerificationBadge status={r.verification} short />}</td>
-              <td class:list={['small', { basis: r.result !== 'NR' }]}>{r.result === 'NR' ? <span class="muted">Not researched</span> : basis(r)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    <p class="small muted" style="margin-top:.75rem">Not researched: {notResearched.length} of {countries.length} Member States. “Not researched” says nothing about whether a safeguard exists.</p>
+    {n > 0 && (
+      <>
+        <h2 id="by-country">Researched countries</h2>
+        <div class="table-wrap stack-table" tabindex="0" role="region" aria-labelledby="by-country">
+          <table>
+            <caption class="visually-hidden">{def.name}: results for researched Member States, alphabetical</caption>
+            <thead><tr><th scope="col">Country</th><th scope="col">Result</th><th scope="col">Verification</th><th scope="col">Basis in the sources</th></tr></thead>
+            <tbody>
+              {researched.map(({ c, r }) => (
+                <tr>
+                  <th scope="row"><a href={url(`/countries/${c.slug}/#sg-${def.id.toLowerCase()}`)}>{c.name}</a></th>
+                  <td data-label="Result"><span><SafeguardScore result={r.result} verification={r.verification} badgeShown /></span></td>
+                  <td data-label="Verification"><span><VerificationBadge status={r.verification} short /></span></td>
+                  <td data-label="Basis" class="small basis"><span>{basis(r)}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </>
+    )}
+
+    <h2 id="not-researched">Not researched yet ({notResearched.length} of {countries.length})</h2>
+    <p class="prose muted">"Not researched" says nothing about whether a safeguard exists in these Member States.</p>
+    <ul class="country-chips">
+      {notResearched.map(({ c }) => <li><a href={url(`/countries/${c.slug}/`)}>{c.name}</a></li>)}
+    </ul>
   </div>
 </Base>
