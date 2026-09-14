@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import DocTypeIcon from '../components/DocTypeIcon.astro';
 import { getEvidence } from '../lib/data';
 import { repoFile, newIssue } from '../lib/url';
 
@@ -16,31 +17,47 @@ const TYPE_LABELS: Record<string, string> = { legislation: 'Legislation', standa
 const jurisdictions = [...new Set(items.map((i) => i.jurisdiction))].sort();
 const usedCats = Object.keys(CATEGORY_LABELS).filter((c) => items.some((i) => i.categories.includes(c)));
 const usedTypes = Object.keys(TYPE_LABELS).filter((t) => items.some((i) => i.source_type === t));
+const typeCounts = usedTypes.map((t) => ({ t, n: items.filter((i) => i.source_type === t).length }));
 ---
 <Base title="Evidence Library" description="Background sources on academic authority, retaliation, complaint procedures and student rights in European higher education." crumbs={[{ label: 'Evidence Library' }]}>
   <div class="container">
     <h1>Evidence Library</h1>
-    <p class="lede">Background material on academic authority, retaliation, complaint systems and student rights: European standards, legislation, reports and research. These items provide context. Scores rest on the primary sources cited in each finding.</p>
+    <p class="lede">Background standards, laws and research for context. Scores rest only on the primary sources cited in each finding.</p>
 
     {items.length === 0 ? (
       <p class="muted">The Evidence Library is being compiled. <a href={newIssue('source-submission.yml')}>Suggest a source.</a></p>
     ) : (
       <>
-        <form class="filters" id="lib-filters" hidden aria-label="Filter the Evidence Library">
-          <label>Search<input type="search" name="q" placeholder="Title, body, summary" /></label>
-          <label>Category<select name="cat"><option value="">All categories</option>{usedCats.map((c) => <option value={c}>{CATEGORY_LABELS[c]}</option>)}</select></label>
-          <label>Jurisdiction<select name="jur"><option value="">All</option>{jurisdictions.map((j) => <option value={j}>{j}</option>)}</select></label>
-          <label>Type<select name="type"><option value="">All types</option>{usedTypes.map((t) => <option value={t}>{TYPE_LABELS[t]}</option>)}</select></label>
-          <p class="filter-count" aria-live="polite" id="lib-count"></p>
-        </form>
-        <ul class="source-list" id="lib-list">
+        <ul class="doc-counts-row" role="list" aria-label="Items by type">
+          {typeCounts.map(({ t, n }) => <li><DocTypeIcon type={t} size="1rem" /><strong>{n}</strong> {TYPE_LABELS[t]}</li>)}
+        </ul>
+        <details class="filter-details" id="lib-filter-details" hidden open>
+          <summary>Filter {items.length} items</summary>
+          <form class="filters" id="lib-filters" aria-label="Filter the Evidence Library">
+            <label>Search<input type="search" name="q" placeholder="Title, body, summary" /></label>
+            <label>Category<select name="cat"><option value="">All categories</option>{usedCats.map((c) => <option value={c}>{CATEGORY_LABELS[c]}</option>)}</select></label>
+            <label>Jurisdiction<select name="jur"><option value="">All</option>{jurisdictions.map((j) => <option value={j}>{j}</option>)}</select></label>
+            <label>Type<select name="type"><option value="">All types</option>{usedTypes.map((t) => <option value={t}>{TYPE_LABELS[t]}</option>)}</select></label>
+            <p class="filter-count" aria-live="polite" id="lib-count"></p>
+          </form>
+        </details>
+        <ul class="lib-list" id="lib-list">
           {items.map((it) => (
-            <li id={it.id} data-cats={it.categories.join(' ')} data-jur={it.jurisdiction} data-type={it.source_type} data-text={`${it.title} ${it.author_body} ${it.summary}`.toLowerCase()}>
-              <h2 style="font-size:1.1rem;margin:0 0 .3rem"><a href={it.url} rel="noopener">{it.title}</a></h2>
-              <p class="small muted" style="margin:0 0 .4rem">{it.author_body}{it.year ? ` · ${it.year}` : ''} · {it.jurisdiction} · {TYPE_LABELS[it.source_type]}{it.doi && <> · DOI <a href={`https://doi.org/${it.doi}`}>{it.doi}</a></>}</p>
-              <p style="margin:0 0 .4rem">{it.summary}</p>
-              <p style="margin:0">{it.categories.map((c) => <span class="tag">{CATEGORY_LABELS[c]}</span>)}</p>
-              {it.notes && <p class="small muted" style="margin:.3rem 0 0">{it.notes}</p>}
+            <li id={it.id} class="lib-item" data-cats={it.categories.join(' ')} data-jur={it.jurisdiction} data-type={it.source_type} data-text={`${it.title} ${it.author_body} ${it.summary}`.toLowerCase()}>
+              <span class="lib-type" aria-hidden="true"><DocTypeIcon type={it.source_type} size="1.2rem" /></span>
+              <div class="lib-body">
+                <h2 class="lib-title"><a href={it.url} rel="noopener">{it.title}</a></h2>
+                <p class="lib-meta small muted"><span class="lib-type-label">{TYPE_LABELS[it.source_type]}</span> · {it.author_body}{it.year ? ` · ${it.year}` : ''} · {it.jurisdiction}{it.doi && <> · DOI <a href={`https://doi.org/${it.doi}`}>{it.doi}</a></>}</p>
+                <p class="lib-tags">
+                  {it.categories.map((c) => <span class="tag">{CATEGORY_LABELS[c]}</span>)}
+                  {it.notes && <span class="tag tag--caveat"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M8 1.75L14.75 14H1.25z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M8 6.25v3.5M8 11.75v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>Caveat</span>}
+                </p>
+                <details class="disclosure lib-details">
+                  <summary>{it.notes ? 'Summary and caveat' : 'Summary'}</summary>
+                  <p>{it.summary}</p>
+                  {it.notes && <p class="small muted"><strong>Caveat:</strong> {it.notes}</p>}
+                </details>
+              </div>
             </li>
           ))}
         </ul>
@@ -49,12 +66,15 @@ const usedTypes = Object.keys(TYPE_LABELS).filter((t) => items.some((i) => i.sou
     <p class="small muted" style="margin-top:2rem">Data: <a href={repoFile('evidence-library/items.yml')}><code>evidence-library/items.yml</code></a> · <a href={newIssue('source-submission.yml')}>Suggest a source</a></p>
   </div>
   <script>
-    // Progressive enhancement: without JavaScript, the full list is shown.
+    // Progressive enhancement: without JavaScript, the full list is shown and the filter stays hidden.
+    const wrap = document.getElementById('lib-filter-details') as HTMLDetailsElement | null;
     const form = document.getElementById('lib-filters') as HTMLFormElement | null;
     const list = document.getElementById('lib-list');
     const count = document.getElementById('lib-count');
-    if (form && list && count) {
-      form.hidden = false;
+    if (wrap && form && list && count) {
+      wrap.hidden = false;
+      // Collapsed on phones, where 15 categories make a long run of controls.
+      wrap.open = window.matchMedia('(min-width: 40rem)').matches;
       const rows = [...list.querySelectorAll<HTMLLIElement>(':scope > li')];
       const apply = () => {
         const f = new FormData(form);

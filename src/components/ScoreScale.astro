@@ -1,0 +1,127 @@
+---
+/**
+ * ScoreScale — compact legend for the six result values.
+ *
+ * Two visually separate groups so NR and ? are never read as low scores:
+ *   "Not a score"   NR (dashed box, no pips)   ?  (dotted box, no pips)
+ *   "Rubric score"  0 (three empty pips)  1 / 2 / 3 (filled pips)
+ * Distinction is carried by text, box outline style and pip count — never by colour alone.
+ * Visual vocabulary matches SafeguardScore.astro (.score-code chip + .score-pips).
+ *
+ * Labels are taken from the site's RESULT_LABELS wording; pass `labels` to override.
+ */
+interface Props {
+  /** Show a sixth-column example of the hatched "provisional" pip style. Default true. */
+  showProvisional?: boolean;
+  /** Optional heading text rendered as a small eyebrow above the legend. */
+  heading?: string;
+  labels?: Partial<Record<'NR' | '?' | '0' | '1' | '2' | '3', string>>;
+  /** Short second line under each label (template copy, never rubric text). Pass '' to hide one. */
+  hints?: Partial<Record<'NR' | '?' | '0' | '1' | '2' | '3', string>>;
+  class?: string;
+}
+const { showProvisional = true, heading = 'How to read results', labels = {}, hints = {}, class: className } = Astro.props;
+const L = {
+  NR: 'Not researched', '?': 'Unable to assess', '0': 'Not identified', '1': 'Limited', '2': 'Substantial', '3': 'Strong',
+  ...labels,
+};
+const H: Record<string, string> = { NR: 'Not yet examined', '?': 'Sources unclear', '0': 'Searched, not found', '1': '', '2': '', '3': '', ...hints };
+const nonScores = [
+  { code: 'NR', label: L.NR, hint: H.NR },
+  { code: '?', label: L['?'], hint: H['?'] },
+];
+const scores = [
+  { code: '0', n: 0, label: L['0'], hint: H['0'] },
+  { code: '1', n: 1, label: L['1'], hint: H['1'] },
+  { code: '2', n: 2, label: L['2'], hint: H['2'] },
+  { code: '3', n: 3, label: L['3'], hint: H['3'] },
+];
+---
+<figure class:list={['scale', className]}>
+  {heading && <figcaption class="scale-cap">{heading}</figcaption>}
+  <div class="scale-groups">
+    <div class="scale-group scale-group--none">
+      <p class="scale-group-label">Not a score</p>
+      <ul class="scale-list" role="list">
+        {nonScores.map((s) => (
+          <li class="scale-item" data-result={s.code}>
+            <span class="scale-mark" aria-hidden="true">
+              <span class="scale-code">{s.code}</span>
+              <span class="scale-pips scale-pips--none"><i></i><i></i><i></i></span>
+            </span>
+            <span class="scale-text">
+              <span class="visually-hidden">{s.code === 'NR' ? 'NR' : 'Question mark'}: </span>
+              <span class="scale-label">{s.label}</span>
+              {s.hint && <span class="scale-hint">{s.hint}</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="scale-group scale-group--score">
+      <p class="scale-group-label">Rubric score, 0 to 3</p>
+      <ul class="scale-list" role="list">
+        {scores.map((s) => (
+          <li class="scale-item" data-result={s.code}>
+            <span class="scale-mark" aria-hidden="true">
+              <span class="scale-code">{s.code}</span>
+              <span class="scale-pips">{[1, 2, 3].map((k) => <i class:list={{ on: s.n >= k }}></i>)}</span>
+            </span>
+            <span class="scale-text">
+              <span class="visually-hidden">Score {s.code}: </span>
+              <span class="scale-label">{s.label}</span>
+              {s.hint && <span class="scale-hint">{s.hint}</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+  {showProvisional && (
+    <p class="scale-prov">
+      <span class="scale-pips scale-pips--prov" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></span>
+      <span><strong>Hatched pips</strong> = provisional: same score, not yet verified by a human reviewer.</span>
+    </p>
+  )}
+</figure>
+
+<style>
+  .scale { margin: 0; container-type: inline-size; font-size: 0.9rem; }
+  .scale-cap { font: 600 0.78rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.6rem; }
+  .scale-groups { display: grid; gap: 0.75rem; grid-template-columns: minmax(0, 1fr); }
+  @container (min-width: 40rem) { .scale-groups { grid-template-columns: minmax(0, 2fr) minmax(0, 4fr); gap: 1rem; } }
+
+  .scale-group { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 0.6rem 0.75rem 0.7rem; min-width: 0; }
+  /* The non-score group is framed with a dashed edge: it sits outside the scale, not at its bottom. */
+  .scale-group--none { border-style: dashed; border-color: var(--control); background: transparent; }
+  .scale-group-label { font: 600 0.72rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3); margin: 0 0 0.55rem; }
+
+  .scale-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr)); }
+  .scale-item { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 0.4rem; min-width: 0; }
+  .scale-mark { display: inline-flex; align-items: center; gap: 0.45rem; }
+  .scale-text { display: grid; gap: 0.1rem; line-height: 1.25; min-width: 0; }
+  .scale-label { font-weight: 600; color: var(--ink); }
+  .scale-hint { font-size: 0.78rem; color: var(--ink-3); }
+
+  .scale-code { font: 600 0.8rem/1 var(--mono); min-width: 1.7rem; text-align: center; padding: 0.25rem 0.3rem; border-radius: 3px; border: 1px solid var(--control); background: var(--surface); color: var(--ink); }
+  [data-result='NR'] .scale-code { border-style: dashed; color: var(--ink-3); }
+  [data-result='?'] .scale-code { border-style: dotted; border-width: 2px; padding: calc(0.25rem - 1px) calc(0.3rem - 1px); }
+  [data-result='NR'] .scale-label { color: var(--ink-2); font-weight: 500; }
+  [data-result='?'] .scale-label { font-weight: 500; }
+
+  .scale-pips { display: inline-flex; gap: 2px; }
+  .scale-pips i { width: 0.55rem; height: 0.8rem; border: 1px solid var(--control); }
+  .scale-pips i.on { background: var(--s3); border-color: var(--s3); }
+  /* NR and ? have no pips at all: show a flat dash track instead of empty boxes, so they cannot be read as 0. */
+  .scale-pips--none { width: calc(3 * 0.55rem + 4px); height: 0.8rem; align-items: center; }
+  .scale-pips--none i { display: none; }
+  .scale-pips--none::before { content: ''; width: 100%; border-top: 1px dashed var(--control); }
+  .scale-pips--prov i.on { background: repeating-linear-gradient(135deg, var(--s3) 0 2px, transparent 2px 4px); border: 1px dashed var(--s3); }
+
+  .scale-prov { display: flex; align-items: center; gap: 0.55rem; margin: 0.6rem 0 0; font-size: 0.82rem; color: var(--ink-2); }
+  .scale-prov strong { color: var(--ink); font-weight: 600; }
+
+  @media print {
+    .scale-pips i.on { background: #000 !important; border-color: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>

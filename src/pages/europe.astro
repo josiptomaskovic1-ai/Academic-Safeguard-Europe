@@ -3,24 +3,39 @@ import Base from '../layouts/Base.astro';
 import EuropeTileMap from '../components/EuropeTileMap.astro';
 import ResearchStatus from '../components/ResearchStatus.astro';
 import LastReviewed from '../components/LastReviewed.astro';
-import { getCountries, getInstitutionsFor, coverage, countryCoverageWithInstitutions } from '../lib/data';
+import StatBlock from '../components/StatBlock.astro';
+import { getCountries, getInstitutions, getInstitutionsFor, coverage, hasFindings, countryCoverageWithInstitutions } from '../lib/data';
 import { url } from '../lib/url';
 const countries = getCountries();
+const institutions = getInstitutions();
+const results = [...countries, ...institutions].flatMap((r) => Object.values(r.safeguards)).filter((r) => r.result !== 'NR');
+const withFindings = countries.filter((c) => hasFindings(c.safeguards)).length;
+const stats = [
+  { value: withFindings, label: withFindings === 1 ? 'Member State with findings' : 'Member States with findings' },
+  { value: institutions.length, label: institutions.length === 1 ? 'institution profile' : 'institution profiles' },
+  { value: results.filter((r) => r.verification === 'verified').length, label: 'verified findings' },
+  { value: results.filter((r) => r.verification === 'needs_review').length, label: 'findings', tone: 'provisional' as const },
+];
 ---
 <Base title="Europe" description="Research status for all 27 EU Member States: which national frameworks and institutions ASE has researched so far, with provisional findings clearly marked." crumbs={[{ label: 'Europe' }]}>
   <div class="container">
     <h1>European country explorer</h1>
-    <p class="lede">All 27 EU Member States are represented. Each tile shows how far ASE's research has progressed. It does not show how well a country performs.</p>
+    <p class="lede">Each tile shows how far our research has progressed in that Member State, not how well it performs.</p>
 
-    <div class="explorer" style="margin-top:2rem">
+    <div class="explorer explorer--page">
       <section aria-labelledby="map-h">
         <h2 id="map-h" class="visually-hidden">Map</h2>
         <EuropeTileMap withCounts />
       </section>
       <aside class="explorer-aside" aria-labelledby="read-h">
-        <h2 id="read-h" style="margin-top:0">How to read the map</h2>
-        <div class="notice" style="margin-top:0"><p>Most jurisdictions have not been researched yet. <strong>Missing data should not be interpreted as absence of safeguards.</strong></p></div>
-        <p>Select a country to see its national framework, the evidence behind each finding, and any institutions researched. Every page shows whether its findings have been verified.</p>        <ul class="link-list">
+        <h2 id="read-h" class="aside-title">How to read the map</h2>
+        <p class="missing-note missing-note--boxed">
+          <svg class="info-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 7v4.5M8 4.6v.1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" /></svg>
+          <span>Most Member States are not researched yet. <strong>Missing data is not absence of safeguards.</strong></span>
+        </p>
+        <StatBlock items={stats} label="Research coverage" class="explorer-stats" />
+        <p class="muted">Select a country for evidence and verification status.</p>
+        <ul class="link-list">
           <li><a href={url('/compare/')}>Compare one safeguard across countries →</a></li>
           <li><a href={url('/institutions/')}>Institution profiles →</a></li>
           <li><a href={url('/contribute/')}>Help research a country →</a></li>
@@ -28,7 +43,7 @@ const countries = getCountries();
       </aside>
     </div>
 
-    <section aria-labelledby="table-h" style="margin-top:3rem">
+    <section aria-labelledby="table-h" class="section record-section">
       <h2 id="table-h">All Member States</h2>
       <div class="table-wrap stack-table" tabindex="0" role="region" aria-labelledby="table-h">
         <table>
@@ -44,9 +59,9 @@ const countries = getCountries();
                 <tr data-status={c.research_status}>
                   <th scope="row" class="nowrap"><a href={url(`/countries/${c.slug}/`)}>{c.name}</a> <span class="source-id">{c.iso_code}</span></th>
                   <td data-label="Status"><span><ResearchStatus status={c.research_status} cov={countryCoverageWithInstitutions(c.iso_code)} /></span></td>
-                  <td data-label="National safeguards"><span>{cov.researched === 0 ? <span class="muted">—</span> : <>{cov.researched} of {cov.total}<span class="small muted"> · {cov.verified} verified, {cov.provisional} provisional</span></>}</span></td>
-                  <td data-label="Institutions"><span>{inst || <span class="muted">—</span>}</span></td>
-                  <td data-label="Last reviewed" class="small"><span><LastReviewed date={c.last_reviewed} /></span></td>
+                  <td data-label="National safeguards"><span>{cov.researched === 0 ? <span class="muted" aria-hidden="true">—</span> : <>{cov.researched} of {cov.total}<span class="small muted"> · {cov.verified} verified, {cov.provisional} provisional</span></>}{cov.researched === 0 && <span class="visually-hidden">none</span>}</span></td>
+                  <td data-label="Institutions"><span>{inst || <><span class="muted" aria-hidden="true">—</span><span class="visually-hidden">none</span></>}</span></td>
+                  <td data-label="Last reviewed" class="small"><span>{c.last_reviewed ? <LastReviewed date={c.last_reviewed} /> : <><span class="muted" aria-hidden="true">—</span><span class="visually-hidden">not yet reviewed</span></>}</span></td>
                 </tr>
               );
             })}

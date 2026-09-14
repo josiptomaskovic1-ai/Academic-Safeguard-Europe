@@ -1,18 +1,26 @@
 ---
 import { coverage, getCountry, primaryLang, type Institution } from '../lib/data';
 import { url } from '../lib/url';
-import ResearchStatus from './ResearchStatus.astro';
 import VerificationBadge from './VerificationBadge.astro';
-interface Props { institution: Institution }
-const { institution: i } = Astro.props;
+import SafeguardStrip from './SafeguardStrip.astro';
+import ScopeIcon from './ScopeIcon.astro';
+interface Props { institution: Institution; showCountry?: boolean }
+const { institution: i, showCountry = true } = Astro.props;
 const cov = coverage(i.safeguards);
 const country = getCountry(i.country);
 ---
-<article class="card">
-  <a class="stretched" href={url(`/institutions/${i.id}/`)}><h3>{i.canonical_name}</h3></a>
-  {i.local_name && i.local_name !== i.canonical_name && <p class="small muted" lang={primaryLang(i.country)}>{i.local_name}</p>}
-  <p class="small">{country?.name}</p>
-  <ResearchStatus status={i.research_status} kind="institution" />
-  {cov.provisional > 0 && <p><VerificationBadge status="needs_review" /></p>}
-  <p class="small muted">{cov.researched} of {cov.total} safeguards researched · {cov.verified} verified{cov.provisional ? ` · ${cov.provisional} provisional` : ''}</p>
+<article class="card inst-card">
+  <div class="inst-card-head">
+    <span class="icon-frame" aria-hidden="true"><ScopeIcon name="institution" size="1.3rem" /></span>
+    <div class="inst-card-title">
+      <a class="stretched" href={url(`/institutions/${i.id}/`)}><h3>{i.canonical_name}</h3></a>
+      {i.local_name && i.local_name !== i.canonical_name && <p class="small muted" lang={primaryLang(i.country)}>{i.local_name}</p>}
+    </div>
+  </div>
+  <SafeguardStrip safeguards={i.safeguards} variant="mini" />
+  <p class="inst-card-meta small">
+    {showCountry && country && <span>{country.name}</span>}
+    {cov.provisional > 0 && <VerificationBadge status="needs_review" short />}
+    <span class="nowrap">{cov.researched}/{cov.total} researched · {cov.verified} verified</span>
+  </p>
 </article>

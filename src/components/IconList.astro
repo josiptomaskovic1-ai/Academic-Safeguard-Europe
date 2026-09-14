@@ -1,0 +1,81 @@
+---
+/**
+ * IconList — a list whose items each carry a framed line icon (ScopeIcon or SafeguardIcon).
+ *
+ * Variants
+ *   tone="does"    solid square frame, plain glyph
+ *   tone="doesnot" dashed square frame, glyph struck through, muted ink
+ * The difference is shape + stroke style + the visible heading; colour only reinforces.
+ * `layout="grid"` turns items into small cards (for the Standard overview of S01–S12).
+ */
+import ScopeIcon from './ScopeIcon.astro';
+import SafeguardIcon from './SafeguardIcon.astro';
+
+interface Item {
+  /** ScopeIcon name ('statutes', 'ranking', …) or safeguard id ('S01'…'S12'). */
+  icon: string;
+  text: string;
+  /** Optional small line under the text. */
+  detail?: string;
+  href?: string;
+  /** Optional mono prefix, e.g. 'S03'. */
+  code?: string;
+}
+interface Props {
+  items: Item[];
+  tone?: 'does' | 'doesnot';
+  layout?: 'list' | 'grid';
+  /** Accessible name when no visible heading labels the list. */
+  label?: string;
+  class?: string;
+}
+const { items, tone = 'does', layout = 'list', label, class: className } = Astro.props;
+const isSafeguard = (s: string) => /^S\d{2}$/.test(s);
+---
+<ul class:list={['icon-list', `icon-list--${layout}`, className]} data-tone={tone} role="list" aria-label={label}>
+  {items.map((it) => (
+    <li class="il-item">
+      <span class="il-lead">
+        <span class="il-frame" aria-hidden="true">
+          {isSafeguard(it.icon)
+            ? <SafeguardIcon id={it.icon} size="1.3rem" />
+            : <ScopeIcon name={it.icon} negated={tone === 'doesnot'} size="1.3rem" />}
+        </span>
+        {it.code && layout === 'grid' && <span class="il-code">{it.code}</span>}
+      </span>
+      <span class="il-text">
+        {it.code && layout !== 'grid' && <span class="il-code">{it.code}</span>}
+        {it.href ? <a href={it.href} class="il-main">{it.text}</a> : <span class="il-main">{it.text}</span>}
+        {it.detail && <span class="il-detail">{it.detail}</span>}
+      </span>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .icon-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+  .il-item { margin: 0; display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.8rem; align-items: start; min-width: 0; }
+  .il-lead { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+  .il-frame { --icon-knockout: var(--surface); width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); color: var(--accent); }
+  .il-text { display: flex; flex-direction: column; gap: 0.05rem; padding-top: 0.35rem; min-width: 0; line-height: 1.4; }
+  .il-main { font-weight: 550; color: var(--ink); }
+  a.il-main { color: var(--accent); }
+  .il-detail { font-size: 0.85rem; color: var(--ink-2); }
+  .il-code { font: 600 0.72rem/1.2 var(--mono); color: var(--ink-3); letter-spacing: 0.03em; }
+
+  .icon-list[data-tone='doesnot'] .il-frame { --icon-knockout: var(--paper); border-style: dashed; border-color: var(--control); background: var(--paper); color: var(--ink-2); }
+  .icon-list[data-tone='doesnot'] .il-main { font-weight: 450; color: var(--ink-2); }
+
+  .icon-list--grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); gap: 0.75rem; }
+  .icon-list--grid .il-item { position: relative; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 0.9rem 1rem 1rem; align-items: start; }
+  .icon-list--grid .il-item:has(a:hover) { border-color: var(--accent); }
+  .icon-list--grid .il-frame { border: 0; background: var(--accent-soft); }
+  .icon-list--grid .il-text { padding-top: 0.1rem; }
+  .icon-list--grid .il-main { font-weight: 600; line-height: 1.3; }
+  .icon-list--grid a.il-main { text-decoration: none; }
+  .icon-list--grid a.il-main:hover { text-decoration: underline; }
+  /* The whole card is the link target; the visible link text stays the accessible name. */
+  .icon-list--grid a.il-main::after { content: ''; position: absolute; inset: 0; }
+  .icon-list--grid .il-detail { margin-top: 0.25rem; }
+  @media (max-width: 34rem) { .icon-list--grid { gap: 0.5rem; } .icon-list--grid .il-item { padding: 0.75rem 0.85rem; gap: 0.7rem; } }
+</style>

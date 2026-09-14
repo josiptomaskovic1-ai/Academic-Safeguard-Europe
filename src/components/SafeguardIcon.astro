@@ -1,0 +1,76 @@
+---
+/**
+ * SafeguardIcon — one line icon per safeguard in the ASE Standard (S01–S12).
+ *
+ * Grid 24×24, 2px safe margin, 1.75px stroke, round caps and joins, no fills, currentColor only,
+ * so icons inherit text colour and work in light, dark and print. Icons are decorative by default
+ * (aria-hidden): the safeguard name must always be visible next to the icon. Pass `title` only
+ * when the icon stands alone and must carry its own accessible name.
+ *
+ * Metaphors are institutional and abstract (documents, shields, trays, clocks, steps, scales) —
+ * no people, no stars, no ticks or crosses, nothing that reads as a grade.
+ */
+export type SafeguardId = 'S01' | 'S02' | 'S03' | 'S04' | 'S05' | 'S06' | 'S07' | 'S08' | 'S09' | 'S10' | 'S11' | 'S12';
+
+interface Props {
+  id: SafeguardId | string;
+  /** Rendered width/height. Number = px; string = any CSS length (e.g. '1.5em'). Default 24. */
+  size?: number | string;
+  /** Accessible name. Omit when a visible label sits next to the icon (the normal case). */
+  title?: string;
+  class?: string;
+}
+
+const { id, size = 24, title, class: className } = Astro.props;
+
+// Shared page outline used by the two document-based icons (S01, S07) so they read as a pair.
+const PAGE = '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>';
+
+const SAFEGUARD_ICON_PATHS: Record<SafeguardId, string> = {
+  // S01 Definition of abuse of academic authority — a page with one term boxed out ("defined term").
+  S01: `${PAGE}<rect x="8.5" y="9.5" width="7" height="3.5" rx=".5"/><path d="M8.5 16h7M8.5 18.5h4"/>`,
+  // S02 Anti-retaliation — a shield that an incoming arrow stops against.
+  S02: '<path d="M14.5 3.5l6 2.25V11c0 4-2.6 7.1-6 8.5-3.4-1.4-6-4.5-6-8.5V5.75z"/><path d="M2.5 11.5h3.5M4.5 9.5l2 2-2 2"/><path d="M12 10.5h5M12 13.5h5"/>',
+  // S03 Independent complaint mechanism — a document lowered into a separate intake tray.
+  S03: '<path d="M7.5 13.5V3.5h9v10"/><path d="M10 7h4M10 10h4"/><path d="M3 13.5h4.5L9 16h6l1.5-2.5H21V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>',
+  // S04 Conflict of interest / recusal — two interests held apart by a dividing rule, each moving away from it.
+  S04: '<circle cx="5.75" cy="12" r="3"/><circle cx="18.25" cy="12" r="3"/><path d="M12 3v18"/><path d="M9.5 6.5H5.5M7 5L5.5 6.5 7 8M14.5 17.5h4M17 16l1.5 1.5L17 19"/>',
+  // S05 Interim protective measures — an umbrella: cover while the case is pending.
+  S05: '<path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6.5a2 2 0 0 1-4 0"/>',
+  // S06 Procedural deadlines — a stopwatch.
+  S06: '<circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.75 1.75M10 2.75h4M12 2.75V6M18 6.5l1.5-1.5"/>',
+  // S07 Written, reasoned decisions — a page of reasons closed by a seal.
+  S07: `${PAGE}<path d="M8.5 9h3.5M8.5 12h7M8.5 15h7M8.5 18.5h2.5"/><circle cx="14.25" cy="18.25" r="1.5"/>`,
+  // S08 Appeal / independent review — ascending tiers with an arrow to the next level.
+  S08: '<path d="M3 20.5h6v-5h6v-5h6"/><path d="M4.5 12.5l6-6M6.5 6.5h4v4"/>',
+  // S09 Proportionate consequences — balanced scales.
+  S09: '<path d="M12 4v16.5M8 20.5h8M5.5 7h13"/><path d="M3 14l2.5-7L8 14M16 14l2.5-7L21 14"/><path d="M3 14a2.5 2.5 0 0 0 5 0zM16 14a2.5 2.5 0 0 0 5 0z"/>',
+  // S10 Remediation of academic harm — a restore arrow around an academic cap.
+  S10: '<path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3.5 3v4h4"/><path d="M12 9l4.5 2-4.5 2-4.5-2z"/><path d="M9.5 12v2.25c1.5.9 3.5.9 5 0V12"/>',
+  // S11 Professional-boundary and safeguarding training — a presentation board on a stand.
+  S11: '<rect x="3" y="3.5" width="18" height="12" rx="1"/><path d="M7 7.5h6M7 11h10"/><path d="M12 15.5v3M8.5 21l3.5-2.5 3.5 2.5"/>',
+  // S12 Academic Authority Safeguarding Review — a magnifier held over an institution.
+  S12: '<circle cx="10" cy="10" r="7"/><path d="M15 15l6 6"/><path d="M6.75 8.5L10 6.25l3.25 2.25M8 9.75v3M12 9.75v3M6.75 14h6.5"/>',
+};
+
+const body = SAFEGUARD_ICON_PATHS[id as SafeguardId] ?? '<rect x="4" y="4" width="16" height="16" rx="1"/>';
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const dim = typeof size === 'number' ? `${size}px` : size;
+---
+<svg
+  class:list={['sg-icon', className]}
+  data-safeguard={id}
+  viewBox="0 0 24 24"
+  width="24"
+  height="24"
+  style={`width:${dim};height:${dim}`}
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  focusable="false"
+  role={title ? 'img' : undefined}
+  aria-hidden={title ? undefined : 'true'}
+  set:html={(title ? `<title>${esc(title)}</title>` : '') + body}
+/>

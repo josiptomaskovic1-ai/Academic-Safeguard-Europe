@@ -1,0 +1,58 @@
+---
+/**
+ * StatBlock — big-number callouts for coverage facts ("27 Member States", "24 findings").
+ *
+ * Semantics: a <dl>; each item is <div><dt>label</dt><dd>value</dd></div>. The value is shown
+ * above the label via CSS grid order, while screen readers hear "label: value".
+ * Use for counts of research coverage only — never for scores, averages or rankings.
+ *
+ * `tone: 'provisional'` marks a figure that describes unverified work: it gets a dashed
+ * provisional rule and the word "Provisional" in text (not colour alone).
+ */
+interface StatItem {
+  value: string | number;
+  label: string;
+  note?: string;
+  tone?: 'default' | 'provisional' | 'muted';
+  href?: string;
+}
+interface Props {
+  items: StatItem[];
+  /** Accessible name for the group, e.g. "Research coverage". */
+  label?: string;
+  class?: string;
+}
+const { items, label = 'Key figures', class: className } = Astro.props;
+---
+<dl class:list={['stats', className]} aria-label={label}>
+  {items.map((it) => (
+    <div class="stat" data-tone={it.tone ?? 'default'}>
+      <dt class="stat-label">
+        {it.href ? <a href={it.href}>{it.label}</a> : it.label}
+      </dt>
+      <dd class="stat-value">{it.value}</dd>
+      {(it.note || it.tone === 'provisional') && (
+        <dd class="stat-note">
+          {it.tone === 'provisional' && <span class="stat-flag">Provisional</span>}
+          {it.note}
+        </dd>
+      )}
+    </div>
+  ))}
+</dl>
+
+<style>
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--stat-min, 9rem)), 1fr)); gap: 0 1.5rem; margin: 0; }
+  /* Each figure carries its own top rule, so rows wrap cleanly at any column count. */
+  .stat { display: grid; grid-template-rows: auto auto 1fr; align-content: start; padding: 0.8rem 0 1.1rem; border-top: 2px solid var(--ink); min-width: 0; }
+  .stat-value { order: -1; margin: 0; font: 600 clamp(2.1rem, 5vw, 2.9rem)/1 var(--serif); color: var(--ink); font-variant-numeric: lining-nums tabular-nums; letter-spacing: -0.01em; }
+  .stat-label { margin: 0.45rem 0 0; font: 600 0.9rem/1.3 var(--sans); color: var(--ink); }
+  .stat-label a { color: inherit; }
+  .stat-note { margin: 0.25rem 0 0; font-size: 0.82rem; line-height: 1.35; color: var(--ink-2); }
+  .stat-flag { display: inline-block; margin-right: 0.35rem; font: 600 0.68rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.06em; color: var(--provisional); }
+  .stat[data-tone='provisional'] { border-top-style: dashed; border-top-color: var(--provisional); }
+  .stat[data-tone='provisional'] .stat-value { text-decoration: underline dashed var(--provisional); text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+  .stat[data-tone='muted'] .stat-value { color: var(--ink-3); }
+
+  @media (max-width: 34rem) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 1rem; } }
+</style>

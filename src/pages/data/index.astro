@@ -1,46 +1,65 @@
 ---
 import Base from '../../layouts/Base.astro';
+import ScopeIcon from '../../components/ScopeIcon.astro';
+import SafeguardScore from '../../components/SafeguardScore.astro';
 import { getCountries, getInstitutions, getSources, getEvidence } from '../../lib/data';
 import { url, repoTree, repoFile, REPO_URL } from '../../lib/url';
 const counts = { countries: getCountries().length, institutions: getInstitutions().length, sources: getSources().length, evidence: getEvidence().length };
+const exports = [
+  { name: 'Countries (all 27 Member States)', n: counts.countries, file: 'countries.json' },
+  { name: 'Institutions', n: counts.institutions, file: 'institutions.json' },
+  { name: 'Sources', n: counts.sources, file: 'sources.json' },
+  { name: 'Evidence Library', n: counts.evidence, file: 'evidence-library.json' },
+  { name: 'Rubric', n: '12 safeguards', file: 'rubric.json' },
+];
 ---
 <Base title="Open data" description="Download Academic Safeguard Europe research data as YAML or JSON." crumbs={[{ label: 'Open data' }]}>
-  <div class="container prose">
+  <div class="container">
     <h1>Open data</h1>
-    <p class="lede">All research data is public and licensed under CC BY 4.0. The canonical data is the YAML in the repository. The JSON files below are generated from it at every build.</p>
+    <p class="lede">All research data, CC BY 4.0. The YAML in the repository is canonical; JSON is generated at every build.</p>
 
-    <h2>JSON exports</h2>
-    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="exports-cap">
-      <table>
-        <caption class="visually-hidden" id="exports-cap">JSON exports</caption>
-        <thead><tr><th scope="col">Dataset</th><th scope="col">Records</th><th scope="col">Download</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Countries (all 27 Member States)</th><td>{counts.countries}</td><td><a href={url('/data/countries.json')}>countries.json</a></td></tr>
-          <tr><th scope="row">Institutions</th><td>{counts.institutions}</td><td><a href={url('/data/institutions.json')}>institutions.json</a></td></tr>
-          <tr><th scope="row">Sources</th><td>{counts.sources}</td><td><a href={url('/data/sources.json')}>sources.json</a></td></tr>
-          <tr><th scope="row">Evidence Library</th><td>{counts.evidence}</td><td><a href={url('/data/evidence-library.json')}>evidence-library.json</a></td></tr>
-          <tr><th scope="row">Rubric</th><td>12 safeguards</td><td><a href={url('/data/rubric.json')}>rubric.json</a></td></tr>
-        </tbody>
-      </table>
+    <div class="data-grid">
+      <section aria-labelledby="exports">
+        <h2 id="exports" class="subhead">JSON exports</h2>
+        <div class="table-wrap stack-table" tabindex="0" role="region" aria-labelledby="exports-cap">
+          <table class="data-table">
+            <caption class="visually-hidden" id="exports-cap">JSON exports</caption>
+            <thead><tr><th scope="col">Dataset</th><th scope="col">Records</th><th scope="col">Download</th></tr></thead>
+            <tbody>
+              {exports.map((e) => (
+                <tr><th scope="row">{e.name}</th><td class="num" data-label="Records"><span>{e.n}</span></td><td data-label="Download"><a class="dl-link" href={url(`/data/${e.file}`)}><ScopeIcon name="download" size="1rem" />{e.file}</a></td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="caveat-line">
+          <ScopeIcon name="evidence" size="1.15rem" />
+          <span>Automated checks reject findings without sources before publication.</span>
+        </p>
+        <details class="disclosure">
+          <summary>Where the files live</summary>
+          <ul class="small">
+            <li><a href={repoTree('data/countries')}><code>data/countries/</code></a>: one file per Member State</li>
+            <li><a href={repoTree('data/institutions')}><code>data/institutions/</code></a>: one folder per country</li>
+            <li><a href={repoTree('data/sources')}><code>data/sources/</code></a>: the source register</li>
+            <li><a href={repoFile('methodology/scoring-rubric.yml')}><code>methodology/scoring-rubric.yml</code></a>: safeguard definitions</li>
+            <li><a href={repoTree('research')}><code>research/</code></a>: research dossiers, including verification notes</li>
+            <li><a href={repoFile('docs/data-model.md')}><code>docs/data-model.md</code></a>: field definitions</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="panel" aria-labelledby="responsible">
+        <h2 id="responsible" class="panel-title">Using the data responsibly</h2>
+        <ul class="rule-list">
+          <li><span class="rule-mark" aria-hidden="true">01</span><span>Keep <SafeguardScore result="NR" compact />, <SafeguardScore result="?" compact /> and <SafeguardScore result="0" compact /> separate. Never average them.</span></li>
+          <li><span class="rule-mark" aria-hidden="true">02</span><span><code>needs_review</code> means provisional and not human-verified. Each JSON file also carries a <code>verification_summary</code> and <code>caveats</code>.</span></li>
+          <li><span class="rule-mark" aria-hidden="true">03</span><span>Don't build rankings. The method isn't built for aggregation.</span></li>
+          <li><span class="rule-mark" aria-hidden="true">04</span><span>Cite the methodology version and download date.</span></li>
+        </ul>
+        <h3 class="subhead">Suggested citation</h3>
+        <pre class="citation-block"><code>Academic Safeguard Europe, research data (methodology v0.1), {REPO_URL}, accessed [date]. CC BY 4.0.</code></pre>
+      </section>
     </div>
-
-    <h2>Repository data</h2>
-    <ul>
-      <li><a href={repoTree('data/countries')}><code>data/countries/</code></a>: one file per Member State</li>
-      <li><a href={repoTree('data/institutions')}><code>data/institutions/</code></a>: one folder per country</li>
-      <li><a href={repoTree('data/sources')}><code>data/sources/</code></a>: the source register</li>
-      <li><a href={repoFile('methodology/scoring-rubric.yml')}><code>methodology/scoring-rubric.yml</code></a>: safeguard definitions</li>
-      <li><a href={repoTree('research')}><code>research/</code></a>: research dossiers, including verification notes</li>
-      <li><a href={repoFile('docs/data-model.md')}><code>docs/data-model.md</code></a>: field definitions</li>
-    </ul>
-
-    <h2>Using the data responsibly</h2>
-    <ul>
-      <li>Keep <code>NR</code>, <code>?</code> and <code>0</code> distinct. Don't convert them to numbers for averaging.</li>
-      <li>Check each finding's <code>verification</code> field. <code>needs_review</code> findings are provisional and have not been verified by a human reviewer. Each JSON file also carries a <code>verification_summary</code> and <code>caveats</code>.</li>
-      <li>Don't build overall rankings from these results. The methodology is not designed for aggregation.</li>
-      <li>Cite the methodology version and the date you downloaded the data.</li>
-    </ul>
-    <p>Suggested citation: <em>Academic Safeguard Europe, research data (methodology v0.1), {REPO_URL}, accessed [date]. CC BY 4.0.</em></p>
   </div>
 </Base>

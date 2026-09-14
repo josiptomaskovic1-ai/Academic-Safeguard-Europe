@@ -2,6 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import SafeguardScore from '../../components/SafeguardScore.astro';
 import VerificationBadge from '../../components/VerificationBadge.astro';
+import SafeguardIcon from '../../components/SafeguardIcon.astro';
+import CountryDots from '../../components/CountryDots.astro';
 import { getRubric, getCountries, type SafeguardDef, type SafeguardResult, type ResultValue } from '../../lib/data';
 import { url } from '../../lib/url';
 
@@ -40,47 +42,58 @@ const basis = (r: SafeguardResult) => {
   crumbs={[{ label: 'Compare safeguards', href: '/compare/' }, { label: def.name }]}
 >
   <div class="container">
-    <p class="eyebrow">{def.id} · National frameworks</p>
-    <h1>{def.name} across EU countries</h1>
-    <p class="lede">{def.question}</p>
-    <div class="notice">
-      <p>This page compares what <strong>national frameworks</strong> provide: legislation, regulations and national quality-assurance standards reviewed by ASE. Each finding's sources show which is which; accreditation standards are expectations, not statutory duties. Universities may provide stronger safeguards than their national framework requires. Countries are listed alphabetically, not ranked. <a href={url(`/standard/#${def.slug}`)}>See the rubric for this safeguard.</a></p>
+    <div class="page-title-icon">
+      <span class="icon-frame icon-frame--lg" aria-hidden="true"><SafeguardIcon id={def.id} size="1.9rem" /></span>
+      <div>
+        <p class="eyebrow">{def.id} · National frameworks</p>
+        <h1>{def.name} across EU countries</h1>
+      </div>
     </div>
-    {provisional.length > 0 && (
-      <div class="notice provisional">
-        <p><strong>{provisional.length} of {n} {n === 1 ? 'result is' : 'results are'} provisional</strong> and {provisional.length === 1 ? 'has' : 'have'} not been verified by a human reviewer. {provisional.length === 1 ? 'It' : 'They'} may change.</p>
-      </div>
-    )}
+    <p class="lede">{def.question}</p>
 
-    <h2 id="so-far">Results recorded so far ({n} of {countries.length} researched)</h2>
-    {n === 0 ? (
-      <p class="muted">No Member State has been researched for this safeguard yet.</p>
-    ) : n < MIN_COUNTRIES_FOR_TALLY ? (
-      <p class="prose">Only {n} Member State{n === 1 ? ' has' : 's have'} been researched for this safeguard, too few for any comparison. Results are shown individually below.</p>
-    ) : (
-      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="tally-cap" style="max-width:36rem">
-        <table>
-          <caption class="visually-hidden" id="tally-cap">Number of researched Member States by result</caption>
-          <thead><tr><th scope="col">Result</th><th scope="col">Countries</th><th scope="col">Of which provisional</th></tr></thead>
-          <tbody>
-            {tally.map((t) => (
-              <tr>
-                <th scope="row"><SafeguardScore result={t.v} verification={t.provisional > 0 ? 'needs_review' : undefined} /></th>
-                <td class="num">{t.count}</td>
-                <td class="num">{t.provisional}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div class="notice-stack">
+      <div class="notice">
+        <p>National rules only; universities may provide more. Countries are alphabetical, not ranked. <a href={url(`/standard/#${def.slug}`)}>Rubric for this safeguard →</a></p>
+        <details class="disclosure">
+          <summary>What counts as national rules</summary>
+          <p class="small">“National framework” here means legislation, regulations and national quality-assurance standards reviewed by ASE; each finding's sources show which is which. Accreditation standards are expectations, not statutory duties.</p>
+        </details>
       </div>
-    )}
+      {provisional.length > 0 && (
+        <div class="notice provisional">
+          <p><strong>{provisional.length} of {n} {n === 1 ? 'result' : 'results'} provisional</strong>, not yet verified by a human reviewer.</p>
+        </div>
+      )}
+    </div>
 
-    {n > 0 && (
-      <>
-        <h2 id="by-country">Researched countries</h2>
-        <div class="table-wrap stack-table" tabindex="0" role="region" aria-labelledby="by-country">
+    <section class="section record-section" aria-labelledby="so-far">
+      <h2 id="so-far">Results so far ({n} of {countries.length})</h2>
+      {n === 0 ? (
+        <p class="muted">No Member State has been researched for this safeguard yet.</p>
+      ) : n < MIN_COUNTRIES_FOR_TALLY ? (
+        <p class="muted">Too few countries for a comparison. Results are listed individually.</p>
+      ) : (
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="tally-cap" style="max-width:36rem">
           <table>
-            <caption class="visually-hidden">{def.name}: results for researched Member States, alphabetical</caption>
+            <caption class="visually-hidden" id="tally-cap">Number of researched Member States by result</caption>
+            <thead><tr><th scope="col">Result</th><th scope="col">Countries</th><th scope="col">Of which provisional</th></tr></thead>
+            <tbody>
+              {tally.map((t) => (
+                <tr>
+                  <th scope="row"><SafeguardScore result={t.v} verification={t.provisional > 0 ? 'needs_review' : undefined} /></th>
+                  <td class="num">{t.count}</td>
+                  <td class="num">{t.provisional}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {n > 0 && (
+        <div class="table-wrap stack-table compare-table" tabindex="0" role="region" aria-labelledby="by-country">
+          <table>
+            <caption class="visually-hidden" id="by-country">{def.name}: results for researched Member States, alphabetical</caption>
             <thead><tr><th scope="col">Country</th><th scope="col">Result</th><th scope="col">Verification</th><th scope="col">Basis in the sources</th></tr></thead>
             <tbody>
               {researched.map(({ c, r }) => (
@@ -94,13 +107,26 @@ const basis = (r: SafeguardResult) => {
             </tbody>
           </table>
         </div>
-      </>
-    )}
+      )}
+    </section>
 
-    <h2 id="not-researched">Not researched yet ({notResearched.length} of {countries.length})</h2>
-    <p class="prose muted">"Not researched" says nothing about whether a safeguard exists in these Member States.</p>
-    <ul class="country-chips">
-      {notResearched.map(({ c }) => <li><a href={url(`/countries/${c.slug}/`)}>{c.name}</a></li>)}
-    </ul>
+    <section class="section record-section" aria-labelledby="not-researched">
+      <h2 id="not-researched">Not researched yet ({notResearched.length} of {countries.length})</h2>
+      <p class="missing-note">
+        <svg class="info-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 7v4.5M8 4.6v.1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" /></svg>
+        <span>"Not researched" says nothing about whether a safeguard exists.</span>
+      </p>
+      <div class="dots-block">
+        <CountryDots variant="labelled" filled={researched.map((x) => x.c.iso_code)} provisional={provisional.map((x) => x.c.iso_code)} context="for this safeguard" />
+      </div>
+      {notResearched.length > 0 && (
+        <details class="disclosure">
+          <summary>List of countries not researched</summary>
+          <ul class="country-chips">
+            {notResearched.map(({ c }) => <li><a href={url(`/countries/${c.slug}/`)}>{c.name}</a></li>)}
+          </ul>
+        </details>
+      )}
+    </section>
   </div>
 </Base>

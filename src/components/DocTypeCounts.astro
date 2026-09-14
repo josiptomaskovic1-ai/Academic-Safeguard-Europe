@@ -1,0 +1,26 @@
+---
+/** A row of document-type counts ("3 Legislation · 1 Standard") with a glyph each. Counts only, never a score. */
+import { getSource, DOC_TYPE_LABELS } from '../lib/data';
+import DocTypeIcon from './DocTypeIcon.astro';
+interface Props { ids: string[]; label?: string; class?: string }
+const { ids, label = 'Sources by document type', class: className } = Astro.props;
+const counts = new Map<string, number>();
+for (const id of ids) {
+  const t = getSource(id)?.document_type ?? 'other';
+  counts.set(t, (counts.get(t) ?? 0) + 1);
+}
+const order = Object.keys(DOC_TYPE_LABELS);
+const rows = [...counts.entries()].sort((a, b) => b[1] - a[1] || order.indexOf(a[0]) - order.indexOf(b[0]));
+---
+<ul class:list={['doc-counts', className]} role="list" aria-label={label}>
+  {rows.map(([t, n]) => (
+    <li><DocTypeIcon type={t} size="1rem" /><span class="doc-counts-n">{n}</span> {DOC_TYPE_LABELS[t] ?? t}</li>
+  ))}
+</ul>
+
+<style>
+  .doc-counts { list-style: none; margin: 0 0 0.5rem; padding: 0; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .doc-counts li { margin: 0; display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.65rem; border: 1px solid var(--rule); border-radius: 999px; background: var(--surface); font-size: 0.86rem; color: var(--ink-2); }
+  .doc-counts li :global(.doc-icon) { color: var(--accent); }
+  .doc-counts-n { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+</style>

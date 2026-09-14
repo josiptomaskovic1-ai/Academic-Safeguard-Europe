@@ -1,0 +1,59 @@
+---
+/**
+ * LayersDiagram — the three layers of rules that can hold a safeguard, stacked from national law
+ * down to the university. The list is the text equivalent: each band is a real list item with its label.
+ * `scope` marks which layers the current page assesses (solid frame + visible "Assessed here" tag);
+ * the others are dashed and tagged with where they are covered instead.
+ */
+import ScopeIcon from './ScopeIcon.astro';
+interface Props {
+  scope?: 'national' | 'institution';
+  label?: string;
+  class?: string;
+}
+const { scope = 'national', label = 'Layers of published rules', class: className } = Astro.props;
+const layers = [
+  { icon: 'legislation', title: 'National law', note: 'Acts and regulations', level: 'national' },
+  { icon: 'safeguards', title: 'Regulator and quality-assurance standards', note: 'Expectations, not statutory duties', level: 'national' },
+  { icon: 'statutes', title: 'University rules', note: 'Statutes, codes, complaint procedures; may add more', level: 'institution' },
+];
+---
+<figure class:list={['layers', className]}>
+  <figcaption class="layers-cap">{label}</figcaption>
+  <ol class="layers-list" role="list">
+    {layers.map((l, i) => {
+      const here = l.level === scope;
+      return (
+        <li class="layer" data-here={here ? 'true' : 'false'} style={`--i:${i}`}>
+          <span class="layer-icon" aria-hidden="true"><ScopeIcon name={l.icon} size="1.2rem" /></span>
+          <span class="layer-text">
+            <span class="layer-title">{l.title}</span>
+            <span class="layer-note">{l.note}</span>
+          </span>
+          <span class="layer-tag">{here ? 'Assessed here' : scope === 'national' ? 'On institution profiles' : 'On country pages'}</span>
+        </li>
+      );
+    })}
+  </ol>
+</figure>
+
+<style>
+  .layers { margin: 0; container-type: inline-size; }
+  .layers-cap { font: 600 0.74rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.6rem; }
+  .layers-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .layer { --icon-knockout: var(--surface); margin: 0; position: relative; display: grid; grid-template-columns: 2.2rem minmax(0, 1fr); gap: 0.2rem 0.75rem; align-items: center; padding: 0.7rem 0.9rem; border: 1.5px solid var(--ink-2); background: var(--surface); margin-inline: calc(var(--i) * 0.9rem) 0; }
+  .layer + .layer { margin-top: -1.5px; }
+  .layer[data-here='false'] { border-style: dashed; border-color: var(--control); background: var(--paper); }
+  .layer-icon { width: 2.2rem; height: 2.2rem; display: grid; place-items: center; border-radius: var(--radius); background: var(--accent-soft); color: var(--accent); grid-row: span 2; }
+  .layer[data-here='false'] .layer-icon { background: transparent; color: var(--ink-3); border: 1px dashed var(--control); }
+  .layer-text { display: grid; gap: 0.05rem; min-width: 0; line-height: 1.3; }
+  .layer-title { font-weight: 600; font-size: 0.95rem; }
+  .layer-note { font-size: 0.8rem; color: var(--ink-2); }
+  .layer-tag { grid-column: 2; justify-self: start; font: 600 0.68rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink); }
+  .layer[data-here='false'] .layer-tag { color: var(--ink-3); }
+  @container (min-width: 30rem) {
+    .layer { grid-template-columns: 2.2rem minmax(0, 1fr) auto; }
+    .layer-icon { grid-row: auto; }
+    .layer-tag { grid-column: 3; }
+  }
+</style>

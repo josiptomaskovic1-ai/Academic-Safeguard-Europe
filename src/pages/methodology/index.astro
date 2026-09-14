@@ -1,11 +1,14 @@
 ---
 import Base from '../../layouts/Base.astro';
 import OnThisPage from '../../components/OnThisPage.astro';
+import ScoreScale from '../../components/ScoreScale.astro';
+import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
 import { Content, frontmatter, getHeadings } from '../../../methodology/methodology-v0.1.md';
 import { getRubric } from '../../lib/data';
 import { repoFile, url } from '../../lib/url';
 const rubric = getRubric();
 const toc = [
+  { slug: 'at-a-glance', text: 'At a glance', depth: 2 },
   ...getHeadings().filter((h) => h.depth <= 2).map((h) => ({ slug: h.slug, text: h.text, depth: h.depth })),
   { slug: 'general-rules', text: 'General rules from the rubric', depth: 2 },
 ];
@@ -18,7 +21,19 @@ const toc = [
     <div class="doc-grid">
       <OnThisPage items={toc} />
       <div class="doc-main">
-        <ul class="link-row small" style="margin-bottom:1.5rem"><li><a href={url('/standard/#rubric')}>Rubric criteria</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>scoring-rubric.yml</a></li><li><a href={repoFile('methodology/methodology-v0.1.md')}>Source text</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
+        <ul class="link-row small doc-links"><li><a href={url('/standard/#rubric')}>Rubric criteria</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>scoring-rubric.yml</a></li><li><a href={repoFile('methodology/methodology-v0.1.md')}>Source text</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
+
+        <section class="glance-block" aria-labelledby="at-a-glance">
+          <h2 id="at-a-glance" class="subhead">At a glance</h2>
+          <div class="panel glance-panel">
+            <ScoreScale heading="Result values (section 2)" hints={{ NR: 'Says nothing about safeguards', '?': 'Sources insufficient', '0': 'Not proof of absence' }} />
+          </div>
+          <div class="panel glance-panel">
+            <WorkflowDiagram label="From source to verified finding (section 5)" showCaption />
+            <p class="small muted glance-note">AI tools and automated cross-checks never make a finding verified. Only a human second reviewer can.</p>
+          </div>
+        </section>
+
         <div class="prose doc-body">
           <Content />
           <h2 id="general-rules">General rules from the rubric</h2>

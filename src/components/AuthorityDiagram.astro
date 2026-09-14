@@ -1,0 +1,113 @@
+---
+/**
+ * AuthorityDiagram — why academic safeguards matter, drawn as a dependency.
+ *
+ * Two abstract nodes (no human figures): a member of staff with authority and a student.
+ * Four labelled lines carry that authority to the student (assess, supervise, reference, progress).
+ * A dashed "complaint" line runs from the student back to the SAME node: the person a student
+ * would report is the person their education depends on.
+ *
+ * The SVG is decorative (aria-hidden). The text equivalent is the visible <figcaption>, plus a
+ * visually hidden list of the four powers. Colours are tokens only; meaning is carried by labels
+ * and line style (solid authority vs dashed complaint), never by colour.
+ */
+interface Props {
+  caption?: string;
+  class?: string;
+}
+const {
+  caption = 'Staff who assess, supervise, write references and decide progression hold real power. If it is misused, students may depend on the person they report.',
+  class: className,
+} = Astro.props;
+
+const W = 400;
+const R = 38;
+const A = { x: 58, y: 108 }; // staff node
+const B = { x: W - 58, y: 108 }; // student node
+const powers = ['Assess', 'Supervise', 'Reference', 'Progress'];
+const CTRL = [-18, 64, 152, 234]; // quadratic control-point heights: the lines fan out between the nodes
+
+const lines = powers.map((label, i) => {
+  const cy = CTRL[i];
+  const cx = W / 2;
+  // Start/end on the node circles, in the direction of the control point.
+  const edge = (n: { x: number; y: number }) => {
+    const dx = cx - n.x, dy = cy - n.y, d = Math.hypot(dx, dy);
+    return { x: n.x + (dx / d) * (R + 4), y: n.y + (dy / d) * (R + 4) };
+  };
+  const s = edge(A);
+  const e = edge(B);
+  // Arrowhead aligned with the curve tangent at the end point.
+  const tx = e.x - cx, ty = e.y - cy, tl = Math.hypot(tx, ty);
+  const ux = tx / tl, uy = ty / tl;
+  const L = 7, spread = 0.5;
+  const h1 = { x: e.x - L * (ux * Math.cos(spread) - uy * Math.sin(spread)), y: e.y - L * (uy * Math.cos(spread) + ux * Math.sin(spread)) };
+  const h2 = { x: e.x - L * (ux * Math.cos(-spread) - uy * Math.sin(-spread)), y: e.y - L * (uy * Math.cos(-spread) + ux * Math.sin(-spread)) };
+  const midY = (s.y + 2 * cy + e.y) / 4;
+  const f = (n: number) => n.toFixed(1);
+  return {
+    label,
+    d: `M${f(s.x)} ${f(s.y)} Q${cx} ${cy} ${f(e.x)} ${f(e.y)}`,
+    head: `M${f(h1.x)} ${f(h1.y)} L${f(e.x)} ${f(e.y)} L${f(h2.x)} ${f(h2.y)}`,
+    mid: { x: cx, y: midY },
+  };
+});
+const loopY = 222;
+const complaint = `M${B.x} ${B.y + R + 4} V${loopY} H${A.x} V${A.y + R + 10}`;
+const cHead = `M${A.x - 6} ${A.y + R + 17} L${A.x} ${A.y + R + 9} L${A.x + 6} ${A.y + R + 17}`;
+---
+<figure class:list={['authority', className]}>
+  <svg class="authority-svg" viewBox={`0 0 ${W} 248`} width={W} height="248" aria-hidden="true" focusable="false">
+    <g class="ad-lines">
+      {lines.map((l) => <path d={l.d} />)}
+      {lines.map((l) => <path d={l.head} />)}
+    </g>
+    <g class="ad-complaint">
+      <path d={complaint} />
+      <path class="ad-complaint-head" d={cHead} />
+    </g>
+    <g class="ad-labels">
+      {lines.map((l) => (
+        <g>
+          <rect x={l.mid.x - 42} y={l.mid.y - 12} width="84" height="24" rx="12" />
+          <text x={l.mid.x} y={l.mid.y + 4.5} text-anchor="middle">{l.label}</text>
+        </g>
+      ))}
+      <g class="ad-clabel">
+        <rect x={W / 2 - 50} y={loopY - 12} width="100" height="24" rx="3" />
+        <text x={W / 2} y={loopY + 4.5} text-anchor="middle">Complaint</text>
+      </g>
+    </g>
+    <g class="ad-node ad-node--staff">
+      <rect x={A.x - R} y={A.y - R} width={R * 2} height={R * 2} rx="4" />
+      <text x={A.x} y={A.y - 2} text-anchor="middle">Staff with</text>
+      <text x={A.x} y={A.y + 14} text-anchor="middle">authority</text>
+    </g>
+    <g class="ad-node ad-node--student">
+      <circle cx={B.x} cy={B.y} r={R} />
+      <text x={B.x} y={B.y + 5} text-anchor="middle">Student</text>
+    </g>
+  </svg>
+  <ul class="visually-hidden">
+    {powers.map((p) => <li>{p}</li>)}
+    <li>Complaint from the student returns to the same member of staff</li>
+  </ul>
+  <figcaption class="authority-cap">{caption}</figcaption>
+</figure>
+
+<style>
+  .authority { margin: 0; }
+  .authority-svg { display: block; width: 100%; max-width: 30rem; height: auto; color: var(--ink); }
+  .ad-lines path { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .ad-labels rect { fill: var(--paper); stroke: var(--rule-strong); stroke-width: 1; }
+  .ad-labels text { font: 600 14px/1 var(--sans); fill: var(--ink); }
+  .ad-complaint path { fill: none; stroke: var(--accent); stroke-width: 1.75; stroke-dasharray: 5 4; stroke-linecap: round; stroke-linejoin: round; }
+  .ad-complaint .ad-complaint-head { stroke-dasharray: none; }
+  .ad-clabel rect { fill: var(--paper); stroke: var(--accent); stroke-width: 1.25; stroke-dasharray: 3 2; }
+  .ad-clabel text { fill: var(--accent); font-weight: 700; }
+  .ad-node rect, .ad-node circle { stroke: var(--ink); stroke-width: 1.75; }
+  .ad-node--staff rect { fill: var(--surface-2); }
+  .ad-node--student circle { fill: var(--surface); }
+  .ad-node text { font: 600 14px/1 var(--sans); fill: var(--ink); }
+  .authority-cap { margin-top: 1rem; font-size: 0.98rem; line-height: 1.55; color: var(--ink-2); max-width: 34rem; }
+</style>

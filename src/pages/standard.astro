@@ -1,28 +1,40 @@
 ---
 import Base from '../layouts/Base.astro';
 import SafeguardScore from '../components/SafeguardScore.astro';
+import SafeguardIcon from '../components/SafeguardIcon.astro';
+import IconList from '../components/IconList.astro';
 import OnThisPage from '../components/OnThisPage.astro';
 import { Content, frontmatter, getHeadings } from '../../standard/standard-v0.1.md';
 import { getRubric } from '../lib/data';
 import { repoFile, url } from '../lib/url';
+import { SAFEGUARD_GLOSS } from '../lib/glosses';
 const rubric = getRubric();
 const toc = [
+  { slug: 'at-a-glance', text: 'The twelve safeguards at a glance', depth: 2 },
   ...getHeadings().filter((h) => h.depth === 2).map((h) => ({ slug: h.slug, text: h.text, depth: 2 })),
   { slug: 'rubric', text: 'Rubric: criteria for each level', depth: 2 },
-  ...rubric.safeguards.map((s) => ({ slug: s.slug, text: `${s.id} ${s.name}`, depth: 3 })),
 ];
+const sgItems = rubric.safeguards.map((s) => ({ icon: s.id, code: s.id, text: s.name, href: `#${s.slug}`, detail: SAFEGUARD_GLOSS[s.id] }));
 ---
 <Base title="Standard" description="The ASE Safeguarding Standard, an independent draft for consultation: twelve safeguards against abuse of academic authority, with observable scoring criteria." crumbs={[{ label: 'Standard' }]}>
   <div class="container">
     <p class="eyebrow">Version {frontmatter.version} · {frontmatter.status}</p>
     <h1>{frontmatter.title}</h1>
-    <p class="lede">Twelve safeguards that allow students to raise concerns about the exercise of academic authority without risking their education. Each is defined by observable features of published rules.</p>
+    <p class="lede">Twelve safeguards that let students raise concerns without risking their education, each defined by published rules.</p>
 
     <div class="doc-grid">
       <OnThisPage items={toc} />
       <div class="doc-main">
-        <div class="notice" style="margin-top:0"><p><strong>An independent draft.</strong> This is ASE's own framework, published for consultation. It is not a legal or regulatory standard and does not replace the Standards and Guidelines for Quality Assurance in the European Higher Education Area (ESG) or national law.</p></div>
-        <ul class="link-row small" style="margin-bottom:2rem"><li><a href={repoFile('standard/standard-v0.1.md')}>Source text</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a></li><li><a href={url('/methodology/')}>Scoring methodology</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
+        <p class="fact-line fact-line--scope draft-line">
+          <span class="fact-tag">An independent draft</span>
+          <span>ASE's own framework, published for consultation. It is not a legal or regulatory standard and does not replace the <abbr title="Standards and Guidelines for Quality Assurance in the European Higher Education Area">ESG</abbr> or national law.</span>
+        </p>
+        <ul class="link-row small doc-links"><li><a href={repoFile('standard/standard-v0.1.md')}>Source text</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a></li><li><a href={url('/methodology/')}>Scoring methodology</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
+
+        <section aria-labelledby="at-a-glance" class="glance-block">
+          <h2 id="at-a-glance" class="subhead">The twelve safeguards at a glance</h2>
+          <IconList items={sgItems} layout="grid" label="The twelve safeguards" class="std-grid" />
+        </section>
 
         <div class="prose doc-body"><Content /></div>
 
@@ -30,22 +42,30 @@ const toc = [
         <p class="prose muted">Every safeguard can also be recorded as <SafeguardScore result="?" /> or <SafeguardScore result="NR" />. Where two levels are plausible, the lower one is assigned.</p>
         {rubric.safeguards.map((s) => (
           <section id={s.slug} class="rubric-item" aria-labelledby={`${s.slug}-h`}>
-            <p class="eyebrow" style="margin-bottom:.2rem">{s.id}</p>
-            <h3 id={`${s.slug}-h`}>{s.name}</h3>
+            <div class="rubric-head">
+              <span class="icon-frame icon-frame--lg" aria-hidden="true"><SafeguardIcon id={s.id} size="2rem" /></span>
+              <div>
+                <p class="eyebrow">{s.id}</p>
+                <h3 id={`${s.slug}-h`}>{s.name}</h3>
+              </div>
+            </div>
             <p class="prose"><strong>Question:</strong> {s.question}</p>
             {s.notes && <p class="prose small muted">{s.notes}</p>}
-            <div class="table-wrap" tabindex="0" role="region" aria-labelledby={`${s.slug}-cap`}>
-              <table class="rubric-table">
-                <caption class="visually-hidden" id={`${s.slug}-cap`}>Levels for {s.name}</caption>
-                <thead><tr><th scope="col">Level</th><th scope="col">Observable criteria</th></tr></thead>
-                <tbody>
-                  {(['3', '2', '1', '0'] as const).map((lvl) => (
-                    <tr><td><SafeguardScore result={lvl} /></td><td>{s.levels[lvl]}</td></tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <p class="small" style="margin-top:.5rem"><a href={url(`/compare/${s.slug}/`)}>{s.name} across EU countries →</a></p>
+            <details class="disclosure">
+              <summary>{s.id} criteria for levels 0–3</summary>
+              <div class="table-wrap" tabindex="0" role="region" aria-labelledby={`${s.slug}-cap`}>
+                <table class="rubric-table">
+                  <caption class="visually-hidden" id={`${s.slug}-cap`}>Levels for {s.name}</caption>
+                  <thead><tr><th scope="col">Level</th><th scope="col">Observable criteria</th></tr></thead>
+                  <tbody>
+                    {(['3', '2', '1', '0'] as const).map((lvl) => (
+                      <tr><td><SafeguardScore result={lvl} /></td><td>{s.levels[lvl]}</td></tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </details>
+            <p class="small rubric-compare"><a href={url(`/compare/${s.slug}/`)}>{s.name} across EU countries →</a></p>
           </section>
         ))}
       </div>

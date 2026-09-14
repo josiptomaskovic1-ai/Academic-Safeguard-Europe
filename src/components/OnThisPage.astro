@@ -14,3 +14,7 @@ const list = items.filter((i) => (i.depth ?? 2) <= 3);
     </ol>
   </details>
 </nav>
+<script>
+  // Narrow screens: start the table of contents collapsed so the document starts sooner. Without JavaScript it stays open.
+  if (window.matchMedia('(max-width: 63.99rem)').matches) document.querySelectorAll<HTMLDetailsElement>('.toc-details').forEach((d) => { d.open = false; });
+</script>

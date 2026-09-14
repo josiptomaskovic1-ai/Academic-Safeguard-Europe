@@ -3,6 +3,7 @@ import { getRubric, type SafeguardResult } from '../lib/data';
 import SafeguardScore from './SafeguardScore.astro';
 import VerificationBadge from './VerificationBadge.astro';
 import EvidencePanel from './EvidencePanel.astro';
+import SafeguardIcon from './SafeguardIcon.astro';
 
 interface Props { safeguards: Record<string, SafeguardResult>; idPrefix?: string }
 const { safeguards, idPrefix = 'sg' } = Astro.props;
@@ -17,7 +18,7 @@ const { safeguards: defs } = getRubric();
         <details>
           <summary>
             <span class="sg-id">{def.id}</span>
-            <span class="sg-name">{def.name}</span>
+            <span class="sg-name"><SafeguardIcon id={def.id} size="1.25rem" class="sg-name-icon" /><span>{def.name}</span></span>
             <span class="sg-result">
               <SafeguardScore result={r.result} verification={r.verification} badgeShown={badge} />
               {badge && <VerificationBadge status={r.verification} short />}

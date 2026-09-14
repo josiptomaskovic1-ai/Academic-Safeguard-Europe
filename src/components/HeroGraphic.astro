@@ -1,0 +1,107 @@
+---
+/**
+ * HeroGraphic — decorative editorial illustration for the homepage hero.
+ *
+ * The EU-27 tile grid (same positions as EuropeTileMap.astro, one equal tile per Member State)
+ * with a single published document laid over the empty south-west corner. A thin dotted trace
+ * runs from a highlighted tile to the document: "rules are traced to their published source".
+ *
+ * Purely decorative (aria-hidden). It does NOT show research status — every tile is neutral except
+ * the optional `highlight` tiles, which only mark where the trace starts. Colours are tokens only.
+ */
+interface Props {
+  /** ISO codes whose tile is accented and traced to the document. Default: HR (the pilot country). */
+  highlight?: string[];
+  class?: string;
+}
+const { highlight = ['HR'], class: className } = Astro.props;
+
+const GRID: Record<string, [number, number]> = {
+  FI: [6, 1], SE: [5, 2], EE: [6, 2], IE: [1, 3], DK: [4, 3], LV: [6, 3],
+  NL: [3, 4], DE: [4, 4], PL: [5, 4], LT: [6, 4],
+  FR: [2, 5], BE: [3, 5], LU: [4, 5], CZ: [5, 5], SK: [6, 5],
+  PT: [1, 6], ES: [2, 6], AT: [4, 6], SI: [5, 6], HU: [6, 6], RO: [7, 6],
+  IT: [4, 7], HR: [5, 7], BG: [7, 7],
+  MT: [4, 8], GR: [6, 8], CY: [7, 8],
+};
+const STEP = 52;
+const T = 42; // tile size
+const OX = 56; // grid offset x (leaves room for the document on the left)
+const OY = 8;
+const pos = (c: number, r: number) => ({ x: OX + (c - 1) * STEP, y: OY + (r - 1) * STEP });
+
+// The document sits in the empty south-west of the grid (below Iberia), so no Member State tile is hidden.
+const DOC = { x: 10, y: 330, w: 150, h: 180 };
+const tiles = Object.entries(GRID).map(([iso, [c, r]]) => {
+  const p = pos(c, r);
+  const under = p.x < DOC.x + DOC.w && p.y + T > DOC.y;
+  return { iso, ...p, hl: highlight.includes(iso), under };
+});
+const first = tiles.find((t) => t.hl);
+// Trace: from the highlighted tile's centre, routed orthogonally through the grid gutters into the cited passage.
+const trace = first
+  ? `M${first.x + T / 2} ${first.y + T + 3} V${first.y + T + (STEP - T) / 2} H${OX + 3 * STEP - (STEP - T) / 2} V${DOC.y + 115.5} H${DOC.x + DOC.w + 6}`
+  : '';
+// Shield emblem on the document (same outline as the site's brand mark).
+const sx = DOC.x + 26, sy = DOC.y + 30;
+---
+<svg
+  class:list={['hero-graphic', className]}
+  viewBox="0 0 420 520"
+  width="420"
+  height="520"
+  aria-hidden="true"
+  focusable="false"
+>
+  <g class="hg-tiles">
+    {tiles.map((t) => (
+      <rect
+        x={t.x + 0.5} y={t.y + 0.5} width={T - 1} height={T - 1} rx="3"
+        class:list={['hg-tile', { 'is-hl': t.hl, 'is-under': t.under }]}
+      />
+    ))}
+    {tiles.map((t) => (
+      <text x={t.x + T / 2} y={t.y + T / 2 + 4} text-anchor="middle" class:list={['hg-iso', { 'is-hl': t.hl }]}>{t.iso}</text>
+    ))}
+  </g>
+
+  {first && (
+    <g class="hg-trace">
+      <path d={trace} />
+      <circle cx={first.x + T / 2} cy={first.y + T + 3} r="2.5" class="hg-node" />
+    </g>
+  )}
+
+  <g class="hg-doc">
+    <path class="hg-sheet" d={`M${DOC.x} ${DOC.y} h${DOC.w - 26} l26 26 v${DOC.h - 26} h-${DOC.w} z`} />
+    <path class="hg-fold" d={`M${DOC.x + DOC.w - 26} ${DOC.y} v26 h26`} />
+    <!-- shield emblem -->
+    <path class="hg-shield" d={`M${sx + 14} ${sy}l14 5v11.5c0 9-6 15.5-14 19-8-3.5-14-10-14-19V${sy + 5}z`} />
+    <path class="hg-shield-lines" d={`M${sx + 7} ${sy + 13}h14M${sx + 7} ${sy + 20}h14M${sx + 7} ${sy + 27}h8`} />
+    <!-- heading + text lines -->
+    <path class="hg-head" d={`M${DOC.x + 66} ${DOC.y + 40}h46M${DOC.x + 66} ${DOC.y + 54}h30`} />
+    <!-- the cited passage (lines 2–3): highlighted and bracketed, where the trace lands -->
+    <rect class="hg-cite-fill" x={DOC.x + 16} y={DOC.y + 102} width={DOC.w - 30} height="27" rx="2" />
+    <path class="hg-cite" d={`M${DOC.x + 9} ${DOC.y + 100}v31M${DOC.x + 9} ${DOC.y + 100}h3M${DOC.x + 9} ${DOC.y + 131}h3`} />
+    <path class="hg-lines" d={[0, 1, 2, 4, 5, 6].map((i) => `M${DOC.x + 22} ${DOC.y + 96 + i * 13}h${i === 2 || i === 6 ? 64 : 106}`).join('')} />
+  </g>
+</svg>
+
+<style>
+  .hero-graphic { display: block; width: 100%; max-width: 420px; height: auto; color: var(--ink); }
+  .hg-tile { fill: var(--surface-2); stroke: var(--rule-strong); stroke-width: 1; }
+  .hg-tile.is-hl { fill: var(--accent); stroke: var(--accent); }
+  .hg-iso { font: 600 11px/1 var(--mono); fill: var(--ink-3); letter-spacing: 0.02em; }
+  .hg-iso.is-hl { fill: var(--surface); }
+  .hg-trace path { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 1 5; stroke-linecap: round; }
+  .hg-node { fill: var(--accent); stroke: none; }
+  .hg-sheet { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+  .hg-fold { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+  .hg-shield { fill: var(--accent); stroke: none; }
+  .hg-shield-lines { stroke: var(--surface); stroke-width: 2.25; stroke-linecap: round; fill: none; }
+  .hg-head { stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; fill: none; }
+  .hg-lines { stroke: var(--rule-strong); stroke-width: 2.5; stroke-linecap: round; fill: none; }
+  .hg-cite { stroke: var(--accent); stroke-width: 1.5; stroke-linecap: round; fill: none; }
+  .hg-cite-fill { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1; }
+  @media print { .hero-graphic { display: none; } }
+</style>

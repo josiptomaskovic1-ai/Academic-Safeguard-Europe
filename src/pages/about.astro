@@ -1,45 +1,77 @@
 ---
 import Base from '../layouts/Base.astro';
+import ScopeIcon from '../components/ScopeIcon.astro';
+import ScopePanel from '../components/ScopePanel.astro';
 import { url, REPO_URL, repoFile } from '../lib/url';
+
+const doesNot = [
+  { icon: 'individuals', text: 'Rate individual academics or judge whether allegations are true' },
+  { icon: 'allegations', text: 'Accept complaints or investigate cases' },
+  { icon: 'legal-advice', text: 'Give legal advice', detail: 'Contact your student ombudsperson, union or a lawyer' },
+  { icon: 'ranking', text: 'Rank universities or countries' },
+  { icon: 'legislation', text: 'Represent, or have any affiliation with, the European Union or any government' },
+];
+const audiences = ['Students', 'Student representatives', 'Researchers', 'Journalists', 'Universities', 'Quality assurance', 'Policymakers', 'Civil society'];
 ---
 <Base title="About" description="Mission, scope, limits and privacy of Academic Safeguard Europe." crumbs={[{ label: 'About' }]}>
-  <div class="container prose">
+  <div class="container">
     <h1>About Academic Safeguard Europe</h1>
-    <p class="lede">An open-source initiative examining how universities and European higher-education systems protect students from abuse of academic authority, retaliation, conflicts of interest and procedural unfairness.</p>
+    <p class="lede">An open-source project comparing how EU universities and national systems protect students from abuse of academic authority.</p>
 
-    <h2>Mission</h2>
-    <p>Academic authority needs accountability. Students depend on the people who assess and supervise them, so the rules for raising concerns safely matter. ASE documents those rules, compares them against a public Standard and publishes the evidence, so students, institutions and policymakers can see where safeguards exist and where they do not appear.</p>
+    <dl class="fact-strip">
+      <div><dt>Status</dt><dd>Phase 1 · v0.1 draft</dd></div>
+      <div><dt>Cost</dt><dd>Free infrastructure · no ads or sponsors</dd></div>
+      <div><dt>Licences</dt><dd>Code <a href={repoFile('LICENSE')}>MIT</a> · Data and texts <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a></dd></div>
+    </dl>
 
-    <h2>What ASE is not</h2>
-    <ul>
-      <li>ASE evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.</li>
-      <li>It does not accept allegations or complaints, and it does not investigate cases.</li>
-      <li>It does not provide legal advice or representation. If you need help with a specific situation, contact your student ombudsperson, student union, or a qualified legal adviser in your country.</li>
-      <li>It does not rank universities or countries.</li>
-      <li>It is not affiliated with the European Union or any government.</li>
-    </ul>
+    <section class="section record-section about-lead" aria-labelledby="mission">
+      <span class="icon-frame icon-frame--lg" aria-hidden="true"><ScopeIcon name="mission" size="1.8rem" /></span>
+      <div>
+        <h2 id="mission">Mission</h2>
+        <p class="about-text">Students depend on those who assess and supervise them. We document the rules for raising concerns safely, and publish the evidence.</p>
+      </div>
+    </section>
 
-    <h2>The limits of documentary research</h2>
-    <p>A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists. ASE describes documented systems. It does not claim to measure how safe any institution is.</p>
+    <section class="section record-section" aria-labelledby="scope">
+      <h2 id="scope">What we do, and what we do not do</h2>
+      <p class="about-scope">ASE evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.</p>
+      <ScopePanel doesNot={doesNot} doesHeading="We examine" doesNotHeading="We do not" />
+      <div class="notice notice--icon limits-note">
+        <ScopeIcon name="practice" size="1.2rem" class="notice-icon" />
+        <p><strong>The limits of documentary research.</strong> A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists. ASE describes documented systems. It does not claim to measure how safe any institution is.</p>
+      </div>
+    </section>
 
-    <h2>Audiences</h2>
-    <p>Students and student representatives, researchers, journalists, universities and quality-assurance organisations, policymakers and civil society.</p>
+    <section class="section record-section" aria-label="Neutrality and privacy">
+      <div class="grid grid-2">
+        <article class="card icon-card">
+          <span class="icon-frame" aria-hidden="true"><ScopeIcon name="balance" size="1.3rem" /></span>
+          <h2 class="card-title" id="neutrality">Neutrality</h2>
+          <p>Not aligned with any party. The Standard assumes neither that staff are dangerous nor that complaints are true.</p>
+        </article>
+        <article class="card icon-card">
+          <span class="icon-frame" aria-hidden="true"><ScopeIcon name="privacy" size="1.3rem" /></span>
+          <h2 class="card-title" id="privacy">Privacy</h2>
+          <p>No cookies, analytics, trackers or third-party scripts. No personal data in the research.</p>
+          <details class="disclosure">
+            <summary>Hosting, GitHub and referrer details</summary>
+            <p class="small">This website is static. It sets no cookies, runs no analytics or tracking, loads no third-party fonts or scripts, and has no forms that send data to ASE. The research data contains no personal data: no names of staff or students, no allegations, no complaint files, no health or disciplinary information.</p>
+            <p class="small">The site is hosted on GitHub Pages. When you visit, GitHub, Inc. processes technical data such as your IP address to deliver and secure the site, and may keep it in logs. ASE has no access to these logs. Links to other websites are set to send no referrer, so the sites you follow a link to are not told you came from ASE.</p>
+            <p class="small">Correction requests and contributions are made through GitHub, which has its own <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>. Links to github.com (corrections, contributions, source files) take you to GitHub, where GitHub's own terms and cookies apply. Contributors may use a pseudonymous account.</p>
+          </details>
+        </article>
+      </div>
+    </section>
 
-    <h2>Neutrality</h2>
-    <p>ASE is not aligned with any political party or ideology. The Standard is about procedural fairness and accountability of authority, principles recognised across European legal traditions. It assumes neither that academic staff are dangerous nor that complaints are true.</p>
-
-    <h2>Privacy</h2>
-    <p>This website is static. It sets no cookies, runs no analytics or tracking, loads no third-party fonts or scripts, and has no forms that send data to ASE. The research data contains no personal data: no names of staff or students, no allegations, no complaint files, no health or disciplinary information.</p>
-    <p>The site is hosted on GitHub Pages. When you visit, GitHub, Inc. processes technical data such as your IP address to deliver and secure the site, and may keep it in logs. ASE has no access to these logs. Links to other websites are set to send no referrer, so the sites you follow a link to are not told you came from ASE.</p>
-    <p>Correction requests and contributions are made through GitHub, which has its own <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>. Links to github.com (corrections, contributions, source files) take you to GitHub, where GitHub's own terms and cookies apply. Contributors may use a pseudonymous account.</p>
-
-    <h2>Funding and cost</h2>
-    <p>ASE runs on free infrastructure: GitHub for code, data and discussion, and GitHub Pages for hosting. It has no paid services, advertising or sponsors.</p>
-
-    <h2>Licences</h2>
-    <p>Code is released under the <a href={repoFile('LICENSE')}>MIT licence</a>. The Standard, methodology, research data and texts are released under <a href={repoFile('LICENSE-DATA.md')}>Creative Commons Attribution 4.0</a>.</p>
-
-    <h2>Status</h2>
-    <p>Phase 1, v0.1. The methodology is a draft for consultation. Most jurisdictions are not researched yet. See the <a href={url('/europe/')}>explorer</a> for current coverage, and the <a href={REPO_URL}>repository</a> for the roadmap.</p>
+    <section class="section record-section" aria-labelledby="audiences">
+      <h2 id="audiences">Who it is for</h2>
+      <ul class="chip-row" role="list">
+        {audiences.map((a) => <li>{a}</li>)}
+      </ul>
+      <ul class="link-row page-links">
+        <li><a href={url('/europe/')}>Current coverage →</a></li>
+        <li><a href={REPO_URL}>Repository and roadmap →</a></li>
+      </ul>
+    </section>
   </div>
 </Base>

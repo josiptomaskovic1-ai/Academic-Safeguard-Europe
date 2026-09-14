@@ -1,0 +1,81 @@
+---
+/**
+ * CountryDots (V8) — one dot per EU Member State (row: by English name; labelled grid: by ISO code).
+ * Filled = researched for the thing being counted; dashed ring = not researched; hatched = researched,
+ * but every result is still provisional. Shape carries the meaning, and the "{n} of 27" text is always
+ * shown next to the dots by the caller or by `showCount`.
+ *
+ * variant="row"      compact decorative row (accessible name = the count)
+ * variant="labelled" wrapping grid with the ISO code under each dot, plus a visually hidden list
+ */
+import { getCountries } from '../lib/data';
+
+interface Props {
+  /** ISO codes counted as researched. */
+  filled: string[];
+  /** ISO codes whose researched result is provisional. */
+  provisional?: string[];
+  variant?: 'row' | 'labelled';
+  /** Noun for the accessible name, e.g. "for this safeguard". */
+  context?: string;
+  showCount?: boolean;
+  class?: string;
+}
+const { filled, provisional = [], variant = 'row', context = '', showCount = false, class: className } = Astro.props;
+const all = getCountries();
+// The labelled grid shows ISO codes, so it is ordered by code; the compact row keeps name order.
+const countries = variant === 'labelled' ? [...all].sort((a, b) => a.iso_code.localeCompare(b.iso_code)) : all;
+const set = new Set(filled);
+const prov = new Set(provisional);
+const n = countries.filter((c) => set.has(c.iso_code)).length;
+const name = `Researched in ${n} of ${countries.length} Member States${context ? ` ${context}` : ''}`;
+const state = (iso: string) => (!set.has(iso) ? 'none' : prov.has(iso) ? 'prov' : 'done');
+const legendNeeded = variant === 'labelled';
+---
+<div class:list={['cdots', `cdots--${variant}`, className]}>
+  {variant === 'row' ? (
+    <span class="cdots-row" role="img" aria-label={name}>
+      {countries.map((c) => <span class="cdot" data-state={state(c.iso_code)} title={`${c.iso_code} · ${set.has(c.iso_code) ? 'researched' : 'not researched'}`}></span>)}
+    </span>
+  ) : (
+    <>
+      <ul class="cdots-grid" role="list" aria-label={name}>
+        {countries.map((c) => (
+          <li data-state={state(c.iso_code)}>
+            <span class="cdot" aria-hidden="true"></span>
+            <abbr class="cdot-iso" title={c.name} aria-hidden="true">{c.iso_code}</abbr>
+            <span class="visually-hidden">{c.name}: {set.has(c.iso_code) ? (prov.has(c.iso_code) ? 'researched, provisional' : 'researched') : 'not researched'}</span>
+          </li>
+        ))}
+      </ul>
+      {legendNeeded && (
+        <p class="cdots-key" aria-hidden="true">
+          {filled.length > provisional.length && <span><span class="cdot" data-state="done"></span> researched</span>}
+          {provisional.length > 0 && <span><span class="cdot" data-state="prov"></span> researched, provisional</span>}
+          <span><span class="cdot" data-state="none"></span> not researched</span>
+        </p>
+      )}
+    </>
+  )}
+  {showCount && <span class="cdots-count">{n}/{countries.length} researched</span>}
+</div>
+
+<style>
+  .cdots { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.75rem; }
+  .cdots-row { display: grid; grid-template-columns: repeat(27, minmax(0, 0.55rem)); gap: 2px; }
+  .cdot { display: inline-block; width: 0.55rem; height: 0.55rem; border-radius: 50%; border: 1px dashed var(--control); flex: none; }
+  [data-state='done'] > .cdot, .cdot[data-state='done'] { background: var(--ink-2); border: 1px solid var(--ink-2); }
+  [data-state='prov'] > .cdot, .cdot[data-state='prov'] { border: 1px solid var(--provisional); background: repeating-linear-gradient(135deg, var(--provisional) 0 1.5px, transparent 1.5px 3px); }
+  .cdots-count { font: 600 0.8rem/1.2 var(--sans); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .cdots--labelled { display: block; }
+  .cdots-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(2.4rem, 1fr)); gap: 0.6rem 0.25rem; max-width: 44rem; }
+  .cdots-grid li { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+  .cdots-grid .cdot { width: 1rem; height: 1rem; border-width: 1.5px; }
+  .cdots-grid li[data-state='none'] .cdot { border-width: 1.5px; }
+  .cdot-iso { font: 600 0.7rem/1 var(--mono); color: var(--ink-2); text-decoration: none; cursor: default; }
+  .cdots-grid li[data-state='none'] .cdot-iso { color: var(--ink-3); font-weight: 500; }
+  .cdots-key { display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; margin: 0.9rem 0 0; font-size: 0.8rem; color: var(--ink-2); }
+  .cdots-key > span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .cdots-key .cdot { width: 0.7rem; height: 0.7rem; }
+</style>

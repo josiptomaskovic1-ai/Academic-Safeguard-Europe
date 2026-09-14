@@ -1,0 +1,139 @@
+---
+/**
+ * WorkflowDiagram — how a finding moves from source to verified.
+ *
+ * Markup is a real ordered list, so it reads correctly without CSS and to screen readers.
+ * Layout is pure CSS: vertical timeline in narrow containers, six columns once the component's
+ * own container is at least 44rem wide (container query — works inside any column width).
+ *
+ * The "Published as provisional" stage is always distinct: dashed provisional frame, hatched marker
+ * and a visible "Provisional" tag. `current` marks where the pilot is today with visible text,
+ * so the diagram never implies findings are further along than they are.
+ */
+interface Step { title: string; text?: string; kind?: 'provisional' | 'verified' }
+interface Props {
+  /** 1-based index of the stage the project has reached. Default 5 (published as provisional). 0 = none. */
+  current?: number;
+  /** Text shown on the current stage. */
+  currentLabel?: string;
+  steps?: Step[];
+  /** Accessible name / optional visible caption. */
+  label?: string;
+  showCaption?: boolean;
+  /** Inner SVG markup (24×24, stroked) per step; defaults to the research-workflow icons by position. */
+  icons?: string[];
+  /** A generic process rather than progress: every step solid, no reached/not-reached state. */
+  process?: boolean;
+  class?: string;
+}
+const DEFAULT_STEPS: Step[] = [
+  { title: 'Source found' },
+  { title: 'Source recorded' },
+  { title: 'Proposed interpretation and score' },
+  { title: 'Methodology check' },
+  { title: 'Published as provisional', kind: 'provisional' },
+  { title: 'Human second review' },
+  { title: 'Verified', kind: 'verified' },
+];
+const {
+  current = 5,
+  currentLabel = 'Pilot is here',
+  steps = DEFAULT_STEPS,
+  label = 'How a finding is produced',
+  showCaption = false,
+  icons,
+  process = false,
+  class: className,
+} = Astro.props;
+
+// Stage icons: 24×24, 1.75 stroke, same family as SafeguardIcon.
+const ICONS = [
+  '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.25 15.25L21 21M8 9h5M8 12h3.5"/>',
+  '<ellipse cx="12" cy="6" rx="7" ry="2.75"/><path d="M5 6v12c0 1.5 3.1 2.75 7 2.75s7-1.25 7-2.75V6M5 12c0 1.5 3.1 2.75 7 2.75s7-1.25 7-2.75"/>',
+  '<rect x="3.5" y="4" width="17" height="16" rx="1"/><path d="M3.5 9h17M9 4v16M12.5 12.5v4M15.5 12.5v4M18 12.5v4" />',
+  '<path d="M4 20.5h16M6 20.5V10M18 20.5V10M12 20.5V10M3 10h18L12 3.5z"/>',
+  '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M8.75 10.5h6.5"/><path d="M9 16.5h.01M12 16.5h.01M15 16.5h.01" stroke-width="2.5"/>',
+  '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.75"/>',
+  '<circle cx="12" cy="12" r="8.5"/><path d="M8.25 12.25l2.5 2.5 5-5.25"/>',
+];
+const stateOf = (i: number) => (process ? 'step' : current === 0 ? 'todo' : i + 1 < current ? 'done' : i + 1 === current ? 'current' : 'todo');
+const iconSet = icons ?? ICONS;
+---
+<figure class:list={['wf', className]}>
+  {showCaption && <figcaption class="wf-cap">{label}</figcaption>}
+  <ol class="wf-list" role="list" aria-label={label} style={`--n:${steps.length}`}>
+    {steps.map((s, i) => {
+      const state = stateOf(i);
+      return (
+        <li class="wf-step" data-kind={s.kind ?? 'step'} data-state={state}>
+          <span class="wf-marker" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" set:html={iconSet[i % iconSet.length]} />
+          </span>
+          <span class="wf-body">
+            <span class="wf-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="wf-title">{s.title}</span>
+            {s.text && <span class="wf-text">{s.text}</span>}
+            <span class="wf-tags">
+              {s.kind === 'provisional' && <span class="wf-tag wf-tag--prov">Provisional</span>}
+              {state === 'current' && <span class="wf-tag wf-tag--here">{currentLabel}</span>}
+            </span>
+            {state === 'todo' && <span class="visually-hidden"> (not yet reached)</span>}
+            {state === 'done' && <span class="visually-hidden"> (done)</span>}
+          </span>
+        </li>
+      );
+    })}
+  </ol>
+</figure>
+
+<style>
+  .wf { margin: 1.5rem 0; container-type: inline-size; }
+  .wf-cap { font: 600 0.78rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.9rem; }
+  .wf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .wf-step { --m: 2.75rem; position: relative; margin: 0; display: grid; grid-template-columns: var(--m) minmax(0, 1fr); gap: 0 0.9rem; padding-bottom: 1.1rem; min-width: 0; }
+  .wf-step:last-child { padding-bottom: 0; }
+
+  /* marker */
+  .wf-marker { position: relative; z-index: 1; width: var(--m); height: var(--m); display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--surface); color: var(--ink); }
+  .wf-marker svg { width: 1.35rem; height: 1.35rem; }
+  .wf-step[data-state='todo'] .wf-marker { border-style: dashed; border-color: var(--control); color: var(--ink-3); background: var(--paper); }
+  .wf-step[data-kind='provisional'] .wf-marker { border: 1.5px dashed var(--provisional); color: var(--provisional); background: repeating-linear-gradient(135deg, var(--provisional-soft) 0 3px, var(--surface) 3px 6px); }
+  .wf-step[data-kind='verified'][data-state='done'] .wf-marker,
+  .wf-step[data-kind='verified'][data-state='current'] .wf-marker { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+
+  /* connector: vertical by default */
+  .wf-step:not(:last-child)::before { content: ''; position: absolute; left: calc(var(--m) / 2 - 0.75px); top: var(--m); bottom: 0; border-left: 1.5px solid var(--ink); }
+  .wf-step[data-state='current']:not(:last-child)::before,
+  .wf-step[data-state='todo']:not(:last-child)::before { border-left-style: dashed; border-left-color: var(--control); }
+
+  /* text */
+  .wf-body { display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; padding-top: 0.2rem; min-width: 0; }
+  .wf-num { font: 600 0.72rem/1.2 var(--mono); color: var(--ink-3); letter-spacing: 0.04em; }
+  .wf-title { font: 600 1rem/1.25 var(--sans); color: var(--ink); }
+  .wf-text { font-size: 0.86rem; line-height: 1.4; color: var(--ink-2); }
+  .wf-step[data-state='todo'] .wf-title { color: var(--ink-2); }
+  .wf-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }
+  .wf-tags:empty { display: none; }
+  .wf-tag { font: 600 0.7rem/1.2 var(--sans); padding: 0.18rem 0.45rem; border-radius: 999px; border: 1px solid var(--control); white-space: nowrap; }
+  .wf-tag--prov { border-color: var(--provisional); color: var(--provisional); background: var(--provisional-soft); }
+  .wf-tag--here { border-color: var(--ink); color: var(--surface); background: var(--ink); }
+
+  /* provisional stage frame (both layouts) */
+  .wf-step[data-kind='provisional'] .wf-body { margin: -0.35rem 0 0 -0.45rem; padding: 0.5rem 0.65rem 0.6rem; border: 1.5px dashed var(--provisional); border-radius: var(--radius); background: var(--provisional-soft); }
+
+  /* horizontal: container at least 44rem wide */
+  @container (min-width: 44rem) {
+    .wf-list { grid-template-columns: repeat(var(--n, 7), minmax(0, 1fr)); gap: 0 0.75rem; }
+    .wf-step { grid-template-columns: minmax(0, 1fr); gap: 0.7rem 0; padding-bottom: 0; align-content: start; }
+    .wf-step:not(:last-child)::before { left: var(--m); right: -0.75rem; top: calc(var(--m) / 2 - 0.75px); bottom: auto; border-left: 0; border-top: 1.5px solid var(--ink); }
+    .wf-step[data-state='current']:not(:last-child)::before,
+    .wf-step[data-state='todo']:not(:last-child)::before { border-top-style: dashed; border-top-color: var(--control); }
+    .wf-body { padding-top: 0; padding-right: 0.25rem; }
+    .wf-step[data-kind='provisional'] .wf-body { margin: -0.5rem -0.4rem 0; }
+  }
+
+  @media print {
+    .wf-step[data-kind='provisional'] .wf-marker { background: #fff; }
+    .wf-tag--here { color: #000; background: #fff; }
+  }
+</style>

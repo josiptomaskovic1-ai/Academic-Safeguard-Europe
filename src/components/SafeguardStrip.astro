@@ -1,0 +1,135 @@
+---
+/**
+ * SafeguardStrip (V4) — the twelve results of one record as a row of glyph cells, S01…S12.
+ *
+ * Same visual vocabulary as SafeguardScore / ScoreScale:
+ *   NR  dashed cell, no pips          ?  dotted cell, no pips
+ *   0   three empty pips              1–3 one to three filled pips
+ * Provisional results get hatched pips and a dashed tick under the cell. Every cell carries its
+ * letter or number, so nothing depends on colour. There is deliberately no total, average or rank.
+ *
+ * variant="full"  labelled cells (optionally linking to the matrix rows) + a one-line key
+ * variant="mini"  compact, decorative row for cards; the accessible name summarises coverage
+ */
+import { getRubric, RESULT_LABELS, coverage, type SafeguardResult } from '../lib/data';
+
+interface Props {
+  safeguards: Record<string, SafeguardResult>;
+  variant?: 'full' | 'mini';
+  /** e.g. '#sg-' links each cell to '#sg-s01'. Full variant only. */
+  linkPrefix?: string;
+  /** Visible caption above the full strip. */
+  caption?: string;
+  showKey?: boolean;
+  class?: string;
+}
+const { safeguards, variant = 'full', linkPrefix, caption, showKey = true, class: className } = Astro.props;
+const { safeguards: defs } = getRubric();
+const cov = coverage(safeguards);
+const cells = defs.map((d) => {
+  const r = safeguards[d.id] ?? { result: 'NR' as const };
+  const n = ['1', '2', '3'].includes(r.result) ? Number(r.result) : 0;
+  const pips = r.result !== 'NR' && r.result !== '?';
+  const provisional = r.result !== 'NR' && r.verification !== 'verified';
+  const disputed = r.verification === 'disputed';
+  const sr = `${d.id} ${d.name}: ${r.result === 'NR' || r.result === '?' ? '' : `score ${r.result}, `}${RESULT_LABELS[r.result]}${disputed ? ', disputed' : provisional ? ', provisional' : ''}`;
+  return { id: d.id, result: r.result, n, pips, provisional, sr };
+});
+const summary = `Safeguard profile: ${cov.researched} of ${cov.total} researched, ${cov.verified} verified, ${cov.provisional} provisional`;
+const anyProvisional = cells.some((c) => c.provisional);
+---
+{variant === 'mini' ? (
+  <div class:list={['sgs', 'sgs--mini', className]} role="img" aria-label={summary}>
+    {cells.map((c) => (
+      <span class="sgs-cell" data-result={c.result} data-prov={c.provisional ? 'true' : undefined}>
+        <span class="sgs-box">
+          <span class="sgs-val">{c.result}</span>
+          {c.pips
+            ? <span class="sgs-pips">{[1, 2, 3].map((k) => <i class:list={{ on: c.n >= k }}></i>)}</span>
+            : <span class="sgs-pips sgs-pips--none"></span>}
+        </span>
+      </span>
+    ))}
+  </div>
+) : (
+  <figure class:list={['sgs', 'sgs--full', className]}>
+    {caption && <figcaption class="sgs-cap">{caption}</figcaption>}
+    <ol class="sgs-list" role="list" aria-label={summary}>
+      {cells.map((c) => {
+        const inner = (
+          <>
+            <span class="sgs-box" aria-hidden="true">
+              <span class="sgs-val">{c.result}</span>
+              {c.pips
+                ? <span class="sgs-pips">{[1, 2, 3].map((k) => <i class:list={{ on: c.n >= k }}></i>)}</span>
+                : <span class="sgs-pips sgs-pips--none"></span>}
+            </span>
+            <span class="sgs-id" aria-hidden="true">{c.id}</span>
+            <span class="visually-hidden">{c.sr}</span>
+          </>
+        );
+        return (
+          <li class="sgs-cell" data-result={c.result} data-prov={c.provisional ? 'true' : undefined}>
+            {linkPrefix ? <a class="sgs-link" href={`${linkPrefix}${c.id.toLowerCase()}`}>{inner}</a> : <span class="sgs-link">{inner}</span>}
+          </li>
+        );
+      })}
+    </ol>
+    {showKey && (
+      <p class="sgs-key" aria-hidden="true">
+        <span><b class="k k--nr">NR</b> not researched</span>
+        <span><b class="k k--q">?</b> unable to assess</span>
+        <span><b class="k">0–3</b> rubric score</span>
+        {anyProvisional && <span><b class="k k--prov"></b> provisional</span>}
+      </p>
+    )}
+  </figure>
+)}
+
+<style>
+  .sgs { margin: 0; container-type: inline-size; }
+  .sgs-cap { font: 600 0.74rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.6rem; }
+  .sgs-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.55rem 0.35rem; }
+  @container (min-width: 30rem) { .sgs-list { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0.3rem; } }
+  .sgs-cell { margin: 0; min-width: 0; }
+  .sgs-link { display: flex; flex-direction: column; align-items: stretch; gap: 0.3rem; text-decoration: none; color: var(--ink); border-radius: 3px; }
+  a.sgs-link:hover .sgs-box { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  a.sgs-link:hover .sgs-id { color: var(--accent); }
+
+  .sgs-box { position: relative; height: 3.4rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; border: 1px solid var(--control); border-radius: 3px; background: var(--surface); }
+  .sgs-val { font: 600 0.95rem/1 var(--mono); color: var(--ink); }
+  .sgs-id { font: 600 0.68rem/1 var(--mono); letter-spacing: 0.02em; color: var(--ink-3); text-align: center; }
+  .sgs-pips { display: inline-flex; gap: 2px; height: 0.7rem; }
+  .sgs-pips i { width: 0.42rem; height: 0.7rem; border: 1px solid var(--control); }
+  .sgs-pips i.on { background: var(--s3); border-color: var(--s3); }
+  .sgs-pips--none { width: calc(3 * 0.42rem + 4px); align-items: center; }
+  .sgs-pips--none::before { content: ''; width: 100%; border-top: 1px dashed var(--control); }
+  [data-result='NR'] .sgs-box { border-style: dashed; background: transparent; }
+  [data-result='NR'] .sgs-val { color: var(--ink-3); font-weight: 500; }
+  [data-result='?'] .sgs-box { border: 2px dotted var(--control); }
+  [data-prov='true'] .sgs-pips i.on { background: repeating-linear-gradient(135deg, var(--s3) 0 2px, transparent 2px 3.5px); border-style: dashed; }
+  /* Provisional tick under the cell: shape (dashed rule) + key text, not colour alone. */
+  [data-prov='true'] .sgs-box::after { content: ''; position: absolute; left: 18%; right: 18%; bottom: -0.3rem; border-top: 2px dashed var(--provisional); }
+  .sgs--full [data-prov='true'] .sgs-id { margin-top: 0.12rem; }
+
+  .sgs-key { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; margin: 0.75rem 0 0; font-size: 0.78rem; color: var(--ink-2); }
+  .sgs-key > span { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .k { font: 600 0.66rem/1 var(--mono); padding: 0.18rem 0.28rem; border: 1px solid var(--control); border-radius: 2px; color: var(--ink); }
+  .k--nr { border-style: dashed; color: var(--ink-3); }
+  .k--q { border: 2px dotted var(--control); padding: 0.1rem 0.3rem; }
+  .k--prov { width: 1.1rem; height: 0; padding: 0; border: 0; border-top: 2px dashed var(--provisional); border-radius: 0; }
+
+  /* mini: decorative row for cards */
+  .sgs--mini { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; width: 100%; max-width: 20rem; }
+  .sgs--mini .sgs-box { height: 1.9rem; gap: 0.2rem; border-radius: 2px; }
+  .sgs--mini .sgs-val { font-size: 0.62rem; }
+  .sgs--mini .sgs-pips { height: 0.4rem; gap: 1px; }
+  .sgs--mini .sgs-pips i { width: 0.22rem; height: 0.4rem; }
+  .sgs--mini .sgs-pips--none { width: calc(3 * 0.22rem + 2px); }
+  .sgs--mini [data-prov='true'] .sgs-box::after { left: 15%; right: 15%; bottom: -0.25rem; border-top-width: 1.5px; }
+  .sgs--mini { padding-bottom: 0.3rem; }
+
+  @media print {
+    .sgs-pips i.on { background: #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>

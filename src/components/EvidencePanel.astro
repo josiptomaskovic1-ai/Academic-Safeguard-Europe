@@ -29,7 +29,7 @@ const docType = (id: string) => {
       {unverifiedZero ? (
         <div class="notice provisional small"><p><strong>Not identified, provisional.</strong> The ASE rubric requires a second review before a "not identified" finding is treated as final. That review has not happened yet. This is not a finding that the safeguard is absent.</p></div>
       ) : r.verification === 'needs_review' && (
-        <div class="notice provisional small"><p><strong>Provisional finding.</strong> This finding has been proposed but not yet verified by a human second reviewer. It may change.</p></div>
+        <div class="notice provisional small"><p><strong>Provisional.</strong> Not yet verified by a human reviewer. May change.</p></div>
       )}
       {r.verification === 'disputed' && (
         <div class="notice disputed small"><p><strong>Disputed.</strong> A correction request or reviewer objection is open ({r.dispute_ids?.join(', ')}). See the <a href={url('/corrections/')}>corrections log</a>.</p></div>
