@@ -2,8 +2,12 @@
 import Base from '../../layouts/Base.astro';
 import SafeguardScore from '../../components/SafeguardScore.astro';
 import VerificationBadge from '../../components/VerificationBadge.astro';
-import { getRubric, getCountries, RESULT_LABELS, type SafeguardDef, type ResultValue } from '../../lib/data';
+import { getRubric, getCountries, type SafeguardDef, type SafeguardResult, type ResultValue } from '../../lib/data';
 import { url } from '../../lib/url';
+
+// Below this many researched Member States a tally of results is too thin to mean anything
+// and would read as a statistic, so results are then shown only row by row.
+const MIN_COUNTRIES_FOR_TALLY = 5;
 
 export function getStaticPaths() {
   return getRubric().safeguards.map((def) => ({ params: { safeguard: def.slug }, props: { def } }));
@@ -15,24 +19,64 @@ const countries = getCountries();
 const rows = countries.map((c) => ({ c, r: c.safeguards[def.id] ?? { result: 'NR' as ResultValue } }));
 const researched = rows.filter((x) => x.r.result !== 'NR');
 const notResearched = rows.filter((x) => x.r.result === 'NR');
+const provisional = researched.filter((x) => x.r.verification !== 'verified');
+const n = researched.length;
 const order: ResultValue[] = ['3', '2', '1', '0', '?'];
+const tally = order.map((v) => {
+  const matching = researched.filter((x) => x.r.result === v);
+  return { v, count: matching.length, provisional: matching.filter((x) => x.r.verification !== 'verified').length };
+});
+const basis = (r: SafeguardResult) => {
+  if (r.locator) return r.locator;
+  const t = r.rationale ?? '';
+  if (t.length <= 140) return t;
+  const cut = t.lastIndexOf(' ', 140);
+  return `${t.slice(0, cut > 0 ? cut : 140)}…`;
+};
 ---
-<Base title={`${def.name} across EU countries`} crumbs={[{ label: 'Compare safeguards', href: '/compare/' }, { label: def.name }]}>
+<Base
+  title={`${def.name} across EU countries`}
+  description={`${def.question} Results for national frameworks in EU Member States, one safeguard at a time. No ranking.`}
+  crumbs={[{ label: 'Compare safeguards', href: '/compare/' }, { label: def.name }]}
+>
   <div class="container">
     <p class="eyebrow">{def.id} · National frameworks</p>
     <h1>{def.name} across EU countries</h1>
     <p class="lede">{def.question}</p>
-    <div class="notice"><p>This page compares what <strong>national frameworks</strong> provide. Universities may provide stronger safeguards than their national framework requires. Countries are listed alphabetically, not ranked. <a href={url(`/standard/#${def.slug}`)}>See the rubric for this safeguard.</a></p></div>
-
-    <h2>Distribution among researched countries</h2>
-    {researched.length === 0 ? <p class="muted">No Member State has been researched for this safeguard yet.</p> : (
-      <ul class="dist">
-        {order.map((v) => <li><SafeguardScore result={v} compact /> {RESULT_LABELS[v]}: <strong>{researched.filter((x) => x.r.result === v).length}</strong></li>)}
-      </ul>
+    <div class="notice">
+      <p>This page compares what <strong>national frameworks</strong> provide: legislation, regulations and national quality-assurance standards reviewed by ASE. Each finding's sources show which is which; accreditation standards are expectations, not statutory duties. Universities may provide stronger safeguards than their national framework requires. Countries are listed alphabetically, not ranked. <a href={url(`/standard/#${def.slug}`)}>See the rubric for this safeguard.</a></p>
+    </div>
+    {provisional.length > 0 && (
+      <div class="notice provisional">
+        <p><strong>{provisional.length} of {n} {n === 1 ? 'result is' : 'results are'} provisional</strong> and {provisional.length === 1 ? 'has' : 'have'} not been verified by a human reviewer. {provisional.length === 1 ? 'It' : 'They'} may change.</p>
+      </div>
     )}
-    <p class="small muted">Not researched: {notResearched.length} of {countries.length} Member States.</p>
 
-    <div class="table-wrap" style="margin-top:1.5rem">
+    <h2 id="so-far">Results recorded so far ({n} of {countries.length} researched)</h2>
+    {n === 0 ? (
+      <p class="muted">No Member State has been researched for this safeguard yet.</p>
+    ) : n < MIN_COUNTRIES_FOR_TALLY ? (
+      <p class="prose">Only {n} Member State{n === 1 ? ' has' : 's have'} been researched for this safeguard, too few for any comparison. Results are shown individually below.</p>
+    ) : (
+      <div class="table-wrap" tabindex="0" role="region" aria-labelledby="tally-cap" style="max-width:36rem">
+        <table>
+          <caption class="visually-hidden" id="tally-cap">Number of researched Member States by result</caption>
+          <thead><tr><th scope="col">Result</th><th scope="col">Countries</th><th scope="col">Of which provisional</th></tr></thead>
+          <tbody>
+            {tally.map((t) => (
+              <tr>
+                <th scope="row"><SafeguardScore result={t.v} verification={t.provisional > 0 ? 'needs_review' : undefined} /></th>
+                <td class="num">{t.count}</td>
+                <td class="num">{t.provisional}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    <h2 id="by-country">By country</h2>
+    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="by-country">
       <table>
         <caption class="visually-hidden">{def.name} by country</caption>
         <thead><tr><th scope="col">Country</th><th scope="col">Result</th><th scope="col">Verification</th><th scope="col">Basis</th></tr></thead>
@@ -41,12 +85,13 @@ const order: ResultValue[] = ['3', '2', '1', '0', '?'];
             <tr>
               <th scope="row"><a href={url(`/countries/${c.slug}/#sg-${def.id.toLowerCase()}`)}>{c.name}</a></th>
               <td><SafeguardScore result={r.result} verification={r.verification} /></td>
-              <td>{r.result === 'NR' ? <span class="muted">—</span> : <VerificationBadge status={r.verification} />}</td>
-              <td class="small">{r.result === 'NR' ? <span class="muted">Not researched</span> : (r.locator ?? r.rationale?.slice(0, 120))}</td>
+              <td>{r.result === 'NR' ? <span class="muted">—</span> : <VerificationBadge status={r.verification} short />}</td>
+              <td class:list={['small', { basis: r.result !== 'NR' }]}>{r.result === 'NR' ? <span class="muted">Not researched</span> : basis(r)}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+    <p class="small muted" style="margin-top:.75rem">Not researched: {notResearched.length} of {countries.length} Member States. “Not researched” says nothing about whether a safeguard exists.</p>
   </div>
 </Base>

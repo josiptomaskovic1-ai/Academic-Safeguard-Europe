@@ -1,0 +1,36 @@
+# Adversarial credibility review (Phase 1, methodology v0.1)
+
+This review reads ASE the way a hostile university legal office or an investigative journalist would. It covers the rendered site, the copy and the JSON exports. No research data was changed while carrying it out or applying its mitigations.
+
+Status key: **Done** means the mitigation is in the site. **Open** means it needs a maintainer decision or work outside the website code.
+
+| # | Risk | How it could be attacked | Mitigation | Status |
+|---|---|---|---|---|
+| 1 | Two provisional "0" findings (HR S11, UniZg S05) are published, although `scoring-rubric.yml` says a 0 "requires secondary verification before publication" | "ASE breaks its own rules to publish negative findings about a named university" | `scripts/validate-data.mjs` now warns about every `0` that isn't verified. Until the conflict is resolved, the evidence panel for these findings shows a specific notice: "Not identified, provisional… This is not a finding that the safeguard is absent." **Maintainer decision still needed:** withhold these findings until a human second review, or amend the rule in a versioned methodology change (v0.1.1). | Partly done, decision open |
+| 2 | The homepage didn't say that all findings are AI-assisted and unverified, and its workflow graphic ended in "Verified · published" | "Unverified AI output presented as research" | A pilot-status notice sits beside the hero and is built from live counts. The AI wording appears only when every record's `research_method` says AI was used. The workflow now reads "Published as provisional → Human second review → Verified", and §06 states that automated or AI cross-checks never count as verification. | Done |
+| 3 | Status labels and map shading ("Researched", a solid HR tile) suggested completeness | "Implies a finished assessment" | Wherever coverage is known, a derived qualifier follows the status ("· all findings provisional"). Map tiles carry a status glyph plus a text "P" marker, and the legend explains the marker. The institution label "Researched" is now "All safeguards researched". Cards show a Provisional badge. | Done |
+| 4 | The Compare page showed a "Distribution" with n=1 and solid score pips | "Pseudo-statistics; a league table in disguise" | A tally appears only when at least 5 Member States are researched (`MIN_COUNTRIES_FOR_TALLY`). It is a plain table with an "of which provisional" column. Below the threshold the page says there are too few results for any comparison. There is a notice counting provisional results and a page-specific meta description. Provisional pips are hatched with a dashed edge. | Done |
+| 5 | The corrections placeholder ("will publish a contact address") and a public-only route | "No real right of reply" | The placeholder is gone. `CONTACT_EMAIL` in `src/lib/url.ts` defaults to `null`. While it is unset, the page states honestly that GitHub, including a pseudonymous account, is the only route and that this is a known gap. The response-time wording is now "We aim to acknowledge requests within 10 working days". The broken README link to `docs/phase-1-status.md` has been replaced. **Open:** a real private address, and GitHub Discussions with a "Right of reply" category. | Partly done |
+| 6 | "European … Standard" and "research infrastructure" could read as an official EU/EHEA instrument | "Impersonates an official EU/EHEA standard" | The hero eyebrow is now "Independent open-source research project · Pilot". The homepage heading is "The ASE Safeguarding Standard v0.1 (independent draft for consultation)". Every page footer says ASE is not affiliated with the EU, any government, quality-assurance agency or university. /standard/ says it is not a legal or regulatory standard and does not replace the ESG or national law. **Open:** the title in the `standard/standard-v0.1.md` frontmatter is unchanged (it is methodology text). | Mostly done |
+| 7 | The AI method and a key validity caveat (the 2007 Code of Ethics, whose legal force after 1 Oct 2024 is unconfirmed) were hard to find | "Findings may rest on a superseded document" | `research_method` now appears at normal size inside the provisional notice on country and institution pages, together with the dossier link and links to the summary and known evidence gaps. "Overall confidence" is now "Research confidence". A "Human verification: Not yet carried out" row has been added. | Done |
+| 8 | Advocacy headlines ("Academic authority needs accountability", "reporting abuse") | "Partisan; paints academics as dangerous" | The project owner kept these as the homepage H1 and the §01 heading, because they are the project's core messages. As mitigation, the scope statement and pilot notice sit directly beside the hero, §02 opens with the neutrality sentence ("assumes neither that academic staff are dangerous nor that complaints are true"), and every page footer carries the scope disclaimer. | Accepted risk, mitigated |
+| 9 | The national framework mixes statute, horizontal law and soft-law accreditation standards, and some sources are unofficial consolidations | "Conflates non-binding expectations with legal duties" | Country matrices and Compare pages now define "national framework" and state that accreditation standards are expectations, not statutory duties. Each source in an evidence panel is labelled with its document type. **Open:** unofficial consolidations are recorded only in free-text source notes, which appear in the page's Sources list. A structured field (for example `official_text: false`) would let the panel flag them. | Partly done |
+| 10 | JSON exports carried no caveats | "Scraped data stripped of context" | Every export envelope now has `generated_at`, a `verification_summary`, a `caveats` array (provisional status, AI assistance, 0 is not proof of absence, no aggregation or ranking, rules not individuals) and `docs` links. The `note` field is kept for compatibility. | Done |
+| 11 | Compare and Institutions could only be reached from the footer | Users land on individual findings without the comparison context | The header now reads Europe · Institutions · Compare · Standard · Methodology · Evidence · Corrections · About. Sources, Contribute and Open data are in the footer. The homepage explorer section links to Compare and Institutions. The 404 page has richer links and a `noindex` tag. | Done |
+
+## Strengths confirmed
+
+- NR, ? and 0 stay distinct in text, code styling and glyphs.
+- Every record has a correction panel.
+- Every finding shows its evidence, locator, rationale and gaps.
+- There are no overall scores.
+- Country and institution pages say clearly that absence is not proof.
+- The safeguard matrix uses `<details>`, so it works without JavaScript.
+- Print expands every panel through `print.js`. A CSS `::details-content` fallback is included for Chromium without JavaScript, but it has not yet been tested in a PDF.
+
+## Still open for the maintainer
+
+1. Decide how to handle unverified "0" findings (risk 1).
+2. Set `CONTACT_EMAIL` or enable a private channel, and consider GitHub Discussions (risk 5).
+3. Consider a structured flag for unofficial consolidated texts (risk 9).
+4. Decide whether the Standard's own title should carry "ASE" or "independent draft" (risk 6).

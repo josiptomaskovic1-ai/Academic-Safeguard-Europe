@@ -30,7 +30,7 @@ Open an issue with the **Correction** or **Methodology proposal** template on Gi
 
 ## Process and timelines
 
-1. **Logged:** within 10 working days, the request receives an ID (`C-YYYY-NNN`) in `data/corrections.yml`.
+1. **Logged:** the request receives an ID (`C-YYYY-NNN`) in `data/corrections.yml`. ASE aims to acknowledge requests within 10 working days.
 2. **Marked as disputed:** if the request raises a substantive question about a finding, the finding's `verification` is set to `disputed` and the correction ID is added to `dispute_ids`. The site shows the finding and the dispute together. Nothing is removed while the review takes place.
 3. **Reviewed:** a reviewer other than the original researcher assesses the evidence against the rubric, aiming to finish within 30 days.
 4. **Decided:** the outcome is `accepted`, `partially_accepted` or `not_accepted`, and a written resolution is published in the log.

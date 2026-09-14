@@ -1,11 +1,17 @@
 ---
 import { RESULT_LABELS, type ResultValue, type Verification } from '../lib/data';
-interface Props { result: ResultValue; verification?: Verification; compact?: boolean }
-const { result, verification, compact = false } = Astro.props;
+interface Props {
+  result: ResultValue;
+  verification?: Verification;
+  compact?: boolean;
+  /** Set when a VerificationBadge follows in the same accessible name, so "provisional" is not announced twice. */
+  badgeShown?: boolean;
+}
+const { result, verification, compact = false, badgeShown = false } = Astro.props;
 const label = RESULT_LABELS[result];
 const n = ['1', '2', '3'].includes(result) ? Number(result) : 0;
 const provisional = verification && verification !== 'verified' && result !== 'NR';
-const sr = `${result === 'NR' || result === '?' ? '' : `Score ${result}: `}${label}${provisional ? ' (provisional, not yet verified)' : ''}`;
+const sr = `${result === 'NR' || result === '?' ? '' : `Score ${result}: `}${label}${provisional && !badgeShown ? ' (provisional, not yet verified)' : ''}`;
 ---
 <span class:list={['score', { provisional }]} data-result={result}>
   <span class="visually-hidden">{sr}</span>

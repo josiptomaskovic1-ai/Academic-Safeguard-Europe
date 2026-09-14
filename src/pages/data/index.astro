@@ -10,8 +10,9 @@ const counts = { countries: getCountries().length, institutions: getInstitutions
     <p class="lede">All research data is public and licensed under CC BY 4.0. The canonical data is the YAML in the repository. The JSON files below are generated from it at every build.</p>
 
     <h2>JSON exports</h2>
-    <div class="table-wrap">
+    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="exports-cap">
       <table>
+        <caption class="visually-hidden" id="exports-cap">JSON exports</caption>
         <thead><tr><th scope="col">Dataset</th><th scope="col">Records</th><th scope="col">Download</th></tr></thead>
         <tbody>
           <tr><th scope="row">Countries (all 27 Member States)</th><td>{counts.countries}</td><td><a href={url('/data/countries.json')}>countries.json</a></td></tr>
@@ -36,7 +37,7 @@ const counts = { countries: getCountries().length, institutions: getInstitutions
     <h2>Using the data responsibly</h2>
     <ul>
       <li>Keep <code>NR</code>, <code>?</code> and <code>0</code> distinct. Don't convert them to numbers for averaging.</li>
-      <li>Check each finding's <code>verification</code> field. <code>needs_review</code> findings are provisional.</li>
+      <li>Check each finding's <code>verification</code> field. <code>needs_review</code> findings are provisional and have not been verified by a human reviewer. Each JSON file also carries a <code>verification_summary</code> and <code>caveats</code>.</li>
       <li>Don't build overall rankings from these results. The methodology is not designed for aggregation.</li>
       <li>Cite the methodology version and the date you downloaded the data.</li>
     </ul>

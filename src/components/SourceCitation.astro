@@ -4,21 +4,14 @@ import { url } from '../lib/url';
 interface Props { id: string; locator?: string; full?: boolean }
 const { id, locator, full = false } = Astro.props;
 const s = getSource(id);
+// Punctuation is built as strings so no template whitespace lands before a full stop.
+const meta = s
+  ? `. ${s.issuing_body}.${s.official_reference ? ` ${s.official_reference}.` : ''} ${DOC_TYPE_LABELS[s.document_type] ?? s.document_type}${s.publication_date ? `, ${String(s.publication_date)}` : ''}.`
+  : '';
 ---
 {s ? (
   <span class="citation" id={full ? id : undefined}>
-    <a class="cite-title" href={s.url} rel="noopener">{s.title}</a>
-    {s.title_en && s.title_en !== s.title && <span class="cite-meta"> ({s.title_en})</span>}
-    <span class="cite-meta">
-      . {s.issuing_body}.
-      {s.official_reference && <> {s.official_reference}.</>}
-      {' '}{DOC_TYPE_LABELS[s.document_type] ?? s.document_type}
-      {s.publication_date ? <>, {String(s.publication_date)}</> : null}.
-      {locator && <> <strong>{locator}</strong>.</>}
-      {' '}Accessed {s.accessed}.
-      {s.archived_url && <> <a href={s.archived_url} rel="noopener">Archived copy</a>.</>}
-    </span>
-    {' '}<a class="source-id" href={url(`/sources/#${s.id}`)}>[{s.id}]</a>
+    <a class="cite-title" href={s.url} rel="noopener" lang={s.language || undefined}>{s.title}</a>{s.title_en && s.title_en !== s.title && <span class="cite-meta"> ({s.title_en})</span>}<span class="cite-meta">{meta}{locator && <> <strong>{locator}</strong>.</>} Accessed {s.accessed}.{s.archived_url && <> <a href={s.archived_url} rel="noopener">Archived copy</a>.</>}</span>{' '}<a class="source-id" href={url(`/sources/#${s.id}`)}>[{s.id}]</a>
     {full && s.notes && <><br /><span class="small muted">{s.notes}</span></>}
   </span>
 ) : (

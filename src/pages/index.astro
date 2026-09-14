@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import EuropeTileMap from '../components/EuropeTileMap.astro';
 import ResearchStatus from '../components/ResearchStatus.astro';
 import SafeguardScore from '../components/SafeguardScore.astro';
+import VerificationBadge from '../components/VerificationBadge.astro';
+import LastReviewed from '../components/LastReviewed.astro';
 import { getCountries, getInstitutions, getRubric, coverage, hasFindings, COUNTRY_STATUS_LABELS } from '../lib/data';
 import { url, REPO_URL } from '../lib/url';
 
@@ -14,6 +16,9 @@ const statusCounts = Object.keys(COUNTRY_STATUS_LABELS).map((s) => ({ s, n: coun
 const allResults = [...countries, ...institutions].flatMap((r) => Object.values(r.safeguards)).filter((r) => r.result !== 'NR');
 const verifiedCount = allResults.filter((r) => r.verification === 'verified').length;
 const provisionalCount = allResults.filter((r) => r.verification === 'needs_review').length;
+// Only disclose AI assistance as universal when every record with findings says so in its research_method.
+const recordsWithFindings = [...researched, ...institutions.filter((i) => hasFindings(i.safeguards))];
+const allAiAssisted = recordsWithFindings.length > 0 && recordsWithFindings.every((r) => /\bAI\b/.test(r.research_method ?? ''));
 
 const latest = [
   ...researched.map((c) => ({ href: `/countries/${c.slug}/`, name: c.name, kind: 'National framework', date: c.last_reviewed ?? '', cov: coverage(c.safeguards), status: c.research_status, k: 'country' as const })),
@@ -22,19 +27,32 @@ const latest = [
 ---
 <Base title="Home">
   <section class="hero">
-    <div class="container">
-      <p class="eyebrow">Open-source European research infrastructure</p>
-      <h1>Academic authority needs accountability.</h1>
-      <p class="lede">
-        Academic Safeguard Europe is an open-source initiative examining how universities and European higher-education systems protect students from abuse of academic authority, retaliation, conflicts of interest and procedural unfairness.
-      </p>
-      <div class="actions">
-        <a class="btn btn-primary" href={url('/europe/')}>Explore Europe</a>
-        <a class="btn btn-secondary" href={url('/standard/')}>Read the Standard</a>
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">Independent open-source research project · Pilot</p>
+        <h1>Academic authority needs accountability.</h1>
+        <p class="lede">
+          Academic Safeguard Europe is an open-source initiative examining how universities and European higher-education systems protect students from abuse of academic authority, retaliation, conflicts of interest and procedural unfairness.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href={url('/europe/')}>Explore Europe</a>
+          <a class="btn btn-secondary" href={url('/standard/')}>Read the Standard</a>
+        </div>
       </div>
-      <div class="scope-statement">
-        <strong>Scope</strong>
-        ASE evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.
+      <div class="hero-aside">
+        <div class="scope-statement">
+          <strong>Scope</strong>
+          ASE evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.
+        </div>
+        <div class="notice provisional">
+          <p>
+            <strong>Pilot status (methodology v{rubric.methodology_version}, draft for consultation).</strong>
+            {researched.length} of 27 Member States researched.
+            {verifiedCount === 0
+              ? `All ${provisionalCount} published findings are provisional. ${allAiAssisted ? 'They were prepared with AI assistance from official sources and cross-checked automatically, but no' : 'No'} human second reviewer has verified them yet. They may change.`
+              : `${provisionalCount} of ${provisionalCount + verifiedCount} published findings are provisional and have not yet been verified by a human second reviewer. They may change.`}
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -62,11 +80,11 @@ const latest = [
               <dt>With research findings</dt><dd>{researched.length} {researched.length === 1 ? 'country' : 'countries'}</dd>
               <dt>Institution profiles</dt><dd>{institutions.length}</dd>
               <dt>Verified findings</dt><dd>{verifiedCount}</dd>
-              <dt>Provisional findings</dt><dd>{provisionalCount} (awaiting second review)</dd>
+              <dt>Provisional findings</dt><dd>{provisionalCount} (awaiting human second review)</dd>
             </dl>
             <hr style="margin:1rem 0" />
-            <ul class="legend" style="margin:0">
-              {statusCounts.map(({ s, n }) => <li><ResearchStatus status={s} /> <span class="muted">— {n}</span></li>)}
+            <ul class="legend" style="margin:0" aria-label="Member States by research status">
+              {statusCounts.map(({ s, n }) => <li><ResearchStatus status={s} /> <span class="muted">{n}</span></li>)}
             </ul>
           </div>
           <p class="small muted" style="margin-top:.75rem">Most Member States have not been researched yet. Missing data should not be read as missing safeguards.</p>
@@ -77,6 +95,7 @@ const latest = [
     <section class="section" aria-labelledby="what">
       <p class="eyebrow">02 · What ASE evaluates</p>
       <h2 id="what">Systems, rules and procedures — not people</h2>
+      <p class="lede" style="font-size:1.05rem">The Standard assumes neither that academic staff are dangerous nor that complaints are true. Fair procedures protect everyone involved.</p>
       <div class="two-col">
         <div>
           <h3>ASE examines</h3>
@@ -108,14 +127,18 @@ const latest = [
         <div class="prose">
           <p>Every Member State has a page from day one. Each shows exactly how far research has progressed: <em>not researched</em>, <em>research underway</em>, <em>partially researched</em>, <em>national framework reviewed</em>, or <em>institution-level research available</em>.</p>
           <p>Research status is a measure of our work, not of a country's safeguards.</p>
-          <p><a href={url('/europe/')}>Open the full explorer and table →</a></p>
+          <ul class="link-row" style="flex-direction:column">
+            <li><a href={url('/europe/')}>Open the full explorer and table →</a></li>
+            <li><a href={url('/compare/')}>Compare one safeguard across countries →</a></li>
+            <li><a href={url('/institutions/')}>Institution profiles →</a></li>
+          </ul>
         </div>
       </div>
     </section>
 
     <section class="section" aria-labelledby="standard">
       <p class="eyebrow">04 · The Safeguarding Standard</p>
-      <h2 id="standard">European Academic Safeguarding Standard v{rubric.methodology_version}</h2>
+      <h2 id="standard">The ASE Safeguarding Standard v{rubric.methodology_version} <span class="muted" style="font-size:.6em;font-weight:400">(independent draft for consultation)</span></h2>
       <p class="lede" style="font-size:1.05rem">Twelve safeguards, each defined by observable features of published rules.</p>
       <ol class="grid grid-3" style="list-style:none;padding:0;margin-top:1.25rem">
         {rubric.safeguards.map((s) => (
@@ -133,9 +156,9 @@ const latest = [
           <p>ASE publishes <strong>safeguard profiles</strong>, not overall scores. There is no "University X — 43/100".</p>
           <p><a href={url('/methodology/')}>Read the scoring methodology →</a></p>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="values-cap">
           <table>
-            <caption>Result values</caption>
+            <caption id="values-cap">Result values</caption>
             <thead><tr><th scope="col">Value</th><th scope="col">Meaning</th></tr></thead>
             <tbody>
               {rubric.result_values.map((v) => (
@@ -152,11 +175,11 @@ const latest = [
         <div class="prose">
           <p class="eyebrow">06 · Evidence-first methodology</p>
           <h2 id="evidence">Every score is traceable to a document</h2>
-          <p>Each finding records the source, the article or section, a summary of what the provision says, the rationale for the score, and a confidence level. Findings are proposed, checked against the rubric, and independently verified before they count as completed.</p>
-          <p>Until that second review happens, a finding is labelled <strong>provisional</strong>.</p>
+          <p>Each finding records the source, the article or section, a summary of what the provision says, the rationale for the score, and a confidence level. Findings are proposed, checked against the rubric, and published as <strong>provisional</strong>.</p>
+          <p>A finding becomes <strong>verified</strong> only after a human reviewer who did not make it has checked the source, locator and level. Automated or AI cross-checks never count as verification.</p>
         </div>
         <ol class="flow" aria-label="Research workflow">
-          <li>Source found</li><li>Source recorded</li><li>Proposed interpretation</li><li>Proposed score</li><li>Methodology check</li><li>Secondary verification</li><li class="final">Verified · published</li>
+          <li>Source found</li><li>Source recorded</li><li>Proposed interpretation and score</li><li>Methodology check</li><li class="milestone">Published as provisional</li><li>Human second review</li><li class="final">Verified</li>
         </ol>
       </div>
     </section>
@@ -172,21 +195,25 @@ const latest = [
     </section>
 
     <section class="section" aria-labelledby="latest">
-      <p class="eyebrow">08 · Latest research</p>
-      <h2 id="latest">Latest research</h2>
+      <p class="eyebrow">08 · Research in progress</p>
+      <h2 id="latest">{verifiedCount === 0 ? 'Recently added provisional findings' : 'Recently added findings'}</h2>
       {latest.length === 0 ? (
         <p class="muted">No research findings have been published yet.</p>
       ) : (
-        <div class="grid grid-3">
-          {latest.map((l) => (
-            <article class="card">
-              <p class="small muted" style="margin:0">{l.kind} · reviewed {l.date}</p>
-              <a class="stretched" href={url(l.href)}><h3>{l.name}</h3></a>
-              <ResearchStatus status={l.status} kind={l.k} />
-              <p class="small muted">{l.cov.researched} of {l.cov.total} safeguards researched · {l.cov.verified} verified · {l.cov.provisional} provisional</p>
-            </article>
-          ))}
-        </div>
+        <>
+          {provisionalCount > 0 && <p class="prose">These records have not yet been fully verified by a human second reviewer. Read the evidence and gaps before relying on any result.</p>}
+          <div class="grid grid-3">
+            {latest.map((l) => (
+              <article class="card">
+                <p class="small muted">{l.kind} · reviewed <LastReviewed date={l.date} /></p>
+                <a class="stretched" href={url(l.href)}><h3>{l.name}</h3></a>
+                <ResearchStatus status={l.status} kind={l.k} />
+                {l.cov.provisional > 0 && <p><VerificationBadge status="needs_review" /></p>}
+                <p class="small muted">{l.cov.researched} of {l.cov.total} safeguards researched · {l.cov.verified} verified · {l.cov.provisional} provisional</p>
+              </article>
+            ))}
+          </div>
+        </>
       )}
     </section>
 

@@ -8,6 +8,10 @@ export function url(p = '/'): string {
   return `${BASE}${clean}${hash ? `#${hash}` : ''}`;
 }
 
+// Private contact for corrections and right of reply. Set by the maintainer; never invent an address.
+// While null, the site states honestly that GitHub is the only route.
+export const CONTACT_EMAIL: string | null = null;
+
 export const REPO_URL = 'https://github.com/josiptomaskovic1-ai/Academic-Safeguard-Europe';
 export const repoFile = (p: string) => `${REPO_URL}/blob/main/${p.replace(/^\//, '')}`;
 export const repoTree = (p: string) => `${REPO_URL}/tree/main/${p.replace(/^\//, '')}`;

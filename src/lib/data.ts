@@ -200,7 +200,7 @@ export const COUNTRY_STATUS_LABELS: Record<string, string> = {
 export const INSTITUTION_STATUS_LABELS: Record<string, string> = {
   research_underway: 'Research underway',
   partially_researched: 'Partially researched',
-  researched: 'Researched',
+  researched: 'All safeguards researched',
 };
 
 export const VERIFICATION_LABELS: Record<Verification, string> = {
@@ -236,3 +236,36 @@ export function coverage(safeguards: Record<string, SafeguardResult>) {
 }
 
 export const hasFindings = (s: Record<string, SafeguardResult>) => Object.values(s).some((r) => r.result !== 'NR');
+
+export type Coverage = ReturnType<typeof coverage>;
+
+/** Coverage across a country's national record and all of its institution profiles (for status qualifiers only). */
+export function countryCoverageWithInstitutions(iso: string): Coverage {
+  const c = getCountry(iso);
+  const records = [c?.safeguards ?? {}, ...getInstitutionsFor(iso).map((i) => i.safeguards)];
+  return records.map(coverage).reduce(
+    (a, b) => ({ total: a.total + b.total, researched: a.researched + b.researched, verified: a.verified + b.verified, provisional: a.provisional + b.provisional, disputed: a.disputed + b.disputed }),
+    { total: 0, researched: 0, verified: 0, provisional: 0, disputed: 0 },
+  );
+}
+
+// Presentation only: BCP 47 language tags for each Member State's local name, in the order the
+// names appear in data/countries/*.yml ("België / Belgique / Belgien"). Country codes are not language codes.
+const LOCAL_NAME_LANGS: Record<string, string[]> = {
+  AT: ['de'], BE: ['nl', 'fr', 'de'], BG: ['bg'], HR: ['hr'], CY: ['el', 'tr'], CZ: ['cs'], DK: ['da'], EE: ['et'],
+  FI: ['fi', 'sv'], FR: ['fr'], DE: ['de'], GR: ['el'], HU: ['hu'], IE: ['ga', 'en'], IT: ['it'], LV: ['lv'], LT: ['lt'],
+  LU: ['lb', 'fr', 'de'], MT: ['mt'], NL: ['nl'], PL: ['pl'], PT: ['pt'], RO: ['ro'], SK: ['sk'], SI: ['sl'], ES: ['es'], SE: ['sv'],
+};
+
+/** Primary language of a Member State, or undefined when there is no single one to declare. */
+export const primaryLang = (iso: string): string | undefined => {
+  const l = LOCAL_NAME_LANGS[iso];
+  return l && l.length === 1 ? l[0] : undefined;
+};
+
+/** Splits a local name into language-tagged parts; parts without a known language get no lang attribute. */
+export function localNameParts(iso: string, localName: string): { text: string; lang?: string }[] {
+  const parts = localName.split(' / ');
+  const langs = LOCAL_NAME_LANGS[iso] ?? [];
+  return parts.map((text, i) => ({ text, lang: parts.length === langs.length ? langs[i] : undefined }));
+}

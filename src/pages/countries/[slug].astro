@@ -8,7 +8,7 @@ import SafeguardMatrix from '../../components/SafeguardMatrix.astro';
 import SourceCitation from '../../components/SourceCitation.astro';
 import InstitutionCard from '../../components/InstitutionCard.astro';
 import CorrectionBanner from '../../components/CorrectionBanner.astro';
-import { getCountries, getInstitutionsFor, coverage, type Country } from '../../lib/data';
+import { getCountries, getInstitutionsFor, coverage, countryCoverageWithInstitutions, localNameParts, type Country } from '../../lib/data';
 import { url, repoFile } from '../../lib/url';
 
 export function getStaticPaths() {
@@ -20,19 +20,21 @@ const cov = coverage(c.safeguards);
 const institutions = getInstitutionsFor(c.iso_code);
 const sourceIds = [...new Set(Object.values(c.safeguards).flatMap((r) => [...(r.source_ids ?? []), ...(r.sources_reviewed ?? [])]))];
 const complete = cov.researched === cov.total && cov.verified === cov.total;
+const localParts = c.local_name && c.local_name !== c.name ? localNameParts(c.iso_code, c.local_name) : [];
 ---
 <Base title={c.name} description={`Published safeguards against abuse of academic authority in ${c.name}: research status, findings and sources.`} crumbs={[{ label: 'Europe', href: '/europe/' }, { label: c.name }]}>
   <div class="container">
     <p class="eyebrow">EU Member State · {c.iso_code}</p>
-    <h1>{c.name} <span class="muted" style="font-size:.55em;font-weight:400" lang={c.iso_code.toLowerCase()}>{c.local_name !== c.name ? c.local_name : ''}</span></h1>
+    <h1>{c.name}{localParts.length > 0 && <> <span class="muted" style="font-size:.55em;font-weight:400">{localParts.map((p, i) => <>{i > 0 && ' / '}<span lang={p.lang}>{p.text}</span></>)}</span></>}</h1>
 
     <div class="panel" style="margin:1.25rem 0">
       <dl class="meta-list">
-        <dt>Research status</dt><dd><ResearchStatus status={c.research_status} /></dd>
+        <dt>Research status</dt><dd><ResearchStatus status={c.research_status} cov={countryCoverageWithInstitutions(c.iso_code)} /></dd>
         <dt>Last reviewed</dt><dd><LastReviewed date={c.last_reviewed} /></dd>
         <dt>Methodology</dt><dd><MethodologyVersion version={c.methodology_version} /></dd>
         <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched at national level · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
-        {c.confidence && <><dt>Overall confidence</dt><dd><ConfidenceLabel value={c.confidence} /></dd></>}
+        {cov.researched > 0 && <><dt>Human verification</dt><dd>{cov.verified === 0 ? 'Not yet carried out' : `${cov.verified} of ${cov.researched} findings verified`}</dd></>}
+        {c.confidence && <><dt title="Confidence in the evidence and interpretation, not a rating of the jurisdiction">Research confidence</dt><dd><ConfidenceLabel value={c.confidence} /></dd></>}
         <dt>Data file</dt><dd><a href={repoFile(`data/countries/${c.slug}.yml`)}><code>data/countries/{c.slug}.yml</code></a></dd>
       </dl>
     </div>
@@ -40,10 +42,15 @@ const complete = cov.researched === cov.total && cov.verified === cov.total;
     {!complete && (
       <div class="notice">
         <p><strong>Research for this jurisdiction is currently incomplete.</strong> Missing data should not be interpreted as absence of safeguards.</p>
-        {cov.provisional > 0 && <p>Findings marked <em>provisional</em> have not yet been independently verified by a second reviewer and may change.</p>}
       </div>
     )}
-    {c.research_method && <p class="small muted"><strong>Research method:</strong> {c.research_method}{c.research_dossier && <> <a href={repoFile(c.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
+    {cov.provisional > 0 && (
+      <div class="notice provisional">
+        <p><strong>{cov.provisional} of {cov.researched} national findings are provisional.</strong> {c.research_method ?? 'They have not yet been verified by a human second reviewer.'} They may change.{c.research_dossier && <> <a href={repoFile(c.research_dossier)}>Research dossier and verification notes</a>.</>}</p>
+        {c.evidence_gaps?.length > 0 && <p>Read the <a href="#gaps">known evidence gaps</a> before relying on any result.</p>}
+      </div>
+    )}
+    {cov.provisional === 0 && c.research_method && <p class="small muted"><strong>Research method:</strong> {c.research_method}{c.research_dossier && <> <a href={repoFile(c.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
 
     <section aria-labelledby="nf">
       <h2 id="nf">National framework</h2>
@@ -54,7 +61,7 @@ const complete = cov.researched === cov.total && cov.verified === cov.total;
 
     <section aria-labelledby="matrix">
       <h2 id="matrix">National safeguard matrix</h2>
-      <p class="muted small">Results describe what the national framework itself provides or requires of higher-education institutions. Institutions may provide more. Select a safeguard to see the evidence.</p>
+      <p class="muted small prose">Results describe what the national framework itself provides or requires of higher-education institutions. Institutions may provide more. “National framework” here means legislation, regulations and national quality-assurance standards reviewed by ASE; each finding's sources show which is which. Accreditation standards are expectations, not statutory duties. Select a safeguard to see the evidence.</p>
       <SafeguardMatrix safeguards={c.safeguards} />
     </section>
 

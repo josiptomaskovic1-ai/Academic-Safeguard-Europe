@@ -50,14 +50,30 @@ const ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const PARTIAL_DATE_RE = /^\d{4}(-\d{2}(-\d{2})?)?$/;
 
+// Rendered as hrefs, so reject anything that could disguise the real destination:
+// non-web schemes, userinfo ("https://trusted.example@evil.example/"), whitespace, control and bidi characters.
+const UNSAFE_URL_CHARS = /[\u0000-\u0020\u007f-\u009f\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
 const isUrl = (u) => {
-  if (typeof u !== 'string') return false;
+  if (typeof u !== 'string' || UNSAFE_URL_CHARS.test(u)) return false;
   try {
     const x = new URL(u);
-    return (x.protocol === 'https:' || x.protocol === 'http:') && x.hostname.includes('.');
+    return (x.protocol === 'https:' || x.protocol === 'http:') && !x.username && !x.password && x.hostname.includes('.');
   } catch {
     return false;
   }
+};
+// Valid but worth a reviewer's attention: unencrypted links and internationalised (punycode) hostnames.
+const checkUrlWarnings = (file, where, u) => {
+  if (!isUrl(u)) return;
+  const x = new URL(u);
+  if (x.protocol === 'http:') warn(file, `${where}: insecure http: URL "${u}" (use https: where available)`);
+  if (x.hostname.split('.').some((l) => l.startsWith('xn--'))) warn(file, `${where}: internationalised hostname "${x.hostname}", check it is not a look-alike domain`);
+};
+const DOI_RE = /^10\.\d{4,9}\/[-._;()/:A-Za-z0-9]+$/;
+const DOSSIER_RE = /^research\/(pending|verified|disputed)\/[a-z0-9-]+\.ya?ml$/;
+const checkDossier = (file, v) => {
+  if (v == null) return;
+  if (typeof v !== 'string' || !DOSSIER_RE.test(v) || !fs.existsSync(path.join(ROOT, v))) err(file, `invalid research_dossier "${v}" (must be an existing research/{pending,verified,disputed}/<name>.yml file)`);
 };
 const str = (v) => typeof v === 'string' && v.trim().length > 0;
 const dateStr = (v) => (v instanceof Date ? v.toISOString().slice(0, 10) : v);
@@ -97,6 +113,7 @@ for (const file of ymlFiles(path.join(ROOT, 'data/sources'))) {
     else sources.set(s.id, { ...s, file });
     for (const f of ['title', 'issuing_body', 'language']) if (!str(s[f])) err(file, `${where}: missing ${f}`);
     if (!isUrl(s.url)) err(file, `${where}: malformed URL "${s.url}"`);
+    checkUrlWarnings(file, where, s.url);
     if (!DOC_TYPES.has(s.document_type)) err(file, `${where}: invalid document_type "${s.document_type}"`);
     if (!EU27.has(s.country) && !SUPRA.has(s.country)) err(file, `${where}: invalid country "${s.country}"`);
     if (!validDate(s.accessed)) err(file, `${where}: accessed must be YYYY-MM-DD`);
@@ -104,6 +121,7 @@ for (const file of ymlFiles(path.join(ROOT, 'data/sources'))) {
     else if (!PARTIAL_DATE_RE.test(String(dateStr(s.publication_date)))) err(file, `${where}: malformed publication_date`);
     if (s.archived_url == null) warn(file, `${where}: missing archived link`);
     else if (!isUrl(s.archived_url)) err(file, `${where}: malformed archived_url`);
+    else checkUrlWarnings(file, `${where} archived_url`, s.archived_url);
   }
 }
 
@@ -153,6 +171,8 @@ function checkResults(file, safeguards, { label }) {
       if (r.confidence != null && !CONFIDENCE.has(r.confidence)) err(file, `${where}: invalid confidence`);
     }
     if (r.confidence === 'low') warn(file, `${where}: low-confidence finding`);
+    // scoring-rubric.yml: a "0" "requires secondary verification before publication". Surface every conflict for the maintainer.
+    if (result === '0' && r.verification !== 'verified') warn(file, `${where}: result "0" is published without secondary verification (rubric requires it before publication)`);
     if (r.verification === 'verified' && !str(r.second_reviewer)) err(file, `${where}: verified finding must record second_reviewer`);
     if (r.verification === 'disputed' && !(Array.isArray(r.dispute_ids) && r.dispute_ids.length)) err(file, `${where}: disputed result must list dispute_ids`);
   }
@@ -177,6 +197,7 @@ for (const file of countryFiles) {
   else if (!METHOD_VERSIONS.has(String(c.methodology_version))) err(file, `unknown methodology version "${c.methodology_version}"`);
   if (!COUNTRY_STATUS.has(c.research_status)) err(file, `invalid research status "${c.research_status}"`);
   if (c.confidence != null && !CONFIDENCE.has(c.confidence)) err(file, 'invalid confidence');
+  checkDossier(file, c.research_dossier);
   const { nonNR } = checkResults(file, c.safeguards, { label });
   if (nonNR > 0 && c.research_status === 'not_researched') err(file, 'has findings but research_status is not_researched');
   if (nonNR > 0 && !validDate(c.last_reviewed)) err(file, 'has findings but last_reviewed is missing');
@@ -200,6 +221,8 @@ for (const file of ymlFiles(path.join(ROOT, 'data/institutions'))) {
   if (str(i.id) && !i.id.startsWith(`${String(i.country).toLowerCase()}-`)) err(file, 'id must start with lowercase country code');
   if (!str(i.canonical_name)) err(file, 'missing canonical_name');
   if (!isUrl(i.website)) err(file, `malformed URL "${i.website}"`);
+  checkUrlWarnings(file, 'website', i.website);
+  checkDossier(file, i.research_dossier);
   if (!INSTITUTION_TYPES.has(i.institution_type)) err(file, `invalid institution_type "${i.institution_type}"`);
   if (!INSTITUTION_STATUS.has(i.research_status)) err(file, `invalid research status "${i.research_status}"`);
   if (i.methodology_version == null) err(file, 'missing methodology version');
@@ -235,6 +258,8 @@ if (fs.existsSync(libFile)) {
     seen.add(it.id);
     for (const f of ['title', 'author_body', 'jurisdiction', 'summary']) if (!str(it[f])) err(libFile, `${where}: missing ${f}`);
     if (!isUrl(it.url)) err(libFile, `${where}: malformed URL`);
+    checkUrlWarnings(libFile, where, it.url);
+    if (it.doi != null && !(typeof it.doi === 'string' && DOI_RE.test(it.doi))) err(libFile, `${where}: malformed doi "${it.doi}"`);
     if (!EVIDENCE_TYPES.has(it.source_type)) err(libFile, `${where}: invalid source_type "${it.source_type}"`);
     if (!Array.isArray(it.categories) || !it.categories.length) err(libFile, `${where}: needs at least one category`);
     for (const cat of it.categories ?? []) if (!EVIDENCE_CATEGORIES.has(cat)) err(libFile, `${where}: unknown category "${cat}"`);

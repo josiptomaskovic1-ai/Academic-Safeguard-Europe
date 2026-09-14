@@ -7,7 +7,7 @@ import ConfidenceLabel from '../../components/ConfidenceLabel.astro';
 import SafeguardMatrix from '../../components/SafeguardMatrix.astro';
 import SourceCitation from '../../components/SourceCitation.astro';
 import CorrectionBanner from '../../components/CorrectionBanner.astro';
-import { getInstitutions, getCountry, coverage, type Institution } from '../../lib/data';
+import { getInstitutions, getCountry, coverage, primaryLang, type Institution } from '../../lib/data';
 import { url, repoFile } from '../../lib/url';
 
 export function getStaticPaths() {
@@ -25,17 +25,18 @@ const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`
   <div class="container">
     <p class="eyebrow">{typeLabel[i.institution_type]} · {country.name}</p>
     <h1>{i.canonical_name}</h1>
-    {i.local_name && <p class="lede" lang={i.country.toLowerCase()} style="margin-top:-.5rem">{i.local_name}</p>}
+    {i.local_name && i.local_name !== i.canonical_name && <p class="lede" lang={primaryLang(i.country)} style="margin-top:-.5rem">{i.local_name}</p>}
 
     <div class="panel" style="margin:1.25rem 0">
       <dl class="meta-list">
         <dt>Country</dt><dd><a href={url(`/countries/${country.slug}/`)}>{country.name}</a></dd>
         <dt>Official website</dt><dd><a href={i.website} rel="noopener">{i.website.replace(/^https?:\/\//, '')}</a></dd>
-        <dt>Research status</dt><dd><ResearchStatus status={i.research_status} kind="institution" /></dd>
+        <dt>Research status</dt><dd><ResearchStatus status={i.research_status} kind="institution" cov={cov} /></dd>
         <dt>Last reviewed</dt><dd><LastReviewed date={i.last_reviewed} /></dd>
         <dt>Methodology</dt><dd><MethodologyVersion version={i.methodology_version} /></dd>
         <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
-        {i.confidence && <><dt>Overall confidence</dt><dd><ConfidenceLabel value={i.confidence} /></dd></>}
+        {cov.researched > 0 && <><dt>Human verification</dt><dd>{cov.verified === 0 ? 'Not yet carried out' : `${cov.verified} of ${cov.researched} findings verified`}</dd></>}
+        {i.confidence && <><dt title="Confidence in the evidence and interpretation, not a rating of the institution">Research confidence</dt><dd><ConfidenceLabel value={i.confidence} /></dd></>}
         <dt>Corrections</dt><dd>{{ none: 'No correction requests', open: 'Correction request open', resolved: 'Correction request resolved' }[i.correction_status]}</dd>
         <dt>Data file</dt><dd><a href={repoFile(file)}><code>{file}</code></a></dd>
       </dl>
@@ -44,8 +45,13 @@ const file = `data/institutions/${i.country.toLowerCase()}/${i.id.slice(3)}.yml`
     <div class="notice">
       <p><strong>What this profile shows.</strong> Results describe the institution's published university-wide rules, reviewed against the <a href={url('/standard/')}>Standard</a>. Faculty-level rules may add protections. A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists.</p>
     </div>
-    {cov.provisional > 0 && <div class="notice provisional"><p><strong>{cov.provisional} of {cov.researched} findings are provisional.</strong> They have not yet been independently verified by a second reviewer and may change.</p></div>}
-    {i.research_method && <p class="small muted"><strong>Research method:</strong> {i.research_method}{i.research_dossier && <> <a href={repoFile(i.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
+    {cov.provisional > 0 && (
+      <div class="notice provisional">
+        <p><strong>{cov.provisional} of {cov.researched} findings are provisional.</strong> {i.research_method ?? 'They have not yet been verified by a human second reviewer.'} They may change.{i.research_dossier && <> <a href={repoFile(i.research_dossier)}>Research dossier and verification notes</a>.</>}</p>
+        {(i.evidence_note || i.evidence_gaps?.length) ? <p>Before relying on any result, read the {i.evidence_note && <a href="#summary">summary</a>}{i.evidence_note && i.evidence_gaps?.length ? ' and the ' : ''}{i.evidence_gaps?.length ? <a href="#gaps">known evidence gaps</a> : null}.</p> : null}
+      </div>
+    )}
+    {cov.provisional === 0 && i.research_method && <p class="small muted"><strong>Research method:</strong> {i.research_method}{i.research_dossier && <> <a href={repoFile(i.research_dossier)}>Research dossier and verification notes</a>.</>}</p>}
 
     {i.evidence_note && <section aria-labelledby="summary"><h2 id="summary">Summary of published safeguards</h2><p class="prose">{i.evidence_note}</p></section>}
 

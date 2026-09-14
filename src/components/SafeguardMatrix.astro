@@ -11,6 +11,7 @@ const { safeguards: defs } = getRubric();
 <ul class="matrix">
   {defs.map((def) => {
     const r = safeguards[def.id] ?? { result: 'NR' };
+    const badge = r.result !== 'NR' && r.verification !== 'verified';
     return (
       <li id={`${idPrefix}-${def.id.toLowerCase()}`}>
         <details>
@@ -18,10 +19,10 @@ const { safeguards: defs } = getRubric();
             <span class="sg-id">{def.id}</span>
             <span class="sg-name">{def.name}</span>
             <span class="sg-result">
-              <SafeguardScore result={r.result} verification={r.verification} />
-              {r.result !== 'NR' && r.verification !== 'verified' && <VerificationBadge status={r.verification} />}
-              <svg class="chev" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+              <SafeguardScore result={r.result} verification={r.verification} badgeShown={badge} />
+              {badge && <VerificationBadge status={r.verification} short />}
             </span>
+            <svg class="chev" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" /></svg>
           </summary>
           <div class="sg-body"><EvidencePanel r={r} def={def} /></div>
         </details>

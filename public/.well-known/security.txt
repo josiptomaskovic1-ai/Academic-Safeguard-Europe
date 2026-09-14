@@ -1,0 +1,5 @@
+Contact: https://github.com/josiptomaskovic1-ai/Academic-Safeguard-Europe/security/advisories/new
+Expires: 2027-09-01T00:00:00.000Z
+Policy: https://github.com/josiptomaskovic1-ai/Academic-Safeguard-Europe/blob/main/SECURITY.md
+Preferred-Languages: en
+Canonical: https://josiptomaskovic1-ai.github.io/Academic-Safeguard-Europe/.well-known/security.txt

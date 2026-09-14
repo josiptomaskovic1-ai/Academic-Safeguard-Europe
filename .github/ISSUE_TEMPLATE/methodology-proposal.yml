@@ -5,7 +5,9 @@ labels: [methodology]
 body:
   - type: markdown
     attributes:
-      value: Methodological disagreements are recorded publicly and considered for the next version. They do not change findings under the current version.
+      value: |
+        Methodological disagreements are recorded publicly and considered for the next version. They do not change findings under the current version.
+        **This issue is public.** Do not include personal data, names of staff or students, or allegations about individuals. Only submit publicly available documents.
   - type: dropdown
     id: area
     attributes:
@@ -41,3 +43,10 @@ body:
     id: affected
     attributes:
       label: Findings affected (record IDs), if any
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: This submission contains no personal data and no allegations about individuals.
+          required: true

@@ -1,7 +1,12 @@
 ---
 import { VERIFICATION_LABELS, type Verification } from '../lib/data';
-interface Props { status?: Verification }
-const { status } = Astro.props;
+interface Props {
+  status?: Verification;
+  /** Short visible label for dense rows; the full wording appears in the adjacent evidence panel. */
+  short?: boolean;
+}
+const { status, short = false } = Astro.props;
 const glyph = { verified: '✓', needs_review: '◔', disputed: '!' } as const;
+const shortLabel = { verified: 'Verified', needs_review: 'Provisional', disputed: 'Disputed' } as const;
 ---
-{status && <span class:list={['badge', status]}><span aria-hidden="true">{glyph[status]}</span>{VERIFICATION_LABELS[status]}</span>}
+{status && <span class:list={['badge', status]}><span aria-hidden="true">{glyph[status]}</span>{short ? shortLabel[status] : VERIFICATION_LABELS[status]}</span>}

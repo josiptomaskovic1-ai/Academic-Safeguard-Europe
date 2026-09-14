@@ -2,6 +2,7 @@
 import { coverage, type Country } from '../lib/data';
 import { url } from '../lib/url';
 import ResearchStatus from './ResearchStatus.astro';
+import VerificationBadge from './VerificationBadge.astro';
 interface Props { country: Country }
 const { country: c } = Astro.props;
 const cov = coverage(c.safeguards);
@@ -9,6 +10,7 @@ const cov = coverage(c.safeguards);
 <article class="card">
   <a class="stretched" href={url(`/countries/${c.slug}/`)}><h3>{c.name}</h3></a>
   <ResearchStatus status={c.research_status} />
+  {cov.provisional > 0 && <p><VerificationBadge status="needs_review" /></p>}
   <p class="small muted">
     {cov.researched === 0
       ? 'No safeguards researched yet.'

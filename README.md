@@ -46,7 +46,7 @@ All 27 Member States have a record. Croatia is the first methodology test:
 - all of those findings are **provisional**: they were researched with AI assistance and have had an automated cross-check, but they still need verification by a human reviewer;
 - the other 26 Member States are *not researched*.
 
-See `docs/phase-1-status.md`.
+See `docs/adversarial-review.md` for known credibility risks and the mitigations in place.
 
 ## Running locally
 

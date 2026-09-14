@@ -1,5 +1,5 @@
 ---
-import type { SafeguardResult, SafeguardDef } from '../lib/data';
+import { getSource, DOC_TYPE_LABELS, type SafeguardResult, type SafeguardDef } from '../lib/data';
 import SourceCitation from './SourceCitation.astro';
 import ConfidenceLabel from './ConfidenceLabel.astro';
 import VerificationBadge from './VerificationBadge.astro';
@@ -9,6 +9,13 @@ import { url } from '../lib/url';
 interface Props { r: SafeguardResult; def: SafeguardDef }
 const { r, def } = Astro.props;
 const levelText = ['0', '1', '2', '3'].includes(r.result) ? def.levels[r.result as '0' | '1' | '2' | '3'] : null;
+// The rubric requires secondary verification before a "0" is treated as final; say so explicitly when it is missing.
+// Disputed zeros get the disputed notice instead, which is the more accurate description.
+const unverifiedZero = r.result === '0' && r.verification !== 'verified' && r.verification !== 'disputed';
+const docType = (id: string) => {
+  const s = getSource(id);
+  return s ? (DOC_TYPE_LABELS[s.document_type] ?? s.document_type) : null;
+};
 ---
 <div class="evidence-panel">
   <p class="muted small"><strong>Question:</strong> {def.question}</p>
@@ -19,8 +26,10 @@ const levelText = ['0', '1', '2', '3'].includes(r.result) ? def.levels[r.result 
 
   {r.result !== 'NR' && (
     <>
-      {r.verification === 'needs_review' && (
-        <div class="notice provisional small"><p><strong>Provisional finding.</strong> This finding has been proposed but not yet independently verified by a second reviewer. It may change.</p></div>
+      {unverifiedZero ? (
+        <div class="notice provisional small"><p><strong>Not identified, provisional.</strong> The ASE rubric requires a second review before a "not identified" finding is treated as final. That review has not happened yet. This is not a finding that the safeguard is absent.</p></div>
+      ) : r.verification === 'needs_review' && (
+        <div class="notice provisional small"><p><strong>Provisional finding.</strong> This finding has been proposed but not yet verified by a human second reviewer. It may change.</p></div>
       )}
       {r.verification === 'disputed' && (
         <div class="notice disputed small"><p><strong>Disputed.</strong> A correction request or reviewer objection is open ({r.dispute_ids?.join(', ')}). See the <a href={url('/corrections/')}>corrections log</a>.</p></div>
@@ -34,13 +43,13 @@ const levelText = ['0', '1', '2', '3'].includes(r.result) ? def.levels[r.result 
         {r.rationale && <><dt>Rationale</dt><dd>{r.rationale}</dd></>}
         {r.gaps && <><dt>Gaps and uncertainty</dt><dd>{r.gaps}</dd></>}
         {r.source_ids?.length ? (
-          <><dt>{r.source_ids.length > 1 ? 'Sources' : 'Source'}</dt><dd><ul class="source-list">{r.source_ids.map((id) => <li><SourceCitation id={id} /></li>)}</ul></dd></>
+          <><dt>{r.source_ids.length > 1 ? 'Sources' : 'Source'}</dt><dd><ul class="source-list">{r.source_ids.map((id) => <li>{docType(id) && <span class="doc-type">{docType(id)}</span>}<SourceCitation id={id} /></li>)}</ul></dd></>
         ) : null}
         {r.sources_reviewed?.length && (r.result === '0' || r.result === '?') ? (
-          <><dt>Sources reviewed</dt><dd><ul class="source-list">{r.sources_reviewed.map((id) => <li><SourceCitation id={id} /></li>)}</ul></dd></>
+          <><dt>Sources reviewed</dt><dd><ul class="source-list">{r.sources_reviewed.map((id) => <li>{docType(id) && <span class="doc-type">{docType(id)}</span>}<SourceCitation id={id} /></li>)}</ul></dd></>
         ) : null}
         <dt>Status</dt>
-        <dd style="display:flex;flex-wrap:wrap;gap:.4rem;align-items:center"><VerificationBadge status={r.verification} /><ConfidenceLabel value={r.confidence} /></dd>
+        <dd class="status-row"><VerificationBadge status={r.verification} /><ConfidenceLabel value={r.confidence} /></dd>
         <dt>Reviewed</dt><dd><LastReviewed date={r.reviewed} /></dd>
       </dl>
     </>

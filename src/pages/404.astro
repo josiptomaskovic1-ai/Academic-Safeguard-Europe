@@ -1,11 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
-import { url } from '../lib/url';
+import { url, REPO_URL } from '../lib/url';
 ---
-<Base title="Page not found">
+<Base title="Page not found" description="The requested page does not exist on Academic Safeguard Europe." noindex>
   <div class="container prose">
     <h1>Page not found</h1>
     <p>The page you requested does not exist or has moved.</p>
-    <p><a href={url('/')}>Home</a> · <a href={url('/europe/')}>Country explorer</a> · <a href={url('/standard/')}>Standard</a></p>
+    <p>If you followed a link to a finding, the record may have been renamed. Every change is in the <a href={`${REPO_URL}/commits/main`}>public history on GitHub</a>.</p>
+    <ul class="link-row">
+      <li><a href={url('/')}>Home</a></li>
+      <li><a href={url('/europe/')}>Country explorer</a></li>
+      <li><a href={url('/institutions/')}>Institutions</a></li>
+      <li><a href={url('/compare/')}>Compare safeguards</a></li>
+      <li><a href={url('/standard/')}>Standard</a></li>
+      <li><a href={url('/corrections/')}>Corrections</a></li>
+      <li><a href={url('/data/')}>Open data</a></li>
+    </ul>
   </div>
 </Base>

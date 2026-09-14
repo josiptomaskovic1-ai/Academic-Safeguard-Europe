@@ -3,6 +3,10 @@ description: Suggest an official document or a background reference.
 title: "[Source] "
 labels: [source]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        **This issue is public.** Do not include personal data, names of staff or students, or allegations about individuals. Only submit publicly available documents.
   - type: dropdown
     id: kind
     attributes:
@@ -46,3 +50,10 @@ body:
       label: Why is it relevant? Which safeguards does it concern?
     validations:
       required: true
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: This submission contains no personal data and no allegations about individuals.
+          required: true

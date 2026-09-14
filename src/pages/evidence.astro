@@ -26,7 +26,7 @@ const usedTypes = Object.keys(TYPE_LABELS).filter((t) => items.some((i) => i.sou
       <p class="muted">The Evidence Library is being compiled. <a href={newIssue('source-submission.yml')}>Suggest a source.</a></p>
     ) : (
       <>
-        <form class="filters" id="lib-filters" hidden aria-label="Filter the Evidence Library" onsubmit="return false">
+        <form class="filters" id="lib-filters" hidden aria-label="Filter the Evidence Library">
           <label>Search<input type="search" name="q" placeholder="Title, body, summary" /></label>
           <label>Category<select name="cat"><option value="">All categories</option>{usedCats.map((c) => <option value={c}>{CATEGORY_LABELS[c]}</option>)}</select></label>
           <label>Jurisdiction<select name="jur"><option value="">All</option>{jurisdictions.map((j) => <option value={j}>{j}</option>)}</select></label>
@@ -70,6 +70,7 @@ const usedTypes = Object.keys(TYPE_LABELS).filter((t) => items.some((i) => i.sou
         }
         count.textContent = `Showing ${n} of ${rows.length} items`;
       };
+      form.addEventListener('submit', (e) => e.preventDefault());
       form.addEventListener('input', apply);
       apply();
     }

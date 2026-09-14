@@ -1,7 +1,9 @@
 ---
 // Tile-grid map: every Member State gets an equal tile, so small states stay usable
 // and no country looks "bigger" in the evidence. Position approximates geography.
-import { getCountries, COUNTRY_STATUS_LABELS } from '../lib/data';
+// Status is never shown by fill alone: each tile carries the status glyph, and a text "P"
+// marks tiles whose national or institutional findings are still provisional.
+import { getCountries, countryCoverageWithInstitutions, COUNTRY_STATUS_LABELS } from '../lib/data';
 import { url } from '../lib/url';
 import ResearchStatus from './ResearchStatus.astro';
 
@@ -13,17 +15,22 @@ const GRID: Record<string, [col: number, row: number]> = {
   IT: [4, 7], HR: [5, 7], BG: [7, 7],
   MT: [4, 8], GR: [6, 8], CY: [7, 8],
 };
-const countries = getCountries();
+const countries = getCountries().map((c) => ({ c, cov: countryCoverageWithInstitutions(c.iso_code) }));
 const statuses = Object.keys(COUNTRY_STATUS_LABELS);
+const anyProvisional = countries.some(({ cov }) => cov.provisional > 0);
 ---
-<div>
+<div class="tilemap-block">
   <ul class="tilemap" aria-label="EU Member States arranged approximately by geography">
-    {countries.map((c) => {
+    {countries.map(({ c, cov }) => {
       const [col, row] = GRID[c.iso_code];
+      const provisional = cov.provisional > 0;
+      const text = `${c.name}: ${COUNTRY_STATUS_LABELS[c.research_status]}${provisional ? (cov.verified === 0 ? ', all findings provisional' : ', some findings provisional') : ''}`;
       return (
         <li style={`grid-column:${col};grid-row:${row}`}>
-          <a href={url(`/countries/${c.slug}/`)} data-status={c.research_status} aria-label={`${c.name}: ${COUNTRY_STATUS_LABELS[c.research_status]}`} title={`${c.name} — ${COUNTRY_STATUS_LABELS[c.research_status]}`}>
+          <a href={url(`/countries/${c.slug}/`)} data-status={c.research_status} aria-label={text} title={text}>
             <span aria-hidden="true">{c.iso_code}</span>
+            <ResearchStatus status={c.research_status} glyphOnly />
+            {provisional && <span class="tile-flag" aria-hidden="true">P</span>}
           </a>
         </li>
       );
@@ -36,13 +43,19 @@ const statuses = Object.keys(COUNTRY_STATUS_LABELS);
         <ResearchStatus status={s} />
       </li>
     ))}
+    {anyProvisional && (
+      <li>
+        <span class="swatch flag-swatch" aria-hidden="true">P</span>
+        <span>Contains provisional findings, not yet verified by a human reviewer</span>
+      </li>
+    )}
   </ul>
-  <p class="small muted" style="margin-top:1rem">Shading shows how far research has progressed, not how well a country performs. A country that has not been researched is not a poor performer.</p>
+  <p class="small muted" style="margin-top:1rem">Shading and glyphs show how far research has progressed, not how well a country performs. A country that has not been researched is not a poor performer.</p>
 </div>
 <style>
   .tilemap-swatch[data-status='not_researched'] { background: repeating-linear-gradient(135deg, var(--surface) 0 4px, var(--surface-2) 4px 6px); border-style: dashed; }
   .tilemap-swatch[data-status='research_underway'] { background: var(--s0); }
   .tilemap-swatch[data-status='partially_researched'] { background: var(--s1); }
   .tilemap-swatch[data-status='national_framework_reviewed'] { background: var(--s2); }
-  .tilemap-swatch[data-status='institution_research_available'] { background: var(--s3); }
+  .tilemap-swatch[data-status='institution_research_available'] { background: var(--s3); border-color: var(--s3); }
 </style>

@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getCorrections } from '../lib/data';
-import { newIssue, repoFile } from '../lib/url';
+import { newIssue, repoFile, CONTACT_EMAIL } from '../lib/url';
 const corrections = [...getCorrections()].sort((a, b) => b.received.localeCompare(a.received));
 const TYPE: Record<string, string> = { factual_correction: 'Factual correction', methodology_disagreement: 'Disagreement with methodology', new_source: 'New or newer source', broken_link: 'Broken link' };
 const STATUS: Record<string, string> = { open: 'Open', under_review: 'Under review', accepted: 'Accepted', partially_accepted: 'Partially accepted', not_accepted: 'Not accepted' };
@@ -35,7 +35,7 @@ const STATUS: Record<string, string> = { open: 'Open', under_review: 'Under revi
     <section aria-labelledby="process" class="prose">
       <h2 id="process">What happens next</h2>
       <ol>
-        <li><strong>Acknowledgement.</strong> The request is logged with an ID such as <code>C-2026-001</code>, normally within 10 working days.</li>
+        <li><strong>Acknowledgement.</strong> The request is logged with an ID such as <code>C-2026-001</code>. We aim to acknowledge requests within 10 working days.</li>
         <li><strong>Disputed marking.</strong> If the request raises a substantive question, the affected finding is marked <em>disputed</em> and the dispute is shown publicly next to it. The finding is not removed.</li>
         <li><strong>Review.</strong> A reviewer who did not make the original finding checks the new evidence against the rubric.</li>
         <li><strong>Outcome.</strong> The request is accepted, partially accepted or not accepted, with written reasons. Any change to data is made in a public commit that references the correction ID.</li>
@@ -44,7 +44,12 @@ const STATUS: Record<string, string> = { open: 'Open', under_review: 'Under revi
       <p>Institutions may also submit a short <strong>statement of reply</strong> (up to 300 words) to be published with their profile, whatever the outcome.</p>
       <h3>Please do not include</h3>
       <p>Correction requests are public. Do not include allegations about individuals, names of staff or students, health information, complaint files or private correspondence. ASE cannot investigate individual cases.</p>
-      <p>If you cannot use GitHub, the project maintainers will publish a contact address in the repository README.</p>
+      <h3>If you cannot or prefer not to use GitHub</h3>
+      {CONTACT_EMAIL ? (
+        <p>Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Requests sent privately are logged publicly with an ID and a neutral summary only, never with your name or correspondence unless you agree.</p>
+      ) : (
+        <p>At present ASE can receive requests only through GitHub. You can use a pseudonymous account. A private, non-GitHub route is not yet available; this is a known gap.</p>
+      )}
     </section>
 
     <section aria-labelledby="log">
@@ -52,7 +57,7 @@ const STATUS: Record<string, string> = { open: 'Open', under_review: 'Under revi
       {corrections.length === 0 ? (
         <p class="muted">No correction requests have been received yet.</p>
       ) : (
-        <div class="table-wrap">
+        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="log">
           <table>
             <thead><tr><th scope="col">ID</th><th scope="col">Received</th><th scope="col">Type</th><th scope="col">Record</th><th scope="col">Summary</th><th scope="col">Status</th></tr></thead>
             <tbody>

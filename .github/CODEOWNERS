@@ -1,0 +1,13 @@
+# Changes to research data, methodology, validation and automation require maintainer review.
+# Enforced only when branch protection on main requires review from Code Owners (see SECURITY.md).
+*                   @josiptomaskovic1-ai
+/data/              @josiptomaskovic1-ai
+/research/          @josiptomaskovic1-ai
+/evidence-library/  @josiptomaskovic1-ai
+/methodology/       @josiptomaskovic1-ai
+/standard/          @josiptomaskovic1-ai
+/scripts/           @josiptomaskovic1-ai
+/.github/           @josiptomaskovic1-ai
+/astro.config.mjs   @josiptomaskovic1-ai
+/package.json       @josiptomaskovic1-ai
+/package-lock.json  @josiptomaskovic1-ai

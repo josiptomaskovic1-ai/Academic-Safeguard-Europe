@@ -7,19 +7,21 @@ interface Props {
   title: string;
   description?: string;
   crumbs?: { label: string; href?: string }[];
+  /** Keep the page out of search indexes (used by the 404 page). */
+  noindex?: boolean;
 }
-const { title, description = 'Academic Safeguard Europe evaluates published safeguards against abuse of academic authority, retaliation and procedural unfairness in European higher education.', crumbs } = Astro.props;
+const { title, description = 'Academic Safeguard Europe evaluates published safeguards against abuse of academic authority, retaliation and procedural unfairness in European higher education.', crumbs, noindex = false } = Astro.props;
 const fullTitle = title === 'Home' ? 'Academic Safeguard Europe' : `${title} · Academic Safeguard Europe`;
 const rubric = getRubric();
 
 const nav = [
   { href: '/europe/', label: 'Europe' },
+  { href: '/institutions/', label: 'Institutions' },
+  { href: '/compare/', label: 'Compare' },
   { href: '/standard/', label: 'Standard' },
   { href: '/methodology/', label: 'Methodology' },
-  { href: '/evidence/', label: 'Evidence Library' },
-  { href: '/sources/', label: 'Sources' },
+  { href: '/evidence/', label: 'Evidence' },
   { href: '/corrections/', label: 'Corrections' },
-  { href: '/contribute/', label: 'Contribute' },
   { href: '/about/', label: 'About' },
 ];
 const current = Astro.url.pathname;
@@ -30,15 +32,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <!-- GitHub Pages cannot send HTTP headers; frame-ancestors, report-uri and X-Frame-Options are not available via meta (see SECURITY.md). -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="referrer" content="no-referrer" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -89,6 +94,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               <li><a href={url('/compare/')}>Compare safeguards</a></li>
               <li><a href={url('/institutions/')}>Institutions</a></li>
               <li><a href={url('/evidence/')}>Evidence Library</a></li>
+              <li><a href={url('/sources/')}>Source register</a></li>
             </ul>
           </div>
           <div>
@@ -102,16 +108,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           </div>
         </div>
         <p class="disclaimer small">
-          ASE evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.
+          ASE is an independent project, not affiliated with the European Union, any government, quality-assurance agency or university.
+          It evaluates institutional safeguards and published rules. It does not rate individual academics or determine whether specific misconduct allegations are true.
           A strong formal policy does not necessarily demonstrate effective implementation, and absence of publicly identified evidence does not necessarily demonstrate that no safeguard exists.
           This site sets no cookies and uses no analytics. Code: MIT licence. Data and texts: <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a>.
         </p>
       </div>
     </footer>
-    <script is:inline>
-      // Expand all evidence panels when printing so findings are never hidden on paper.
-      window.addEventListener('beforeprint', () => document.querySelectorAll('details').forEach((d) => { d.dataset.wasOpen = d.open; d.open = true; }));
-      window.addEventListener('afterprint', () => document.querySelectorAll('details').forEach((d) => { d.open = d.dataset.wasOpen === 'true'; }));
-    </script>
+    <script is:inline src={url('/scripts/print.js')} defer></script>
   </body>
 </html>
