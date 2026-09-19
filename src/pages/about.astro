@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ProtectiveField from '../components/ProtectiveField.astro';
 import { url, REPO_URL, repoFile } from '../lib/url';
-import { CAMPAIGN_NAME } from '../lib/campaign';
+import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SHORT, ORG_SEAT } from '../lib/campaign';
 import { getRubric } from '../lib/data';
 
 const rubric = getRubric();
@@ -165,6 +165,11 @@ const CAVEATS = [
           <p class="ab-body ab-gov-note" id="neutrality">
             Research integrity is what makes any of this usable in an argument with an institution. The
             campaign never changes a finding.
+          </p>
+          <p class="ab-body ab-gov-note" id="publisher">
+            Academic Safeguard Europe is a programme of <strong>{ORG_NAME}</strong> — legal name
+            {ORG_NAME_LEGAL}, short name {ORG_SHORT} — a voluntary, non-profit, independent association
+            based in {ORG_SEAT}, working across the European Higher Education Area.
           </p>
           <p class="ab-gov-links">
             <a href={url('/methodology/')}>Methodology</a>

@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { url, REPO_URL, repoFile } from '../lib/url';
 import { getRubric } from '../lib/data';
-import { CAMPAIGN_NAME } from '../lib/campaign';
+import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SEAT } from '../lib/campaign';
 
 interface Props {
   title: string;
@@ -110,7 +110,7 @@ const csp = [
         <div class="footer-row">
           <div class="footer-id">
             <p class="ss-mark ss-mark--sm">{CAMPAIGN_NAME}</p>
-            <p class="disclaimer">Not affiliated with the European Union, any government, quality-assurance agency or university. ASE evaluates published rules; it does not rate individuals, judge allegations or give legal advice.</p>
+            <p class="disclaimer">Academic Safeguard Europe is a programme of {ORG_NAME} ({ORG_NAME_LEGAL}), a non-profit association based in {ORG_SEAT}. Not affiliated with the European Union, any government, quality-assurance agency or university. ASE evaluates published rules; it does not rate individuals, judge allegations or give legal advice.</p>
             <p class="footer-facts">No cookies · No analytics · Code MIT · Data and texts <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a></p>
           </div>
           <nav aria-label="Footer">

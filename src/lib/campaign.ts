@@ -5,6 +5,18 @@ import { getRubric } from './data';
 
 export const CAMPAIGN_NAME = 'Safe to Speak';
 
+/**
+ * The association that publishes this project, per its signed Statute (Articles 2 and 3):
+ * the legal name is "StudentSafe Europa", the English name "StudentSafe Europe" and the short
+ * name "StudentSafe". Article 2 says the association primarily uses the English name in its
+ * international, programme, research and communication work, which is what this site is.
+ * Academic Safeguard Europe is a programme of that association, not a separate body.
+ */
+export const ORG_NAME = 'StudentSafe Europe';
+export const ORG_NAME_LEGAL = 'StudentSafe Europa';
+export const ORG_SHORT = 'StudentSafe';
+export const ORG_SEAT = 'Zagreb, Croatia';
+
 /** The key sentence, split so the homepage can accent its closing phrase. Advocacy, not a finding. */
 export const KEY_SENTENCE_LEAD = 'A complaint mechanism is not protection if using it can cost you your ';
 export const KEY_SENTENCE_ACCENT = 'academic future.';
