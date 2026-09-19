@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import Marquee from '../components/Marquee.astro';
 import { getCountries, getInstitutions, getRubric, hasFindings } from '../lib/data';
 import { url } from '../lib/url';
-import { CAMPAIGN_NAME, PRINCIPLES, DEMANDS, KEY_SENTENCE_LEAD, KEY_SENTENCE_ACCENT, TRIAD } from '../lib/campaign';
+import { CAMPAIGN_NAME, PRINCIPLES, DEMANDS, KEY_SENTENCE, KEY_SENTENCE_LEAD, KEY_SENTENCE_ACCENT, TRIAD } from '../lib/campaign';
 
 const countries = getCountries();
 const institutions = getInstitutions();
@@ -32,6 +33,9 @@ const roman = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 // Hero headline, split at build time for the word-by-word rise. The last word keeps
 // the signal underline. HERO_SENTENCE is what assistive technology announces.
 const HERO_SENTENCE = 'Academic power needs safeguards.';
+// The problem statement, split at build time so each word can ink in on scroll.
+// The full sentence stays in one visually-hidden span, so the h2 is announced once.
+const STATEMENT_WORDS = KEY_SENTENCE_LEAD.trim().split(/\s+/);
 const HERO_WORDS = [
   { text: 'Academic', bar: false },
   { text: 'power', bar: false },
@@ -60,15 +64,22 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
     </div>
   </section>
 
+  <Marquee />
+
   <section class="m-section on-paper" aria-labelledby="problem">
     <div class="container container--wide">
       <p class="m-folio"><span>The problem</span></p>
-      <h2 id="problem" class="m-statement">{KEY_SENTENCE_LEAD}<em class="m-bar">{KEY_SENTENCE_ACCENT}</em></h2>
+      <h2 id="problem" class="m-statement">
+        <span class="visually-hidden">{KEY_SENTENCE}</span>
+        <span aria-hidden="true">{STATEMENT_WORDS.map((w, i) => (
+          <><span class="sw" style={`--i: ${i}`}>{w}</span>{' '}</>
+        ))}<em class="m-bar sw" style={`--i: ${STATEMENT_WORDS.length}`}>{KEY_SENTENCE_ACCENT}</em></span>
+      </h2>
       <a class="m-more" href={url('/problem/')}>Understand the problem <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
-  <section class="m-section on-navy" aria-labelledby="guarantees">
+  <section class="m-section on-navy" aria-labelledby="guarantees" data-reveal>
     <div class="container container--wide">
       <p class="m-folio"><span>Guarantees</span></p>
       <h2 id="guarantees" class="m-title">What must be guaranteed.</h2>
@@ -79,18 +90,18 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
     </div>
   </section>
 
-  <section class="m-section on-paper" aria-labelledby="demands">
+  <section class="m-section on-paper" aria-labelledby="demands" data-reveal>
     <div class="container container--wide">
       <p class="m-folio"><span>Our demands</span></p>
       <h2 id="demands" class="m-title">What we want Europe to&nbsp;do.</h2>
       <ol class="m-demands">
-        {DEMANDS.map((d, i) => <li style={`--i: ${i}`}><span class="m-dem-num" aria-hidden="true">{i + 1}</span><div><h3>{d.title}</h3><p class="m-dem-text">{d.summary}</p></div></li>)}
+        {DEMANDS.map((d, i) => <li style={`--i: ${i}`}><span class="m-dem-num" aria-hidden="true"><span>{i + 1}</span></span><div><h3>{d.title}</h3><p class="m-dem-text">{d.summary}</p></div></li>)}
       </ol>
       <a class="m-more" href={url('/demands/')}>Read our demands <span aria-hidden="true">→</span></a>
     </div>
   </section>
 
-  <section class="m-section on-navy" aria-labelledby="evidence">
+  <section class="m-section on-navy" aria-labelledby="evidence" data-reveal>
     <div class="container container--wide">
       <p class="m-folio"><span>Evidence</span></p>
       <div class="m-evidence">
@@ -103,9 +114,9 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
           </div>
         </div>
         <figure class="m-scope">
-          <p class="m-scope-figure"><span class="m-scope-num">{countries.length}</span><span class="m-scope-cap">EU Member States<br />in scope</span></p>
+          <p class="m-scope-figure"><span class="m-scope-num"><span class="visually-hidden">{countries.length}</span><span aria-hidden="true" data-count={String(countries.length)}>{countries.length}</span></span><span class="m-scope-cap">EU Member States<br />in scope</span></p>
           <div class="m-grid" aria-hidden="true">
-            {cells.map((on) => <span class="m-cell" data-on={on ? '' : undefined}></span>)}
+            {cells.map((on, i) => <span class="m-cell" data-on={on ? '' : undefined} style={`--i: ${i}`}></span>)}
           </div>
           <p class="visually-hidden">One square per Member State in scope. {started.length > 0 ? `Research has started in ${started.length}: ${startedNames}.` : 'Research has not started in any yet.'} {notStarted.length} not yet researched, which does not mean safeguards are absent.</p>
           <figcaption class="m-legend" aria-hidden="true">
@@ -117,12 +128,12 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
     </div>
   </section>
 
-  <section class="m-section m-action on-signal" id="safe-to-speak" aria-labelledby="act">
+  <section class="m-section m-action on-signal" id="safe-to-speak" aria-labelledby="act" data-reveal>
     <div class="container container--wide">
       <p class="m-folio"><span>Take action</span></p>
       <h2 id="act" class="m-triad">
-        {triadLead.map((line) => <><span>{line}</span>{' '}</>)}
-        <span class="m-ink-line"><span class="m-ink">{triadLast}</span></span>
+        {triadLead.map((line, i) => <><span style={`--i: ${i}`}>{line}</span>{' '}</>)}
+        <span class="m-ink-line" style={`--i: ${triadLead.length}`}><span class="m-ink">{triadLast}</span></span>
       </h2>
       <div class="actions">
         <a class="btn btn-primary btn-xl" href={url('/take-action/')}>Support European Safeguards</a>
@@ -133,4 +144,6 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
 
 <script>
   import '../scripts/hero.ts';
+  import '../scripts/reveal.ts';
+  import '../scripts/marquee.ts';
 </script>

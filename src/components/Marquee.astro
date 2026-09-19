@@ -1,0 +1,42 @@
+---
+/**
+ * Marquee — the triad on a moving signal band, between the hero and the problem.
+ *
+ * The track is aria-hidden: the same three lines already exist as the <h2> in the
+ * Take Action section, so a screen reader must not hear them twice. The band is
+ * therefore decorative repetition, which is exactly what a protest banner is.
+ *
+ * WCAG 2.2.2: the motion runs longer than 5s, so there is a visible, keyboard
+ * operable pause control. It also pauses on hover, on focus within, when scrolled
+ * out of view and when the tab is hidden. Under reduced motion the band is static
+ * and the control is not rendered at all.
+ *
+ * The track is duplicated once and translated by -50%, which is what makes the
+ * loop seamless. Both copies are built here, at build time.
+ */
+import { TRIAD } from '../lib/campaign';
+
+const RUN = [...TRIAD, ...TRIAD];
+---
+
+<div class="mq on-signal" data-mq>
+  <div class="mq-viewport">
+    <div class="mq-track" aria-hidden="true">
+      {[0, 1].map(() => (
+        <div class="mq-run">
+          {RUN.map((line) => (
+            <>
+              <span class="mq-item">{line}</span>
+              <span class="mq-sep"></span>
+            </>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <button class="mq-toggle" type="button" aria-pressed="false" data-mq-toggle>
+    <span class="mq-icon" aria-hidden="true"></span>
+    <span class="mq-label">Pause</span>
+  </button>
+</div>

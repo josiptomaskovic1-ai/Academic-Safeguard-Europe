@@ -266,3 +266,291 @@
     transform: scaleX(1);
   }
 }
+
+/* =============================================================================
+   4. Marquee band — the triad as a moving banner
+   The track is duplicated once and shifted by -50%, which is what makes the loop
+   seamless. Everything here is CSS; marquee.ts only decides when to pause.
+   ============================================================================= */
+
+.mq {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: clamp(0.85rem, 1.6vw, 1.4rem) 0;
+  border-block: 3px solid var(--signal-ink);
+  overflow: hidden;
+}
+.mq-viewport {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  /* Fade the band into its own edges so items do not pop at the cut. */
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+.mq-track {
+  display: flex;
+  width: max-content;
+  animation: mq-scroll 40s linear infinite;
+}
+.mq[data-mq-state='paused'] .mq-track {
+  animation-play-state: paused;
+}
+/* Hover and focus pause with no script at all. */
+.mq:hover .mq-track,
+.mq:focus-within .mq-track {
+  animation-play-state: paused;
+}
+.mq-run {
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+.mq-item {
+  font: 700 clamp(1.35rem, 3.2vw, 2.6rem)/1 var(--serif);
+  letter-spacing: -0.02em;
+  color: var(--signal-ink);
+  white-space: nowrap;
+}
+/* Separator squares echo the bar in the brand mark. */
+.mq-sep {
+  flex: none;
+  width: 0.5em;
+  height: 0.5em;
+  margin: 0 clamp(1rem, 2.4vw, 2.25rem);
+  background: var(--signal-ink);
+}
+
+@keyframes mq-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.mq-toggle {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  margin-right: var(--gutter-c);
+  padding: 0 0.75rem;
+  border: 2px solid var(--signal-ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--signal-ink);
+  font: 700 0.8125rem/1 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--dur-ui) var(--ease-out-quart), color var(--dur-ui) var(--ease-out-quart);
+}
+.mq-toggle:hover {
+  background: var(--signal-ink);
+  color: var(--signal);
+}
+.mq-icon {
+  flex: none;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: currentColor;
+  /* Two bars while running; a triangle once paused, because the button then offers Play. */
+  clip-path: polygon(0 0, 35% 0, 35% 100%, 0 100%, 0 0, 65% 0, 100% 0, 100% 100%, 65% 100%);
+}
+.mq-toggle[aria-pressed='true'] .mq-icon {
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* Static band, and no control, because there is nothing to pause. */
+@media (prefers-reduced-motion: reduce) {
+  .mq-toggle {
+    display: none;
+  }
+  .mq-track {
+    animation: none;
+  }
+}
+
+/* =============================================================================
+   5. "The problem" — a scroll-linked reading highlight
+   The sentence inks in as it rises toward the middle of the viewport, and the
+   accent phrase takes its yellow last. Scroll-driven only: with no support the
+   sentence is simply fully inked, which is its base state.
+   ============================================================================= */
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .m-statement {
+      view-timeline-name: --statement;
+      view-timeline-axis: block;
+    }
+    .m-statement .sw {
+      animation: ink linear both;
+      animation-timeline: --statement;
+      animation-range: cover calc(10% + var(--i, 0) * 1.1%) cover calc(34% + var(--i, 0) * 1.1%);
+    }
+    /* The highlighter lands after the last word is inked. */
+    .m-statement .m-bar {
+      animation: bar-draw-scroll linear both;
+      animation-timeline: --statement;
+      animation-range: cover 42% cover 54%;
+    }
+  }
+}
+
+@keyframes ink {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes bar-draw-scroll {
+  from {
+    background-size: 0% 0.11em;
+  }
+  to {
+    background-size: 100% 0.11em;
+  }
+}
+
+/* =============================================================================
+   6. Guarantees — the Roman numerals stamp in, each row's rule draws
+   ============================================================================= */
+
+.m-articles li {
+  position: relative;
+}
+.m-articles li::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+[data-reveal='in'] .m-articles li::before {
+  animation: rule-draw 420ms var(--ease-out-quart) calc(var(--i, 0) * 90ms) forwards;
+}
+[data-reveal='in'] .m-art-num {
+  animation: stamp-num 180ms var(--ease-out-quart) calc(var(--i, 0) * 90ms) backwards;
+}
+[data-reveal='in'] .m-articles h3,
+[data-reveal='in'] .m-art-text {
+  animation: rise-in 420ms var(--ease-out-expo) calc(120ms + var(--i, 0) * 90ms) backwards;
+}
+
+/* Down from 1.15, never up: a stamp presses, it does not spring. */
+@keyframes stamp-num {
+  from {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+
+/* =============================================================================
+   7. Demands — the giant numerals rise out of a mask
+   ============================================================================= */
+
+.m-demands li {
+  position: relative;
+}
+.m-demands li::before {
+  content: '';
+  position: absolute;
+  inset: -3px 0 auto 0;
+  height: 3px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+[data-reveal='in'] .m-demands li::before {
+  animation: rule-draw 460ms var(--ease-out-quart) calc(var(--i, 0) * 110ms) forwards;
+}
+.m-dem-num {
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.12em 0.05em 0.2em;
+  margin: -0.12em -0.05em -0.2em;
+}
+.m-dem-num > span {
+  display: inline-block;
+}
+[data-reveal='in'] .m-dem-num > span {
+  animation: word-rise 700ms var(--ease-out-expo) calc(60ms + var(--i, 0) * 110ms) backwards;
+}
+[data-reveal='in'] .m-demands h3,
+[data-reveal='in'] .m-dem-text {
+  animation: rise-in 420ms var(--ease-out-expo) calc(200ms + var(--i, 0) * 110ms) backwards;
+}
+
+/* =============================================================================
+   8. Evidence — the 27 squares arrive as a wave, Croatia lights up once
+   ============================================================================= */
+
+[data-reveal='in'] .m-cell {
+  animation: cell-in 260ms var(--ease-out-quart) calc(var(--i, 0) * 16ms) backwards;
+}
+
+@keyframes cell-in {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
+/* Two rings leave the researched square and stop. No infinite pulse anywhere. */
+.m-cell[data-on] {
+  position: relative;
+}
+.m-cell[data-on]::before,
+.m-cell[data-on]::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--signal);
+  opacity: 0;
+  pointer-events: none;
+}
+[data-reveal='in'] .m-cell[data-on]::before {
+  animation: ring 900ms var(--ease-out-quart) 620ms 1 forwards;
+}
+[data-reveal='in'] .m-cell[data-on]::after {
+  animation: ring 900ms var(--ease-out-quart) 820ms 1 forwards;
+}
+
+@keyframes ring {
+  from {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3.2);
+  }
+}
+
+/* =============================================================================
+   9. Take action — the triad wipes in line by line, then the ink block
+   ============================================================================= */
+
+/* Each line wipes in left to right. The last line is the navy ink block, and its
+   block and its type are revealed by the same clip, deliberately: the type is
+   signal yellow on a signal-yellow band, so wiping the block in *behind* type that
+   was already painted would leave yellow on yellow — invisible, and a contrast
+   failure mid-transition. Revealing them together keeps 11.1:1 at every frame and
+   still reads as the block landing last. */
+[data-reveal='in'] .m-triad > span {
+  animation: wipe-in 520ms var(--ease-out-quart) calc(var(--i, 0) * 150ms) backwards;
+}
+
+@keyframes wipe-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
