@@ -1,0 +1,268 @@
+/* =============================================================================
+   Motion system — Academic Safeguard Europe
+   Imported after global.css, so it may refine but never redefine the identity.
+
+   Principles
+   - The base state of every element is its final, visible state. Animations run
+     FROM an offset state TO that natural state with `backwards` fill, so the page
+     is complete with no CSS animation support, no JavaScript, in print and after
+     a bfcache restore.
+   - Signal yellow behaves like a marker pen: it underlines, highlights, wipes and
+     stamps. It never merely decorates.
+   - Campaign pages are expressive. Research pages get 150-250ms state feedback only.
+   - No bounce, elastic, wobble or overshoot anywhere. The subject is abuse of power.
+
+   See docs/motion.md for the full table of every animation.
+   ============================================================================= */
+
+:root {
+  /* Entrances travel far and settle hard; UI feedback is short and flat. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --dur-press: 120ms;
+  --dur-ui: 220ms;
+  --dur-reveal: 600ms;
+  --dur-hero: 800ms;
+  --stagger: 60ms;
+
+  /* Exits run at ~75% of the entrance. */
+  --dur-ui-out: 165ms;
+  --dur-reveal-out: 450ms;
+
+  /* Semantic layers. Nothing in this file may invent a new stacking number. */
+  --z-base: 0;
+  --z-spotlight: 1;
+  --z-raised: 2;
+  --z-menu: 30;
+  --z-header: 40;
+  --z-progress: 50;
+}
+
+/* =============================================================================
+   1. Global guards
+   The reduced-motion rule in global.css already kills transitions and animations.
+   These add what it cannot reach: view transitions, scroll timelines and the
+   marquee's own paused state. Every JS effect checks matchMedia separately,
+   because a CSS rule cannot stop the Web Animations API.
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  * {
+    animation-timeline: none !important;
+    view-transition-name: none !important;
+  }
+}
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    animation-timeline: none !important;
+  }
+  .mq,
+  .reading-progress,
+  .spotlight {
+    display: none !important;
+  }
+}
+
+/* Anything that has finished animating must not keep a compositor layer alive. */
+@media (prefers-reduced-motion: no-preference) {
+  .will-animate {
+    will-change: transform, opacity;
+  }
+}
+
+/* =============================================================================
+   2. Cross-document page transitions (CSS only, no ClientRouter)
+   The CSP has no connect-src, so nothing may fetch a page. @view-transition is a
+   native navigation effect and needs no script.
+   ============================================================================= */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  /* The header is continuous between pages, so it must not cross-fade with the body. */
+  .site-header {
+    view-transition-name: site-header;
+  }
+
+  ::view-transition-old(root) {
+    animation: vt-out 150ms var(--ease-out-quart) both;
+  }
+  ::view-transition-new(root) {
+    animation: vt-in 280ms var(--ease-out-quart) both;
+  }
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header) {
+    animation: none;
+  }
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* =============================================================================
+   3. Homepage hero — the signature moment (total <= 1.6s)
+   Pure CSS except the typing dots, which need a JS gate so that the base markup
+   shows the finished mark with no dots at all.
+   ============================================================================= */
+
+/* 3a. The campaign mark stamps in. No overshoot: 0.92 -> 1 only. */
+.m-hero .ss-mark {
+  animation: stamp-in 160ms var(--ease-out-quart) backwards;
+}
+
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
+/* 3b. Typing dots: someone finding the courage to speak.
+   Only ever rendered when hero.ts has confirmed motion is welcome. */
+.m-hero .ss-dots {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34em;
+}
+.m-hero .ss-dots i {
+  width: 0.34em;
+  height: 0.34em;
+  border-radius: 50%;
+  background: var(--signal-ink);
+}
+
+.m-hero[data-intro='run'] .ss-dots {
+  display: flex;
+  animation: dots-out 120ms var(--ease-out-quart) 520ms both;
+}
+.m-hero[data-intro='run'] .ss-dots i {
+  animation: dot-blink 900ms steps(2, end) infinite;
+}
+.m-hero[data-intro='run'] .ss-dots i:nth-child(2) {
+  animation-delay: 150ms;
+}
+.m-hero[data-intro='run'] .ss-dots i:nth-child(3) {
+  animation-delay: 300ms;
+}
+/* The word waits behind the dots, then takes their place. */
+.m-hero[data-intro='run'] .ss-word {
+  animation: word-in 140ms var(--ease-out-quart) 560ms backwards;
+}
+
+@keyframes dots-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes dot-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+@keyframes word-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* 3c. The headline rises word by word from behind a mask.
+   line-height is 0.88, so the mask is grown by padding and pulled back by an equal
+   negative margin: the clip region clears ascenders and descenders (p, f, d, g)
+   without moving a single pixel of layout. */
+.hero-line {
+  display: block;
+}
+.hw {
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.2em 0.04em 0.26em;
+  margin: -0.2em -0.04em -0.26em;
+  vertical-align: baseline;
+}
+.hw-i {
+  display: inline-block;
+  animation: word-rise var(--dur-hero) var(--ease-out-expo) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@keyframes word-rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+/* 3d. The highlighter draws left to right under the last word, after it lands. */
+.m-hero .m-bar {
+  animation: bar-draw 420ms var(--ease-out-quart) 900ms backwards;
+}
+
+@keyframes bar-draw {
+  from {
+    background-size: 0% 0.11em;
+  }
+}
+
+/* 3e. Lede and buttons: fully visible within 600ms, clickable throughout. */
+.m-hero .m-lede {
+  animation: rise-in 420ms var(--ease-out-expo) 260ms backwards;
+}
+.m-hero .actions .btn:nth-of-type(1) {
+  animation: rise-in 420ms var(--ease-out-expo) 320ms backwards;
+}
+.m-hero .actions .btn:nth-of-type(2) {
+  animation: rise-in 420ms var(--ease-out-expo) 380ms backwards;
+}
+/* The divider above the lede draws left to right. It is a pseudo-element, never a
+   clip on .m-hero-foot itself, so the lede and both buttons stay hittable throughout. */
+.m-hero-foot {
+  position: relative;
+}
+.m-hero-foot::before {
+  content: '';
+  position: absolute;
+  inset: -1px 0 auto 0;
+  height: 1px;
+  background: var(--signal);
+  transform-origin: left;
+  animation: rule-draw 500ms var(--ease-out-quart) 220ms backwards;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes rule-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}

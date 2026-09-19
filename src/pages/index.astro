@@ -29,13 +29,27 @@ const findingsLine = verified === 0
   ? `All findings are provisional${allAiAssisted ? ' and AI-assisted' : ''}.`
   : 'Findings not yet independently verified are marked provisional.';
 const roman = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+// Hero headline, split at build time for the word-by-word rise. The last word keeps
+// the signal underline. HERO_SENTENCE is what assistive technology announces.
+const HERO_SENTENCE = 'Academic power needs safeguards.';
+const HERO_WORDS = [
+  { text: 'Academic', bar: false },
+  { text: 'power', bar: false },
+  { text: 'needs', bar: false },
+  { text: 'safeguards.', bar: true },
+];
 const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
 ---
 <Base title="Home" campaign>
   <section class="m-hero on-navy" aria-labelledby="hero-title">
     <div class="container container--wide">
-      <p class="ss-mark">{CAMPAIGN_NAME}</p>
-      <h1 id="hero-title">Academic power needs <span class="m-bar">safeguards.</span></h1>
+      <p class="ss-mark"><span class="ss-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="ss-word">{CAMPAIGN_NAME}</span></p>
+      <h1 id="hero-title">
+        <span class="visually-hidden">{HERO_SENTENCE}</span>
+        <span class="hero-line" aria-hidden="true">{HERO_WORDS.map((w, i) => (
+          <><span class="hw"><span class="hw-i" style={`--i: ${i}`}>{w.bar ? <span class="m-bar">{w.text}</span> : w.text}</span></span>{i < HERO_WORDS.length - 1 ? ' ' : ''}</>
+        ))}</span>
+      </h1>
       <div class="m-hero-foot">
         <p class="m-lede">When your grades, degree and career depend on the people you may need to report, speaking&nbsp;up must be safe.</p>
         <div class="actions">
@@ -48,7 +62,7 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
 
   <section class="m-section on-paper" aria-labelledby="problem">
     <div class="container container--wide">
-      <p class="m-folio"><span class="m-folio-num">01</span><span>The problem</span></p>
+      <p class="m-folio"><span>The problem</span></p>
       <h2 id="problem" class="m-statement">{KEY_SENTENCE_LEAD}<em class="m-bar">{KEY_SENTENCE_ACCENT}</em></h2>
       <a class="m-more" href={url('/problem/')}>Understand the problem <span aria-hidden="true">→</span></a>
     </div>
@@ -56,10 +70,10 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
 
   <section class="m-section on-navy" aria-labelledby="guarantees">
     <div class="container container--wide">
-      <p class="m-folio"><span class="m-folio-num">02</span><span>Guarantees</span></p>
+      <p class="m-folio"><span>Guarantees</span></p>
       <h2 id="guarantees" class="m-title">What must be guaranteed.</h2>
       <ol class="m-articles">
-        {PRINCIPLES.map((p, i) => <li><span class="m-art-num" aria-hidden="true">{roman[i]}</span><h3>{p.title}</h3></li>)}
+        {PRINCIPLES.map((p, i) => <li style={`--i: ${i}`}><span class="m-art-num" aria-hidden="true">{roman[i]}</span><div><h3>{p.title}</h3><p class="m-art-text">{p.text}</p></div></li>)}
       </ol>
       <a class="m-more" href={url('/standard/')}>See all {safeguardCount} safeguards <span aria-hidden="true">→</span></a>
     </div>
@@ -67,10 +81,10 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
 
   <section class="m-section on-paper" aria-labelledby="demands">
     <div class="container container--wide">
-      <p class="m-folio"><span class="m-folio-num">03</span><span>Our demands</span></p>
+      <p class="m-folio"><span>Our demands</span></p>
       <h2 id="demands" class="m-title">What we want Europe to&nbsp;do.</h2>
       <ol class="m-demands">
-        {DEMANDS.map((d, i) => <li><span class="m-dem-num" aria-hidden="true">{i + 1}</span><h3>{d.title}</h3></li>)}
+        {DEMANDS.map((d, i) => <li style={`--i: ${i}`}><span class="m-dem-num" aria-hidden="true">{i + 1}</span><div><h3>{d.title}</h3><p class="m-dem-text">{d.summary}</p></div></li>)}
       </ol>
       <a class="m-more" href={url('/demands/')}>Read our demands <span aria-hidden="true">→</span></a>
     </div>
@@ -78,7 +92,7 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
 
   <section class="m-section on-navy" aria-labelledby="evidence">
     <div class="container container--wide">
-      <p class="m-folio"><span class="m-folio-num">04</span><span>Evidence</span></p>
+      <p class="m-folio"><span>Evidence</span></p>
       <div class="m-evidence">
         <div>
           <h2 id="evidence" class="m-title">The evidence.</h2>
@@ -105,7 +119,7 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
 
   <section class="m-section m-action on-signal" id="safe-to-speak" aria-labelledby="act">
     <div class="container container--wide">
-      <p class="m-folio"><span class="m-folio-num">05</span><span>Take action</span></p>
+      <p class="m-folio"><span>Take action</span></p>
       <h2 id="act" class="m-triad">
         {triadLead.map((line) => <><span>{line}</span>{' '}</>)}
         <span class="m-ink-line"><span class="m-ink">{triadLast}</span></span>
@@ -116,3 +130,7 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
     </div>
   </section>
 </Base>
+
+<script>
+  import '../scripts/hero.ts';
+</script>

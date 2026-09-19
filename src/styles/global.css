@@ -93,7 +93,7 @@
   --mono: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
 
   /* Display scale */
-  --fs-hero: clamp(2.5rem, 12vw, 11rem);
+  --fs-hero: clamp(2.5rem, 12vw, 6.5rem);
   --fs-display: clamp(2.4rem, 6.4vw, 5.75rem);
   --fs-statement: clamp(2rem, 6vw, 6rem);
   --fs-label: 0.8125rem;
@@ -870,10 +870,10 @@ main.campaign { padding-block: 0; }
 .m-links { display: flex; flex-wrap: wrap; gap: 0 2.25rem; }
 
 /* Hero */
-.m-hero { padding-block: clamp(3.5rem, 9vw, 8rem) clamp(4rem, 9vw, 7.5rem); }
-.m-hero .ss-mark { margin-bottom: clamp(2.25rem, 4.5vw, 3.5rem); }
+.m-hero { padding-block: clamp(3.5rem, 9vw, 4.5rem) clamp(4rem, 9vw, 5rem); }
+.m-hero .ss-mark { margin-bottom: clamp(2.25rem, 4.5vw, 2.25rem); }
 .m-hero h1 { max-width: 12ch; margin: 0; font: 700 var(--fs-hero)/0.88 var(--serif); letter-spacing: -0.035em; color: var(--bone); text-wrap: balance; }
-.m-hero-foot { display: grid; gap: 2rem; margin-top: clamp(2.75rem, 6vw, 5rem); padding-top: clamp(1.75rem, 3vw, 2.5rem); border-top: 1px solid var(--rule-d); }
+.m-hero-foot { display: grid; gap: 2rem; margin-top: clamp(2.75rem, 6vw, 3.25rem); padding-top: clamp(1.75rem, 3vw, 2rem); border-top: 1px solid var(--rule-d); }
 .m-lede { max-width: 34ch; margin: 0; font: 400 clamp(1.25rem, 2.1vw, 1.75rem)/1.35 var(--serif); color: var(--bone); }
 .m-hero .actions { margin: 0; gap: 0.9rem; }
 @media (min-width: 60rem) { .m-hero-foot { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 3rem; } }
@@ -887,6 +887,7 @@ main.campaign { padding-block: 0; }
 .m-articles li { margin: 0; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); align-items: baseline; gap: 1rem; padding-block: clamp(1.4rem, 3vw, 2.25rem); border-bottom: 1px solid var(--rule); }
 .m-art-num { font: italic 700 clamp(1.8rem, 5vw, 4.25rem)/1 var(--serif); color: var(--mark); }
 .m-articles h3 { margin: 0; font: 400 clamp(1.6rem, 3.4vw, 3rem)/1.08 var(--serif); letter-spacing: -0.015em; text-wrap: pretty; hyphens: manual; }
+.m-art-text { max-width: 44ch; margin: 0.6rem 0 0; font: 400 clamp(0.9375rem, 1.1vw, 1.0625rem)/1.5 var(--sans); color: var(--muted-d); }
 @media (min-width: 56rem) {
   .m-articles { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(2rem, 5vw, 5rem); border-top: 0; }
   .m-articles li { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 1.25rem; min-height: 11rem; border-top: 1px solid var(--rule); border-bottom: 0; }
@@ -900,6 +901,7 @@ main.campaign { padding-block: 0; }
 .m-demands li:last-child { border-bottom: 3px solid var(--line); }
 .m-dem-num { font: 700 clamp(4rem, 14vw, 12rem)/0.85 var(--serif); letter-spacing: -0.05em; color: var(--mark); }
 .m-demands h3 { max-width: 26ch; margin: 0; font: 800 clamp(1.25rem, 2.8vw, 2.4rem)/1.1 var(--sans); letter-spacing: -0.01em; text-wrap: balance; }
+.m-dem-text { max-width: 52ch; margin: 0.55rem 0 0; font: 400 clamp(0.9375rem, 1.1vw, 1.0625rem)/1.55 var(--sans); color: var(--ink-2); }
 
 /* 04 Evidence */
 .m-evidence { display: grid; gap: clamp(3rem, 6vw, 5rem); }
