@@ -844,3 +844,219 @@ section.on-navy[data-spot]::before {
   opacity: 1;
   transform: none;
 }
+
+/* =============================================================================
+   16. The Problem — the authority diagram draws its own argument
+   The four authority lines reach the student one after another, each label
+   arrives after its line, the dashed complaint line flows back to the SAME staff
+   node for three cycles, and that node registers the arrival once.
+   CSS, not SMIL: SMIL ignores prefers-reduced-motion.
+   ============================================================================= */
+
+.authority[data-reveal='in'] .ad-lines path {
+  stroke-dasharray: 1;
+  animation: draw-line 400ms var(--ease-out-quart) calc(var(--i, 0) * 120ms) backwards;
+}
+.authority[data-reveal='in'] .ad-labels > g {
+  animation: rise-in 300ms var(--ease-out-quart) calc(260ms + var(--i, 0) * 120ms) backwards;
+}
+/* The complaint line appears only once every authority line has landed. */
+.authority[data-reveal='in'] .ad-complaint {
+  animation: fade-in 260ms var(--ease-out-quart) 760ms backwards;
+}
+.authority[data-reveal='in'] .ad-complaint > path:first-child {
+  animation: dash-flow 1200ms linear 900ms 3;
+}
+/* One acknowledgement as the complaint arrives back. Once, never a loop. */
+.authority[data-reveal='in'] .ad-node--staff rect {
+  animation: node-note 620ms var(--ease-out-quart) 1500ms 1;
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+@keyframes node-note {
+  0% {
+    stroke-width: 1.75;
+  }
+  40% {
+    stroke-width: 4;
+  }
+  100% {
+    stroke-width: 1.75;
+  }
+}
+
+/* =============================================================================
+   17. Europe — tiles ripple outward from Croatia
+   Research started in Croatia and spreads, and the delay is literally the grid
+   distance from HR. --d is computed at build time in EuropeTileMap.astro.
+   ============================================================================= */
+
+.tilemap[data-reveal='in'] li {
+  animation: cell-in 300ms var(--ease-out-quart) calc(var(--d, 0) * 1ms) backwards;
+}
+/* Research pages stay calm: hover and focus shift the edge, nothing moves. */
+.tilemap a {
+  transition: border-color var(--dur-ui) var(--ease-out-quart), background-color var(--dur-ui) var(--ease-out-quart);
+}
+
+/* =============================================================================
+   18. Take Action — the jump tiles fill from the bottom
+   ============================================================================= */
+
+.jump-tiles a {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.jump-tiles a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--signal);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--dur-ui) var(--ease-out-quart);
+}
+.jump-tiles a:hover::before,
+.jump-tiles a:focus-visible::before {
+  transform: scaleY(1);
+}
+.jump-tiles a span:last-child {
+  display: inline-block;
+  transition: transform var(--dur-ui) var(--ease-out-quart);
+}
+.jump-tiles a:hover span:last-child,
+.jump-tiles a:focus-visible span:last-child {
+  transform: translateX(6px);
+}
+
+/* Copy control: the check draws itself in. */
+.copy-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+}
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 700 0.9375rem/1 var(--sans);
+  cursor: pointer;
+  transition: background-color var(--dur-ui) var(--ease-out-quart), color var(--dur-ui) var(--ease-out-quart);
+}
+.copy-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.copy-check {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+.copy-check path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.copy-btn[data-copied='true'] .copy-check path {
+  animation: draw-line 260ms var(--ease-out-quart) forwards;
+}
+.copy-status {
+  font: 600 0.875rem/1 var(--sans);
+  color: var(--ink-2);
+}
+
+/* =============================================================================
+   19. Records — score pips fill in sequence, accordions open smoothly
+   Research pages: 150-250ms state feedback, nothing celebratory near a finding.
+   ============================================================================= */
+
+[data-reveal='in'] .score-pips i.on {
+  animation: pip-in 200ms var(--ease-out-quart) calc(var(--i, 0) * 70ms) backwards;
+}
+
+@keyframes pip-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.4);
+  }
+}
+
+.matrix details > summary .chev {
+  transition: transform var(--dur-ui) var(--ease-out-quart);
+}
+.matrix details[open] > summary .chev {
+  transform: rotate(45deg);
+}
+
+/* interpolate-size lets a closed height animate to `auto`; ::details-content is the
+   box that actually needs to move. Both are progressive: without them the panel
+   simply snaps, which is what it did before. */
+@supports (interpolate-size: allow-keywords) {
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+    .matrix details::details-content {
+      height: 0;
+      overflow: clip;
+      transition: height var(--dur-ui) var(--ease-out-quart), content-visibility var(--dur-ui) allow-discrete;
+    }
+    .matrix details[open]::details-content {
+      height: auto;
+    }
+  }
+}
+
+/* =============================================================================
+   20. 404 — lost for words
+   The only loop on the site, on a page with nothing to read but a way out.
+   ============================================================================= */
+
+.lost-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34em;
+}
+.lost-dots i {
+  width: 0.34em;
+  height: 0.34em;
+  border-radius: 50%;
+  background: var(--signal-ink);
+  animation: dot-blink 1400ms steps(2, end) infinite;
+}
+.lost-dots i:nth-child(2) {
+  animation-delay: 220ms;
+}
+.lost-dots i:nth-child(3) {
+  animation-delay: 440ms;
+}

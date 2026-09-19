@@ -17,7 +17,7 @@ const sr = `${result === 'NR' || result === '?' ? '' : `Score ${result}: `}${lab
   <span class="visually-hidden">{sr}</span>
   <span aria-hidden="true" class="score-code">{result}</span>
   {result !== 'NR' && result !== '?' && (
-    <span class="score-pips" aria-hidden="true"><i class:list={{ on: n >= 1 }}></i><i class:list={{ on: n >= 2 }}></i><i class:list={{ on: n >= 3 }}></i></span>
+    <span class="score-pips" aria-hidden="true"><i class:list={{ on: n >= 1 }} style="--i: 0"></i><i class:list={{ on: n >= 2 }} style="--i: 1"></i><i class:list={{ on: n >= 3 }} style="--i: 2"></i></span>
   )}
   {!compact && <span aria-hidden="true">{label}</span>}
 </span>

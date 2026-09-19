@@ -56,19 +56,19 @@ const loopY = 222;
 const complaint = `M${B.x} ${B.y + R + 4} V${loopY} H${A.x} V${A.y + R + 10}`;
 const cHead = `M${A.x - 6} ${A.y + R + 17} L${A.x} ${A.y + R + 9} L${A.x + 6} ${A.y + R + 17}`;
 ---
-<figure class:list={['authority', className]}>
+<figure class:list={['authority', className]} data-reveal>
   <svg class="authority-svg" viewBox={`0 0 ${W} 248`} width={W} height="248" aria-hidden="true" focusable="false">
     <g class="ad-lines">
-      {lines.map((l) => <path d={l.d} />)}
-      {lines.map((l) => <path d={l.head} />)}
+      {lines.map((l, i) => <path d={l.d} pathLength="1" style={`--i: ${i}`} />)}
+      {lines.map((l, i) => <path d={l.head} pathLength="1" style={`--i: ${i}`} />)}
     </g>
     <g class="ad-complaint">
       <path d={complaint} />
       <path class="ad-complaint-head" d={cHead} />
     </g>
     <g class="ad-labels">
-      {lines.map((l) => (
-        <g>
+      {lines.map((l, i) => (
+        <g style={`--i: ${i}`}>
           <rect x={l.mid.x - 42} y={l.mid.y - 12} width="84" height="24" rx="12" />
           <text x={l.mid.x} y={l.mid.y + 4.5} text-anchor="middle">{l.label}</text>
         </g>

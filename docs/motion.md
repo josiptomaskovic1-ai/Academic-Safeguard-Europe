@@ -82,6 +82,79 @@ The hero sequence finishes at 1.32 s. The lede and both buttons are fully opaque
 700 ms and are clickable for the whole sequence, because nothing clips or overlays them.
 The `h1` is the LCP element and starts at 0 ms.
 
+
+### Homepage sections
+
+| Element | Trigger | Duration | Easing | How | Reduced motion |
+| --- | --- | --- | --- | --- | --- |
+| `.mq-track` | Load | 40 s loop | linear | CSS `mq-scroll`, duplicated track at −50% | Static, control removed |
+| `.mq-toggle` | Click | 220 ms | `--ease-out-quart` | CSS; `marquee.ts` owns the state | Not rendered |
+| `.m-statement .sw` | Scroll | scroll-linked | linear | `view-timeline`, per-word `animation-range` from `--i` | Fully inked |
+| `.m-statement .m-bar` | Scroll | scroll-linked | linear | `view-timeline`, `background-size` | Full underline |
+| `.m-art-num` | In view | 180 ms, 90 ms stagger | `--ease-out-quart` | CSS `stamp-num`, scale 1.15 → 1 | Static |
+| `.m-articles li::before` | In view | 420 ms | `--ease-out-quart` | CSS `rule-draw`, `scaleX` | Full rule |
+| `.m-dem-num > span` | In view | 700 ms, 110 ms stagger | `--ease-out-expo` | CSS `word-rise` behind a mask | Static |
+| `.m-cell` | In view | 260 ms, 16 ms per cell | `--ease-out-quart` | CSS `cell-in` | Static |
+| `.m-cell[data-on]::before/after` | In view | 900 ms ×2 | `--ease-out-quart` | CSS `ring`, exactly two, then stop | Not shown |
+| `.m-scope-num` copy | In view | 900 ms | quartic out | `reveal.ts`, `textContent` on an aria-hidden copy | Final number at once |
+| `.m-triad > span` | In view | 520 ms, 150 ms stagger | `--ease-out-quart` | CSS `wipe-in`, `clip-path` | Static |
+
+### Site-wide
+
+| Element | Trigger | Duration | Easing | How | Reduced motion |
+| --- | --- | --- | --- | --- | --- |
+| `.btn-primary::before` | Hover / focus-visible | 220 ms | `--ease-out-quart` | CSS `scaleX` fill wipe | No wipe |
+| `.btn` | Press | 120 ms | `--ease-out-quart` | CSS `--press: 0.97` | No scale |
+| `[data-magnetic]` | Pointer move | ≤6 px, 400 ms back | `--ease-out-quart` | `pointer.ts` writes `--mx`/`--my` | Disabled |
+| `.m-more span` | Hover / focus-visible | 350 ms | `--ease-out-quart` | CSS `arrow-cycle`, out right, in from left | Static |
+| `.m-more::after` | Hover / focus-visible | 220 ms | `--ease-out-quart` | CSS `scaleX` rule redraw | Static |
+| `.nav a::after` | Hover / focus-visible | 220 ms | `--ease-out-quart` | CSS `scaleX` from the left | Static |
+| `.mark-bar` | Hover | 220 ms | `--ease-out-quart` | CSS `scaleX(1.35)`, `transform-box: fill-box` | Static |
+| `.reading-progress` | Scroll | scroll-linked | linear | `animation-timeline: scroll(root)` | `display: none` |
+| `section.on-navy::before` | Pointer move | 220 ms fade | `--ease-out-quart` | `pointer.ts` writes `--sx`/`--sy` | `display: none` |
+| `.nav[data-open]` | Menu toggle | 240 ms | `--ease-out-quart` | CSS `clip-path` + `@starting-style` | Instant |
+| `.nav li` | Menu open | 260 ms, 30 ms stagger | `--ease-out-quart` | CSS `nav-item` | Static |
+| `.nav-toggle svg path` | Menu toggle | 220 ms | `--ease-out-quart` | CSS opacity + rotate morph | Instant swap |
+
+### Inner pages
+
+| Page | Element | Trigger | Duration | Easing | How | Reduced motion |
+| --- | --- | --- | --- | --- | --- | --- |
+| Problem | `.ad-lines path` | In view | 400 ms, 120 ms stagger | `--ease-out-quart` | CSS `draw-line`, `pathLength="1"` | Drawn |
+| Problem | `.ad-labels > g` | In view | 300 ms, after its line | `--ease-out-quart` | CSS `rise-in` | Static |
+| Problem | `.ad-complaint path` | In view | 1200 ms × 3 | linear | CSS `dash-flow`, 3.6 s total | Static dashes |
+| Problem | `.ad-node--staff rect` | In view + 1.5 s | 620 ms, once | `--ease-out-quart` | CSS `node-note`, stroke width | Static |
+| Europe | `.tilemap li` | In view | 300 ms, `--d` from grid distance to HR | `--ease-out-quart` | CSS `cell-in`; delay computed at build time, capped 600 ms | Static |
+| Take Action | `.jump-tiles a::before` | Hover / focus-visible | 220 ms | `--ease-out-quart` | CSS `scaleY` from the bottom | Static |
+| Take Action | `.copy-check path` | Copy | 260 ms | `--ease-out-quart` | CSS `draw-line` | Check shown at once |
+| Records | `.score-pips i.on` | In view | 200 ms, 70 ms stagger | `--ease-out-quart` | CSS `pip-in` | Filled |
+| Records | `.matrix details` | Toggle | 220 ms | `--ease-out-quart` | `interpolate-size` + `::details-content` | Snaps, as before |
+| Records | `.matrix .chev` | Toggle | 220 ms | `--ease-out-quart` | CSS rotate | Static |
+| 404 | `.lost-dots i` | Load | 1400 ms loop | steps | CSS `dot-blink` | Static dots |
+
+## The one loop on the site
+
+The 404 typing dots are the only animation that repeats forever. They sit on a page
+with nothing to read and a way out, they are `aria-hidden`, and they carry no
+meaning. Everything else that repeats — the marquee — has a pause control, and
+everything else that plays does so once.
+
+## What is deliberately still
+
+Nothing celebratory goes near a finding, a score or a verification label. Research
+pages get state feedback only: an edge colour on a tile, pips filling in order, an
+accordion that opens smoothly. The one exception is the Europe ripple, because the
+delay *is* the information: research started in Croatia and spreads outward from it.
+
+## Testing notes
+
+- axe-core: 0 violations on `/`, `/problem/`, `/demands/`, `/europe/`, `/evidence/`,
+  `/take-action/`, `/about/`, `/countries/croatia/`, `/institutions/hr-unizg/` and
+  `/standard/`.
+- No horizontal overflow at 1920, 1440, 1280, 820, 390 or 320 px.
+- Reduced motion, print and JavaScript-disabled each render the complete page.
+- Shipped JavaScript: about 4.6 KB gzipped across the whole site.
+
 ### The headline mask
 
 `.m-hero h1` has `line-height: 0.88`, so a plain `overflow: hidden` mask cuts ascenders

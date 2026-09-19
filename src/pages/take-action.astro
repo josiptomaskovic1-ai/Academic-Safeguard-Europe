@@ -48,6 +48,13 @@ const jumps = [
           <h3>Share the campaign</h3>
           <p>Copy this; it links to the demands, not to anyone’s story.</p>
           <span class="share-text">{shareText}</span>
+          <p class="copy-row">
+            <button class="copy-btn" type="button" data-copy>
+              <svg class="copy-check" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2 8.5 L6 12.5 L14 4" pathLength="1" /></svg>
+              Copy
+            </button>
+            <span class="copy-status" role="status" aria-live="polite" data-copy-status></span>
+          </p>
         </li>
         <li>
           <h3>Contribute a public source</h3>
@@ -147,3 +154,8 @@ const jumps = [
     </div>
   </section>
 </Base>
+
+<script>
+  import '../scripts/reveal.ts';
+  import '../scripts/copy.ts';
+</script>

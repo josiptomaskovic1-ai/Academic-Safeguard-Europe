@@ -5,6 +5,7 @@ import { url, REPO_URL } from '../lib/url';
 ---
 <Base title="Page not found" description="The requested page does not exist on Academic Safeguard Europe." noindex campaign>
   <PageHero kicker="Error 404" class="nf-hero">
+    <span class="lost-dots" aria-hidden="true"><i></i><i></i><i></i></span>
     Page not found
     <Fragment slot="lede">The page doesn't exist or has moved. Renamed records are in the <a href={`${REPO_URL}/commits/main`}>public history on GitHub</a>.</Fragment>
     <Fragment slot="meta">
