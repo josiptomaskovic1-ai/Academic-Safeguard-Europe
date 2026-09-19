@@ -1269,6 +1269,118 @@ main.campaign { padding-block: 0; }
 /* 404 */
 .nf-hero .hero-aside { display: flex; justify-content: flex-end; }
 
+/* ---------- About page: tightened vertical rhythm ----------
+   Scoped to body.page-about, so no other page is affected. Palette, typography, copy and the
+   numbered folio structure are unchanged; only vertical space, the Governance grid proportions
+   and the pairing of the two short closing sections differ.
+   ----------------------------------------------------------- */
+
+/* Hero: less padding, slightly smaller h1, lede brought into view sooner. */
+.page-about .page-hero { padding-block: clamp(1.35rem, 3.2vw, 2.25rem) clamp(1.6rem, 3.6vw, 2.6rem); }
+.page-about .page-hero .breadcrumbs { margin-bottom: clamp(0.9rem, 2.2vw, 1.5rem); }
+.page-about .hero-kicker { margin-bottom: 0.8rem; }
+.page-about .page-hero--navy h1 { font-size: clamp(2.05rem, 6.5vw, 5.9rem); }
+.page-about .page-hero--navy .hero-lede {
+  margin-top: clamp(1.1rem, 2.2vw, 1.75rem);
+  padding-top: clamp(0.85rem, 1.6vw, 1.25rem);
+}
+
+/* The yellow accent reads as one deliberate bar rather than a fragment under each wrapped word.
+   It takes its own line and never wraps, so the h1 must stay narrow enough for it to fit. The phrase is
+   about 9.1x the font size wide, so the size tracks the viewport: full size from ~480px up, and only the
+   narrowest phones take a deeper cut, which is what keeps 320px free of horizontal overflow. */
+@media (max-width: 47.99rem) {
+  .page-about .page-hero--navy h1 { font-size: clamp(1.5rem, 9.9vw, 2.6rem); }
+  .page-about .page-hero--navy h1 .m-bar { display: block; width: fit-content; white-space: nowrap; }
+}
+
+/* Sections: ~20-25% less vertical space, separation and numbering preserved. */
+.page-about .sec { padding-block: clamp(2.3rem, 5.2vw, 4.5rem); }
+.page-about .folio { margin-bottom: clamp(1.1rem, 2.8vw, 2rem); }
+.page-about .sec-title { margin-bottom: clamp(1rem, 2.6vw, 1.75rem); }
+.page-about .layers > div { padding: 0.9rem 0 1.35rem; }
+.page-about .layers .m-more { margin-top: 1rem; }
+.page-about .ruled-index > li { padding: 0.75rem 0 1.15rem; }
+.page-about .accept li { padding-block: 0.5rem; }
+.page-about .accept { gap: 1.25rem 3rem; }
+.page-about .band-note { margin-top: clamp(1.25rem, 2.6vw, 2rem); padding-top: 0.9rem; }
+
+/* Internal gaps inside reading blocks and the privacy disclosure. */
+.page-about .reading p { margin-bottom: 0.8rem; }
+.page-about .reading .m-more { margin-top: 1.25rem; }
+.page-about .disclosure { margin-top: 0.9rem; }
+.page-about .privacy-links { margin-top: 0.9rem; }
+
+/* Governance: five items in a balanced 3 + 2 grid that fills the row, instead of 3 + 2 with a hole. */
+@media (min-width: 60rem) {
+  .page-about .ruled-index--3 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .page-about .ruled-index--3 > li { grid-column: span 2; }
+  .page-about .ruled-index--3 > li:nth-child(4),
+  .page-about .ruled-index--3 > li:nth-child(5) { grid-column: span 3; }
+  .page-about .ruled-index--3 p { max-width: none; }
+}
+
+/* "The limits of the research" and "Privacy" share one row on desktop and stack on mobile.
+   The wrapper carries the page gutter so each section's own .container can pass through.
+   Below 48rem nothing is overridden: the two sections stack exactly as before. */
+@media (min-width: 48rem) {
+  .page-about .about-pair {
+    width: 100%;
+    max-width: calc(var(--wide-c) + 2 * var(--gutter-c));
+    margin-inline: auto;
+    padding-inline: var(--gutter-c);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(2rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  /* Both columns start on the same line, so the adjacent-sibling "no double padding" rule is undone here. */
+  .page-about .about-pair > .sec.on-paper { padding-block: clamp(2.3rem, 5.2vw, 4.5rem); }
+  .page-about .about-pair > .sec > .container {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+  /* Narrow columns: the heading sits above its text rather than beside it. */
+  .page-about .about-pair .split { grid-template-columns: minmax(0, 1fr); gap: 0.85rem; }
+  .page-about .about-pair .split > .sec-title { margin-bottom: 0; }
+  .page-about .about-pair .reading .m-more { margin-top: 1.25rem; }
+}
+
+/* Closing call to action: a shorter band that still carries the yellow. */
+.page-about .action-band { padding-block: clamp(2rem, 4.4vw, 3.5rem); }
+.page-about .band-title { margin-bottom: clamp(1.25rem, 3vw, 2rem); font-size: clamp(2rem, 5.4vw, 4.25rem); }
+
+/* Footer: tighter blocks. Link hit areas stay at 2.75rem (44px). */
+.page-about .site-footer { padding-block: clamp(2rem, 4vw, 3.25rem) 1.6rem; }
+.page-about .footer-trust { padding-top: 0.9rem; }
+.page-about .footer-row { margin-top: clamp(1.5rem, 3vw, 2.5rem); padding-top: 1.1rem; gap: 1rem 2.5rem; }
+.page-about .footer-id { gap: 0.8rem; }
+
+/* Phones: the same rhythm, compressed again. Type sizes stay large enough to keep the
+   editorial voice; only spacing and the two oversized display sizes come down. */
+@media (max-width: 47.99rem) {
+  .page-about .sec { padding-block: 1.6rem; }
+  .page-about .folio { margin-bottom: 0.85rem; padding-top: 0.6rem; }
+  .page-about .sec-title { margin-bottom: 0.85rem; }
+  .page-about .layers > div { padding: 0.7rem 0 0.95rem; }
+  .page-about .layers h3 { font-size: 1.6rem; }
+  .page-about .layers .m-more { margin-top: 0.85rem; }
+  .page-about .ruled-index > li { padding: 0.55rem 0 0.8rem; }
+  .page-about .accept { gap: 1rem 3rem; }
+  .page-about .accept li { padding-block: 0.4rem; }
+  .page-about .band-note { margin-top: 1.05rem; }
+  .page-about .split { gap: 1.05rem; }
+  .page-about .action-band { padding-block: 1.6rem; }
+  .page-about .band-title { margin-bottom: 1.05rem; }
+  .page-about .site-footer { padding-block: 1.6rem 1.25rem; }
+  .page-about .footer-trust { font-size: 1.2rem; }
+  .page-about .footer-row { margin-top: 1.35rem; padding-top: 1rem; }
+  /* Two columns of links: half the rows, full 44px targets. */
+  .page-about .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+}
+
 /* ---------- print ---------- */
 @media print {
   @page { margin: 18mm 16mm; }

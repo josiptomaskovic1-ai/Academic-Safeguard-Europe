@@ -12,8 +12,10 @@ interface Props {
   noindex?: boolean;
   /** Legacy flag: every page now renders PageHero (breadcrumbs inside it) and owns its vertical space. */
   campaign?: boolean;
+  /** Optional class on <body>, so one page can scope layout overrides to itself (e.g. "page-about"). */
+  pageClass?: string;
 }
-const { title, description = 'Academic power needs safeguards. Academic Safeguard Europe turns evidence about academic power into a European demand for enforceable student safeguards.', crumbs, noindex = false, campaign = false } = Astro.props;
+const { title, description = 'Academic power needs safeguards. Academic Safeguard Europe turns evidence about academic power into a European demand for enforceable student safeguards.', crumbs, noindex = false, campaign = false, pageClass } = Astro.props;
 const fullTitle = title === 'Home' ? 'Academic Safeguard Europe' : `${title} · Academic Safeguard Europe`;
 const rubric = getRubric();
 
@@ -72,7 +74,7 @@ const csp = [
     <meta property="og:type" content="website" />
     <meta name="referrer" content="no-referrer" />
   </head>
-  <body>
+  <body class:list={[pageClass]}>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header on-navy" data-site-header>
       <div class="container container--wide bar">

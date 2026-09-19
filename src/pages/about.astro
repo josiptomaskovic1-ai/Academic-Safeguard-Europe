@@ -8,7 +8,7 @@ import { CAMPAIGN_NAME } from '../lib/campaign';
 import { getRubric } from '../lib/data';
 const rubric = getRubric();
 ---
-<Base title="About" description="About Academic Safeguard Europe: mission, independence, governance principles, limits of the research, and privacy." campaign>
+<Base title="About" description="About Academic Safeguard Europe: mission, independence, governance principles, limits of the research, and privacy." campaign pageClass="page-about">
   <PageHero tone="navy" crumbs={[{ label: 'About' }]} kicker="About ASE">
     Evidence about academic power, turned into a <span class="m-bar">European demand.</span>
     <Fragment slot="lede">An independent, open-source project that researches published student safeguards and campaigns to make them enforceable.</Fragment>
@@ -74,6 +74,7 @@ const rubric = getRubric();
     </div>
   </section>
 
+  <div class="about-pair">
   <section class="sec on-paper" id="limits" aria-labelledby="limits-h">
     <div class="container">
       <Folio label="Limits" />
@@ -105,6 +106,7 @@ const rubric = getRubric();
       </div>
     </div>
   </section>
+  </div>
 
   <ActionBand id="close-title">
     Independent. Open. <span class="m-ink-line"><span class="m-ink">Correctable.</span></span>
