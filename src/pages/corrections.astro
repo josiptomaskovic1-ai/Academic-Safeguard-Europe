@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Folio from '../components/Folio.astro';
 import ScopeIcon from '../components/ScopeIcon.astro';
 import IconList from '../components/IconList.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
@@ -30,40 +32,65 @@ const doNot = [
   { icon: 'correspondence', text: 'Health information or private correspondence' },
 ];
 ---
-<Base title="Corrections and right of reply" description="How universities, researchers and others can correct or challenge ASE findings." crumbs={[{ label: 'Corrections' }]}>
-  <div class="container">
-    <h1>Corrections and right of reply</h1>
-    <p class="lede">Any finding can be challenged: missing policies, newer versions, broken links, misreadings or disagreements with the method.</p>
+<Base title="Corrections and right of reply" description="How universities, researchers and others can correct or challenge ASE findings." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Corrections' }]} kicker="Evidence · Corrections">
+    Corrections and right of reply
+    <Fragment slot="lede">Any finding can be challenged: missing policies, newer versions, broken links, misreadings or disagreements with the method.</Fragment>
+  </PageHero>
 
-    <div class="grid grid-2 page-grid">
-      <section class="card icon-card route-card" aria-labelledby="fact">
-        <span class="icon-frame" aria-hidden="true"><ScopeIcon name="correction" size="1.3rem" /></span>
-        <h2 id="fact">Factual correction</h2>
-        <p>We applied the rubric wrongly or missed a document. If accepted, the finding changes.</p>
-        <details class="disclosure">
-          <summary>Examples</summary>
-          <ul class="small">
-            <li>a policy or regulation exists that we did not review;</li>
-            <li>a newer version replaces the document we cited;</li>
-            <li>we misread or mistranslated a provision;</li>
-            <li>a link is broken or points to the wrong document.</li>
-          </ul>
-        </details>
-        <p class="icon-card-link"><a class="btn btn-primary" href={newIssue('correction.yml', '[Correction] ')}>Submit a factual correction</a></p>
-      </section>
-      <section class="card icon-card route-card" aria-labelledby="method">
-        <span class="icon-frame" aria-hidden="true"><ScopeIcon name="rubric" size="1.3rem" /></span>
-        <h2 id="method">Methodology disagreement</h2>
-        <p>The rubric itself is wrong. Recorded publicly for the next version; current findings stay.</p>
-        <details class="disclosure">
-          <summary>More about disagreements</summary>
-          <p class="small">Use this route if you accept that we applied the rubric correctly but think the rubric itself is wrong. For example, a safeguard should be defined differently, or a national system achieves the same protection another way. Disagreements are shown alongside the finding where relevant.</p>
-        </details>
-        <p class="icon-card-link"><a class="btn btn-secondary" href={newIssue('methodology-proposal.yml', '[Methodology] ')}>Record a disagreement</a></p>
+  <section class="sec--dense" aria-label="Choose a route">
+    <div class="container">
+      <Folio label="Choose a route" dense />
+      <div class="route-grid">
+        <section class="route-card" aria-labelledby="fact">
+          <h2 id="fact">Factual correction</h2>
+          <p>We applied the rubric wrongly or missed a document. If accepted, the finding changes.</p>
+          <details class="disclosure">
+            <summary>Examples</summary>
+            <ul class="small">
+              <li>a policy or regulation exists that we did not review;</li>
+              <li>a newer version replaces the document we cited;</li>
+              <li>we misread or mistranslated a provision;</li>
+              <li>a link is broken or points to the wrong document.</li>
+            </ul>
+          </details>
+          <p class="route-action"><a class="btn btn-primary" href={newIssue('correction.yml', '[Correction] ')}>Open the correction form on GitHub</a></p>
+        </section>
+        <section class="route-card" aria-labelledby="method">
+          <h2 id="method">Methodology disagreement</h2>
+          <p>The rubric itself is wrong. Recorded publicly for the next version; current findings stay.</p>
+          <details class="disclosure">
+            <summary>More about disagreements</summary>
+            <p class="small">Use this route if you accept that we applied the rubric correctly but think the rubric itself is wrong. For example, a safeguard should be defined differently, or a national system achieves the same protection another way. Disagreements are shown alongside the finding where relevant.</p>
+          </details>
+          <p class="route-action"><a class="btn btn-secondary" href={newIssue('methodology-proposal.yml', '[Methodology] ')}>Open the methodology form on GitHub</a></p>
+        </section>
+      </div>
+
+      <section class="guide-block" aria-labelledby="github-guide">
+        <h2 id="github-guide">New to GitHub? Here is what to expect</h2>
+        <ol class="step-list">
+          <li>Choose a factual correction or a methodology disagreement above.</li>
+          <li>The button opens a structured GitHub form. Sign in, follow the prompts and submit it; a pseudonymous account works.</li>
+          <li>The request, review and outcome remain public so changes can be audited.</li>
+        </ol>
+        <div class="statement statement--provisional">
+          <p><strong>Do not submit personal data, names, allegations or case details.</strong> ASE reviews published evidence, not individual cases.</p>
+          <p class="small">
+            {CONTACT_EMAIL ? (
+              <>Prefer a non-GitHub route? Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Only a neutral summary and request ID are logged publicly.</>
+            ) : (
+              <>ASE does not currently have a safe private submission route. GitHub is the only route; this is a known limitation.</>
+            )}
+          </p>
+        </div>
       </section>
     </div>
+  </section>
 
-    <section class="section record-section" aria-labelledby="process">
+  <section class="sec--dense" aria-labelledby="process">
+    <div class="container">
+      <Folio label="Process" dense />
       <h2 id="process">What happens next</h2>
       <WorkflowDiagram steps={steps} icons={stepIcons} process label="Stages of a correction request" />
       <p class="caveat-line">
@@ -80,37 +107,32 @@ const doNot = [
           <li><strong>Record.</strong> The earlier finding remains in the public history. Nothing is silently overwritten.</li>
         </ol>
       </details>
-    </section>
+    </div>
+  </section>
 
-    <section class="section record-section corr-extra" aria-label="Right of reply and privacy">
-      <div class="grid grid-2">
-        <div class="panel reply-panel">
-          <span class="icon-frame" aria-hidden="true"><ScopeIcon name="institution" size="1.3rem" /></span>
-          <div>
-            <h2 id="reply" class="panel-title">Right of reply</h2>
-            <p>Institutions may publish a reply of up to 300 words on their profile, whatever the outcome.</p>
-          </div>
+  <section class="sec--dense" aria-label="Right of reply and privacy">
+    <div class="container">
+      <Folio label="Reply and privacy" dense />
+      <div class="split split--even">
+        <div>
+          <h2 id="reply">Right of reply</h2>
+          <p class="reading reading--sm">Institutions may publish a reply of up to 300 words on their profile, whatever the outcome.</p>
         </div>
-        <div class="panel donot-panel">
-          <h2 id="do-not" class="panel-title">Please do not include</h2>
+        <div>
+          <h2 id="do-not">Please do not include</h2>
           <IconList items={doNot} tone="doesnot" />
           <p class="small muted donot-close">Requests are public. ASE cannot investigate individual cases.</p>
         </div>
       </div>
-      <p class="small muted no-github">
-        <strong>Without GitHub:</strong>
-        {CONTACT_EMAIL ? (
-          <> write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Requests sent privately are logged publicly with an ID and a neutral summary only.</>
-        ) : (
-          <> requests currently go through GitHub; a pseudonymous account works. A private route is a known gap.</>
-        )}
-      </p>
-    </section>
+    </div>
+  </section>
 
-    <section class="section record-section" aria-labelledby="log">
+  <section class="sec--dense" aria-labelledby="log">
+    <div class="container">
+      <Folio label="Log" dense />
       <h2 id="log">Public corrections log</h2>
       {corrections.length === 0 ? (
-        <p class="muted">No correction requests have been received yet.</p>
+        <p class="muted sec-note">No correction requests have been received yet.</p>
       ) : (
         <div class="table-wrap" tabindex="0" role="region" aria-labelledby="log">
           <table>
@@ -124,6 +146,6 @@ const doNot = [
         </div>
       )}
       <p class="small muted">Log file: <a href={repoFile('data/corrections.yml')}><code>data/corrections.yml</code></a> · Full policy: <a href={repoFile('docs/correction-policy.md')}>correction-policy.md</a> · <a href={repoFile('docs/right-of-reply.md')}>right-of-reply.md</a></p>
-    </section>
-  </div>
+    </div>
+  </section>
 </Base>

@@ -16,12 +16,47 @@ const docType = (id: string) => {
   const s = getSource(id);
   return s ? (DOC_TYPE_LABELS[s.document_type] ?? s.document_type) : null;
 };
+const compact = (text: string, max = 320) => {
+  if (text.length <= max) return { text, shortened: false };
+  const sentences = [...new Intl.Segmenter('en', { granularity: 'sentence' }).segment(text)].map(({ segment }) => segment.trim());
+  let preview = '';
+  for (const sentence of sentences) {
+    const candidate = preview ? `${preview} ${sentence}` : sentence;
+    if (preview && candidate.length > max) break;
+    preview = candidate;
+    if (preview.length >= 150) break;
+  }
+  if (preview.length > max * 1.35) {
+    const wordBreak = preview.lastIndexOf(' ', max);
+    preview = `${preview.slice(0, wordBreak > max * 0.7 ? wordBreak : max).trimEnd()}…`;
+  }
+  return { text: preview, shortened: preview !== text };
+};
+const rationale = r.rationale ? compact(r.rationale) : null;
+const keySourceIds = r.source_ids ?? [];
+const reviewedSourceIds = r.sources_reviewed ?? [];
+const repeatedReviewed = reviewedSourceIds.filter((id) => keySourceIds.includes(id));
+const additionalReviewed = reviewedSourceIds.filter((id) => !keySourceIds.includes(id));
 ---
 <div class="evidence-panel">
-  <p class="muted small"><strong>Question:</strong> {def.question}</p>
+  {r.result !== 'NR' && (
+    <div class="evidence-status" role="group" aria-label="Finding status">
+      <VerificationBadge status={r.verification} />
+      <ConfidenceLabel value={r.confidence} />
+    </div>
+  )}
+  <p class="evidence-question"><strong>Question</strong><span>{def.question}</span></p>
 
   {r.result === 'NR' && (
-    <p>This safeguard has not been researched for this jurisdiction or institution yet. This says nothing about whether a safeguard exists. <a href={url('/contribute/')}>Help research it.</a></p>
+    <>
+      <p>This safeguard has not been researched for this jurisdiction or institution yet. This says nothing about whether a safeguard exists. <a href={url('/contribute/')}>Help research it.</a></p>
+      {def.notes && (
+        <details class="disclosure evidence-record">
+          <summary>Methodology note for this safeguard</summary>
+          <p>{def.notes}</p>
+        </details>
+      )}
+    </>
   )}
 
   {r.result !== 'NR' && (
@@ -34,25 +69,40 @@ const docType = (id: string) => {
       {r.verification === 'disputed' && (
         <div class="notice disputed small"><p><strong>Disputed.</strong> A correction request or reviewer objection is open ({r.dispute_ids?.join(', ')}). See the <a href={url('/corrections/')}>corrections log</a>.</p></div>
       )}
-      <dl>
-        {levelText && <><dt>Rubric level</dt><dd>{levelText}</dd></>}
-        {r.result === '0' && <><dt>What 0 means</dt><dd>No qualifying provision was identified in the sources reviewed. This is not proof that no safeguard exists.</dd></>}
-        {r.result === '?' && <><dt>What ? means</dt><dd>Research was carried out, but the available sources did not allow a responsible score.</dd></>}
-        {r.evidence && <><dt>Evidence</dt><dd>{r.evidence}</dd></>}
-        {r.locator && <><dt>Location</dt><dd>{r.locator}</dd></>}
-        {r.rationale && <><dt>Rationale</dt><dd>{r.rationale}</dd></>}
-        {r.gaps && <><dt>Gaps and uncertainty</dt><dd>{r.gaps}</dd></>}
-        {r.source_ids?.length ? (
-          <><dt>{r.source_ids.length > 1 ? 'Sources' : 'Source'}</dt><dd><ul class="source-list">{r.source_ids.map((id) => <li>{docType(id) && <span class="doc-type">{docType(id)}</span>}<SourceCitation id={id} /></li>)}</ul></dd></>
+      <dl class="evidence-primary">
+        {r.evidence && <><dt>Finding</dt><dd>{r.evidence}</dd></>}
+        {r.locator && <><dt>Source location</dt><dd>{r.locator}</dd></>}
+        {rationale && <><dt>{rationale.shortened ? 'Rationale in brief' : 'Rationale'}</dt><dd>{rationale.text}</dd></>}
+        {keySourceIds.length ? (
+          <><dt>{keySourceIds.length > 1 ? 'Key citations' : 'Key citation'}</dt><dd><ul class="source-list">{keySourceIds.map((id) => <li>{docType(id) && <span class="doc-type">{docType(id)}</span>}<SourceCitation id={id} /></li>)}</ul></dd></>
         ) : null}
-        {r.sources_reviewed?.length && (r.result === '0' || r.result === '?') ? (
-          <><dt>Sources reviewed</dt><dd><ul class="source-list">{r.sources_reviewed.map((id) => <li>{docType(id) && <span class="doc-type">{docType(id)}</span>}<SourceCitation id={id} /></li>)}</ul></dd></>
-        ) : null}
-        <dt>Status</dt>
-        <dd class="status-row"><VerificationBadge status={r.verification} /><ConfidenceLabel value={r.confidence} /></dd>
-        <dt>Reviewed</dt><dd><LastReviewed date={r.reviewed} /></dd>
       </dl>
+
+      <details class="disclosure evidence-record">
+        <summary>Methodology notes and full record</summary>
+        <dl class="evidence-secondary">
+          {levelText && <><dt>Rubric level</dt><dd>{levelText}</dd></>}
+          {r.result === '0' && <><dt>What 0 means</dt><dd>No qualifying provision was identified in the sources reviewed. This is not proof that no safeguard exists.</dd></>}
+          {r.result === '?' && <><dt>What ? means</dt><dd>Research was carried out, but the available sources did not allow a responsible score.</dd></>}
+          {rationale?.shortened && <><dt>Complete rationale</dt><dd>{r.rationale}</dd></>}
+          {r.gaps && <><dt>Gaps and uncertainty</dt><dd>{r.gaps}</dd></>}
+          {def.notes && <><dt>Methodology note</dt><dd>{def.notes}</dd></>}
+          <dt>Reviewed</dt><dd><LastReviewed date={r.reviewed} /></dd>
+          {reviewedSourceIds.length && (r.result === '0' || r.result === '?') ? (
+            <>
+              <dt>Complete sources reviewed ({reviewedSourceIds.length})</dt>
+              <dd>
+                {repeatedReviewed.length > 0 && (
+                  <p class="reviewed-note">{repeatedReviewed.length === 1 ? 'The key citation shown above is' : `All ${repeatedReviewed.length} key citations shown above are`} included in this complete record.</p>
+                )}
+                {additionalReviewed.length > 0 && (
+                  <ul class="source-list">{additionalReviewed.map((id) => <li>{docType(id) && <span class="doc-type">{docType(id)}</span>}<SourceCitation id={id} /></li>)}</ul>
+                )}
+              </dd>
+            </>
+          ) : null}
+        </dl>
+      </details>
     </>
   )}
-  {def.notes && <p class="small muted" style="margin-top:1rem">{def.notes}</p>}
 </div>

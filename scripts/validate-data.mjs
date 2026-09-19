@@ -91,7 +91,9 @@ if (!rubric) {
   process.exit(1);
 }
 const SAFEGUARDS = new Set(rubric.safeguards.map((s) => s.id));
-const METHOD_VERSIONS = new Set([String(rubric.methodology_version)]);
+// Records keep the methodology version they were researched under. v0.1.1 only clarified how an
+// unverified "0" is published; it changed no safeguard, level or score, so v0.1 records stay valid.
+const METHOD_VERSIONS = new Set([String(rubric.methodology_version), '0.1']);
 for (const s of rubric.safeguards) {
   for (const lvl of ['0', '1', '2', '3']) if (!str(s.levels?.[lvl])) err(rubricFile, `${s.id} missing level ${lvl} definition`);
 }
@@ -115,6 +117,10 @@ for (const file of ymlFiles(path.join(ROOT, 'data/sources'))) {
     if (!isUrl(s.url)) err(file, `${where}: malformed URL "${s.url}"`);
     checkUrlWarnings(file, where, s.url);
     if (!DOC_TYPES.has(s.document_type)) err(file, `${where}: invalid document_type "${s.document_type}"`);
+    // Unofficial consolidations (e.g. zakon.hr) must be flagged structurally, not only in free-text notes,
+    // so every citation of them can be labelled. Absent means the source is an official text.
+    if (s.official_text != null && typeof s.official_text !== 'boolean') err(file, `${where}: official_text must be true or false`);
+    if (s.official_text === false && !str(s.notes)) warn(file, `${where}: unofficial consolidation should say in notes which official versions it consolidates`);
     if (!EU27.has(s.country) && !SUPRA.has(s.country)) err(file, `${where}: invalid country "${s.country}"`);
     if (!validDate(s.accessed)) err(file, `${where}: accessed must be YYYY-MM-DD`);
     if (s.publication_date == null) warn(file, `${where}: missing publication date`);
@@ -171,8 +177,16 @@ function checkResults(file, safeguards, { label }) {
       if (r.confidence != null && !CONFIDENCE.has(r.confidence)) err(file, `${where}: invalid confidence`);
     }
     if (r.confidence === 'low') warn(file, `${where}: low-confidence finding`);
-    // scoring-rubric.yml: a "0" "requires secondary verification before publication". Surface every conflict for the maintainer.
-    if (result === '0' && r.verification !== 'verified') warn(file, `${where}: result "0" is published without secondary verification (rubric requires it before publication)`);
+    // scoring-rubric.yml v0.1.1: an unverified "0" may be published, but only as provisional and only with
+    // the complete list of sources reviewed. Enforce both, so the rule cannot be satisfied by wording alone.
+    if (result === '0' && r.verification !== 'verified') {
+      if (!(Array.isArray(r.sources_reviewed) && r.sources_reviewed.length)) {
+        err(file, `${where}: an unverified result "0" must list every source reviewed (sources_reviewed)`);
+      }
+      if (r.verification !== 'needs_review' && r.verification !== 'disputed') {
+        err(file, `${where}: an unverified result "0" must be marked needs_review or disputed so it is shown as provisional`);
+      }
+    }
     if (r.verification === 'verified' && !str(r.second_reviewer)) err(file, `${where}: verified finding must record second_reviewer`);
     if (r.verification === 'disputed' && !(Array.isArray(r.dispute_ids) && r.dispute_ids.length)) err(file, `${where}: disputed result must list dispute_ids`);
   }

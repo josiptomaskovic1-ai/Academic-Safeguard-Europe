@@ -1,6 +1,6 @@
 ---
 title: Scoring methodology
-version: "0.1"
+version: "0.1.1"
 status: Draft for public consultation
 published: 2026-09-13
 ---
@@ -29,7 +29,7 @@ These values are not interchangeable:
 
 - **`NR` never becomes `0`.** A jurisdiction that has not been researched is not a poor performer.
 - **`?` is not `0`.** It records the limits of the evidence.
-- **`0` is not proof of absence.** It states that nothing qualifying was identified in the sources listed. Every `0` lists the sources reviewed, and should be checked by a second reviewer before publication.
+- **`0` is not proof of absence.** It states that nothing qualifying was identified in the sources listed. Every `0` lists every source reviewed and stays provisional until a second reviewer has verified it. Until then it is shown with a provisional notice and is never stated as a finding that the safeguard is absent.
 
 ## 3. Sources
 

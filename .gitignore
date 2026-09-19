@@ -2,5 +2,23 @@ node_modules/
 dist/
 .astro/
 .DS_Store
+Thumbs.db
 *.log
+
+# Secrets and local configuration: never commit.
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc.local
+credentials*.json
+
+# Editor and private working files.
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.local
+private/

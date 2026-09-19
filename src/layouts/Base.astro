@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { url, REPO_URL, repoFile } from '../lib/url';
 import { getRubric } from '../lib/data';
+import { CAMPAIGN_NAME } from '../lib/campaign';
 
 interface Props {
   title: string;
@@ -9,37 +10,63 @@ interface Props {
   crumbs?: { label: string; href?: string }[];
   /** Keep the page out of search indexes (used by the 404 page). */
   noindex?: boolean;
+  /** Legacy flag: every page now renders PageHero (breadcrumbs inside it) and owns its vertical space. */
+  campaign?: boolean;
 }
-const { title, description = 'Academic Safeguard Europe evaluates published safeguards against abuse of academic authority, retaliation and procedural unfairness in European higher education.', crumbs, noindex = false } = Astro.props;
+const { title, description = 'Academic power needs safeguards. Academic Safeguard Europe turns evidence about academic power into a European demand for enforceable student safeguards.', crumbs, noindex = false, campaign = false } = Astro.props;
 const fullTitle = title === 'Home' ? 'Academic Safeguard Europe' : `${title} · Academic Safeguard Europe`;
 const rubric = getRubric();
 
+// Public hierarchy: campaign first, evidence one level down. Research utilities keep their URLs and
+// highlight the section they now belong to.
 const nav = [
-  { href: '/europe/', label: 'Europe' },
-  { href: '/institutions/', label: 'Institutions' },
-  { href: '/compare/', label: 'Compare' },
-  { href: '/standard/', label: 'Standard' },
-  { href: '/methodology/', label: 'Methodology' },
-  { href: '/evidence/', label: 'Evidence' },
-  { href: '/corrections/', label: 'Corrections' },
+  { href: '/problem/', label: 'The Problem' },
+  { href: '/demands/', label: 'Our Demands' },
+  { href: '/europe/', label: 'Europe', also: ['/countries/', '/institutions/'] },
+  { href: '/evidence/', label: 'Evidence', also: ['/standard/', '/methodology/', '/sources/', '/compare/', '/corrections/', '/data/'] },
+  { href: '/take-action/', label: 'Take Action', also: ['/contribute/'], action: true },
   { href: '/about/', label: 'About' },
 ];
 const current = Astro.url.pathname;
-const isCurrent = (href: string) => current === url(href) || (href !== '/' && current.startsWith(url(href)));
+const isCurrent = (n: { href: string; also?: string[] }) =>
+  [n.href, ...(n.also ?? [])].some((h) => current.startsWith(url(h)));
 const canonical = new URL(Astro.url.pathname, Astro.site);
+
+// Content-Security-Policy (meta, because GitHub Pages cannot send headers; see SECURITY.md).
+// style-src-attr permits only style="" attributes (tile positions, icon sizes); <style> elements and stylesheets must
+// come from 'self'. style-src is the fallback for browsers without CSP3 split directives.
+// `astro dev` injects component CSS as <style> elements and uses a WebSocket for reloads, so only the dev server
+// relaxes style-src-elem and adds connect-src. scripts/check-security.mjs asserts the exact production policy on every built page.
+const csp = [
+  ...(import.meta.env.DEV ? ["connect-src 'self'"] : []),
+  "default-src 'none'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  `style-src-elem 'self'${import.meta.env.DEV ? " 'unsafe-inline'" : ''}`,
+  "style-src-attr 'unsafe-inline'",
+  "img-src 'self'",
+  "font-src 'self'",
+  "object-src 'none'",
+  "base-uri 'none'",
+  "form-action 'none'",
+  'upgrade-insecure-requests',
+].join('; ');
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <!-- GitHub Pages cannot send HTTP headers; frame-ancestors, report-uri and X-Frame-Options are not available via meta (see SECURITY.md). -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests" />
+    <meta http-equiv="Content-Security-Policy" content={csp} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
+    <!-- Self-hosted Literata (OFL, public/fonts): same URL as the @font-face in global.css, served from 'self'. -->
+    <link rel="preload" href={url('/fonts/literata-latin-opsz-normal.woff2')} as="font" type="font/woff2" crossorigin />
+
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -47,84 +74,116 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header">
-      <div class="container bar">
+    <header class="site-header on-navy" data-site-header>
+      <div class="container container--wide bar">
         <a class="brand" href={url('/')}>
-          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="4" fill="currentColor" style="color:var(--accent)"/><path d="M16 5l9 3.2v7.1c0 5.6-3.8 9.6-9 11.7-5.2-2.1-9-6.1-9-11.7V8.2z" fill="none" stroke="var(--surface)" stroke-width="2"/><path d="M11.5 13.5h9M11.5 17.5h9M11.5 21.5h5" stroke="var(--surface)" stroke-width="1.8"/></svg>
-          <span><span class="brand-name">Academic Safeguard Europe</span><span class="brand-sub">Published safeguards · Evidence first</span></span>
+          <svg class="brand-mark" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="37" height="37" fill="none" stroke="currentColor" stroke-width="3"/><rect x="9" y="9" width="22" height="3" fill="currentColor"/><rect x="9" y="16" width="14" height="3" fill="currentColor"/><rect class="mark-bar" x="9" y="25" width="22" height="6"/></svg>
+          <span><span class="brand-name">Academic Safeguard Europe</span><span class="brand-sub">{CAMPAIGN_NAME}</span></span>
         </a>
-        <nav class="nav" aria-label="Main">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path class="nav-toggle-menu" d="M3 5h14M3 10h14M3 15h14" />
+            <path class="nav-toggle-close" d="M4.5 4.5l11 11m0-11l-11 11" />
+          </svg>
+          <span>Menu</span>
+        </button>
+        <nav class="nav" id="site-navigation" aria-label="Main" data-site-navigation>
           <ul>
-            {nav.map((n) => <li><a href={url(n.href)} aria-current={isCurrent(n.href) ? 'page' : undefined}>{n.label}</a></li>)}
+            {nav.map((n) => {
+              const active = isCurrent(n);
+              return <li><a href={url(n.href)} class:list={{ 'nav-action': n.action }} aria-current={active ? 'page' : undefined}>{n.label}{active && <span class="nav-current" aria-hidden="true">Current</span>}</a></li>;
+            })}
           </ul>
         </nav>
       </div>
     </header>
 
-    <main id="main" class:list={{ home: title === 'Home' }}>
-      <div class="container">
-        {crumbs && (
-          <nav class="breadcrumbs" aria-label="Breadcrumb">
-            <ol>
-              <li><a href={url('/')}>Home</a></li>
-              {crumbs.map((c, i) => <li>{c.href && i < crumbs.length - 1 ? <a href={url(c.href)}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}
-            </ol>
-          </nav>
-        )}
-      </div>
+    <main id="main" class:list={{ campaign }}>
       <slot />
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-grid">
-          <div>
-            <h2>Project</h2>
-            <ul>
-              <li><a href={url('/about/')}>About and scope</a></li>
-              <li><a href={url('/standard/')}>Standard v{rubric.methodology_version}</a></li>
+    <footer class="site-footer on-navy">
+      <div class="container container--wide">
+        <p class="footer-trust">Independent. Open methodology. Public sources. Versioned evidence. Corrections welcome.</p>
+        <div class="footer-row">
+          <div class="footer-id">
+            <p class="ss-mark ss-mark--sm">{CAMPAIGN_NAME}</p>
+            <p class="disclaimer">Not affiliated with the European Union, any government, quality-assurance agency or university. ASE evaluates published rules; it does not rate individuals, judge allegations or give legal advice.</p>
+            <p class="footer-facts">No cookies · No analytics · Code MIT · Data and texts <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a></p>
+          </div>
+          <nav aria-label="Footer">
+            <ul class="footer-links">
+              <li><a href={url('/about/')}>About</a></li>
+              <li><a href={url('/standard/')}>ASE Standard v{rubric.methodology_version}</a></li>
               <li><a href={url('/methodology/')}>Methodology</a></li>
-              <li><a href={url('/methodology/changelog/')}>Methodology changelog</a></li>
-            </ul>
-          </div>
-          <div>
-            <h2>Research</h2>
-            <ul>
-              <li><a href={url('/europe/')}>Country explorer</a></li>
-              <li><a href={url('/compare/')}>Compare safeguards</a></li>
-              <li><a href={url('/institutions/')}>Institutions</a></li>
-              <li><a href={url('/evidence/')}>Evidence Library</a></li>
-              <li><a href={url('/sources/')}>Source register</a></li>
-            </ul>
-          </div>
-          <div>
-            <h2>Participate</h2>
-            <ul>
-              <li><a href={url('/corrections/')}>Corrections and right of reply</a></li>
-              <li><a href={url('/contribute/')}>Contribute research</a></li>
+              <li><a href={url('/sources/')}>Sources</a></li>
               <li><a href={url('/data/')}>Open data</a></li>
-              <li><a href={REPO_URL}>Source code on GitHub</a></li>
+              <li><a href={url('/corrections/')}>Corrections</a></li>
+              <li><a href={url('/methodology/changelog/')}>Changelog</a></li>
+              <li><a href={REPO_URL}>GitHub</a></li>
             </ul>
-          </div>
-        </div>
-        <div class="disclaimer small">
-          <p>Independent project. Not affiliated with the European Union, any government, quality-assurance agency or university.</p>
-          <p>ASE evaluates published rules. It does not rate individuals or judge allegations.</p>
-          <p class="footer-facts">No cookies · No analytics · Code MIT · Data and texts <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a></p>
+          </nav>
         </div>
       </div>
     </footer>
     <script is:inline src={url('/scripts/print.js')} defer></script>
     <script>
+      const siteHeader = document.querySelector<HTMLElement>('[data-site-header]');
+      const menuButton = siteHeader?.querySelector<HTMLButtonElement>('.nav-toggle');
+      const siteNavigation = siteHeader?.querySelector<HTMLElement>('[data-site-navigation]');
+
+      if (siteHeader && menuButton && siteNavigation) {
+        const setMenuOpen = (open: boolean, restoreFocus = false) => {
+          menuButton.setAttribute('aria-expanded', String(open));
+          menuButton.setAttribute('aria-label', open ? 'Close main menu' : 'Open main menu');
+          siteNavigation.dataset.open = String(open);
+          if (restoreFocus) menuButton.focus();
+        };
+
+        siteHeader.dataset.navReady = '';
+        setMenuOpen(false);
+        menuButton.addEventListener('click', () => setMenuOpen(menuButton.getAttribute('aria-expanded') !== 'true'));
+        siteNavigation.addEventListener('click', (event) => {
+          if ((event.target as Element | null)?.closest('a')) setMenuOpen(false);
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') setMenuOpen(false, true);
+        });
+        document.addEventListener('click', (event) => {
+          if (menuButton.getAttribute('aria-expanded') === 'true' && !siteHeader.contains(event.target as Node)) setMenuOpen(false);
+        });
+        window.matchMedia('(min-width: 62rem)').addEventListener('change', (event) => {
+          if (event.matches) setMenuOpen(false);
+        });
+      }
+
+      // Keep safeguard evidence readable as an accordion, including in browsers that do not yet support details[name].
+      document.querySelectorAll<HTMLElement>('.matrix').forEach((matrix) => {
+        const panels = [...matrix.querySelectorAll<HTMLDetailsElement>(':scope > li > details')];
+        panels.forEach((panel) => panel.addEventListener('toggle', () => {
+          if (panel.open && document.documentElement.dataset.printing !== 'true') {
+            panels.forEach((other) => { if (other !== panel) other.open = false; });
+          }
+        }));
+      });
+
       // Open a closed <details> when a link targets it (or something inside it), e.g. #gaps or #sg-s03.
       // Progressive enhancement: without JavaScript the summary line is still where the anchor lands.
       const openForHash = () => {
-        const id = decodeURIComponent(location.hash.slice(1));
+        // The fragment is untrusted: a malformed escape (e.g. #%E0%A4%A) must not throw, and it is only ever used as an
+        // element id lookup (getElementById, never a selector or markup).
+        let id = '';
+        try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
         const el = id ? document.getElementById(id) : null;
         if (!el) return;
         let changed = false;
         const open = (d: Element | null) => {
-          if (d instanceof HTMLDetailsElement && !d.open) { d.open = true; changed = true; }
+          if (!(d instanceof HTMLDetailsElement)) return;
+          const matrix = d.closest('.matrix');
+          matrix?.querySelectorAll<HTMLDetailsElement>(':scope > li > details[open]').forEach((other) => {
+            if (other !== d) other.open = false;
+          });
+          if (!d.open) { d.open = true; changed = true; }
         };
         open(el);
         el.querySelectorAll(':scope > details').forEach(open);

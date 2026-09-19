@@ -6,6 +6,8 @@ body:
   - type: markdown
     attributes:
       value: |
+        **This issue is public** and stays in the repository history. Do not include personal data (names of staff or students, student IDs, contact details, health information), allegations about individuals, or confidential or non-public documents. Only cite publicly available sources.
+
         Read the [researcher guide](https://github.com/josiptomaskovic1-ai/Academic-Safeguard-Europe/blob/main/docs/researcher-guide.md) and the rubric first. Never guess legal references. Use NR for not researched, ? for unclear, and 0 only after actually reviewing sources.
   - type: input
     id: jurisdiction

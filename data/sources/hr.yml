@@ -198,6 +198,7 @@ sources:
     official_reference: NN 82/2008, 69/2017
     accessed: 2026-09-13
     language: hr
+    official_text: false
     archived_url: null
     notes: Unofficial consolidated text on zakon.hr (NN 82/08, 69/17; in force from 2017-07-22). Official gazette
       versions not opened. Whether a newer gender equality act has been adopted was not separately checked
@@ -214,6 +215,7 @@ sources:
     official_reference: NN 85/2008, 112/2012
     accessed: 2026-09-13
     language: hr
+    official_text: false
     archived_url: null
     notes: Unofficial consolidated text on zakon.hr (NN 85/08, 112/12). Official gazette versions not opened.
   - id: hr-zszso-2007
@@ -244,6 +246,7 @@ sources:
     official_reference: NN 47/2009, 110/2021
     accessed: 2026-09-13
     language: hr
+    official_text: false
     archived_url: null
     notes: Unofficial consolidated text on zakon.hr (NN 47/09, 110/21; consolidated version in force from
       2022-01-01). Relevant to higher education only through Article 5(3) of the Act on Higher Education and

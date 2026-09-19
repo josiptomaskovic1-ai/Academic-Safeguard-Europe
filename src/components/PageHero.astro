@@ -1,0 +1,41 @@
+---
+/**
+ * PageHero — the shared inner-page hero (one h1 per page).
+ *
+ * tone="navy"  campaign pages and the Evidence bridge: large serif h1, serif lede under a thin rule.
+ * tone="paper" research and utility pages: research-scale h1, lede, closing 6px rule.
+ *
+ * Slots: default = h1 content (wrap one phrase in <span class="m-bar"> if wanted);
+ *        lede = ONE sentence (rendered inside <p class="hero-lede">);
+ *        meta = fact rail, statement or links under the lede;
+ *        aside = right column at ≥64rem (e.g. SafeguardStrip, StatBlock).
+ * Pages that use PageHero pass `campaign` to Base so the breadcrumbs render here, not above the hero.
+ */
+import Breadcrumbs from './Breadcrumbs.astro';
+
+interface Props {
+  tone?: 'navy' | 'paper';
+  crumbs?: { label: string; href?: string }[];
+  kicker?: string;
+  titleId?: string;
+  class?: string;
+}
+const { tone = 'paper', crumbs, kicker, titleId = 'page-title', class: className } = Astro.props;
+const hasLede = Astro.slots.has('lede');
+const hasMeta = Astro.slots.has('meta');
+const hasAside = Astro.slots.has('aside');
+---
+<section class:list={['page-hero', `page-hero--${tone}`, `on-${tone}`, className]} aria-labelledby={titleId}>
+  <div class="container">
+    {crumbs && <Breadcrumbs crumbs={crumbs} />}
+    {kicker && <p class="hero-kicker"><slot name="kicker-icon" />{kicker}</p>}
+    <div class="hero-grid">
+      <div>
+        <h1 id={titleId}><slot /></h1>
+        {hasLede && <p class="hero-lede"><slot name="lede" /></p>}
+        {hasMeta && <div class="hero-meta"><slot name="meta" /></div>}
+      </div>
+      {hasAside && <div class="hero-aside"><slot name="aside" /></div>}
+    </div>
+  </div>
+</section>

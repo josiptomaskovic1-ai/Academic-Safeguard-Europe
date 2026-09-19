@@ -32,7 +32,8 @@ const PATHS: Record<string, string> = {
   network: '<circle cx="12" cy="5" r="2.25"/><circle cx="5" cy="18" r="2.25"/><circle cx="19" cy="18" r="2.25"/><path d="M11 7l-5 9M13 7l5 9M7.25 18h9.5"/>',
   other: PAGE,
 };
-const body = PATHS[type] ?? PATHS.other;
+// set:html only ever receives the constant markup above; own-property lookup keeps data values like "constructor" out.
+const body = Object.hasOwn(PATHS, type) ? PATHS[type] : PATHS.other;
 const dim = typeof size === 'number' ? `${size}px` : size;
 ---
 <svg class:list={['doc-icon', className]} viewBox="0 0 24 24" width="24" height="24" style={`width:${dim};height:${dim}`}

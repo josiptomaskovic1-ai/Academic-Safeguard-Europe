@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Folio from '../components/Folio.astro';
 import SourceCitation from '../components/SourceCitation.astro';
 import DocTypeIcon from '../components/DocTypeIcon.astro';
 import DocTypeCounts from '../components/DocTypeCounts.astro';
@@ -13,34 +15,41 @@ const groups = [...new Set(sources.map((s) => s.country))].sort().map((code) => 
   items: sources.filter((s) => s.country === code).sort((a, b) => a.id.localeCompare(b.id)),
 }));
 ---
-<Base title="Sources" description="Every primary source cited in ASE findings, with stable IDs." crumbs={[{ label: 'Sources' }]}>
-  <div class="container">
-    <h1>Source register</h1>
-    <p class="lede">Every cited source has a stable ID, access date and, where available, an archived copy.</p>
-    <ul class="link-row page-links small"><li><a href={repoTree('data/sources')}>Source records on GitHub</a></li></ul>
-    {sources.length === 0 && <p class="muted">No sources have been recorded yet.</p>}
-    {groups.map((g) => (
-      <section class="section record-section" aria-labelledby={`g-${g.code}`}>
-        <h2 id={`g-${g.code}`}>{g.name} <span class="h2-count">{g.items.length} {g.items.length === 1 ? 'source' : 'sources'}</span></h2>
-        <DocTypeCounts ids={g.items.map((s) => s.id)} label={`${g.name}: sources by document type`} />
-        <ul class="source-list source-register">
-          {g.items.map((s) => (
-            <li id={s.id}>
-              <span class="source-type" aria-hidden="true"><DocTypeIcon type={s.document_type} size="1.15rem" /></span>
-              <div class="source-main">
-                <span class="doc-type">{DOC_TYPE_LABELS[s.document_type] ?? s.document_type}</span>
-                <SourceCitation id={s.id} />
-                {s.notes && (
-                  <details class="disclosure source-notes">
-                    <summary>Notes</summary>
-                    <p class="small muted">{s.notes}</p>
-                  </details>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))}
-  </div>
+<Base title="Sources" description="Every primary source cited in ASE findings, with stable IDs." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Source register' }]} kicker="Evidence · Sources">
+    Source register
+    <Fragment slot="lede">Every cited source has a stable ID, access date and, where available, an archived copy.</Fragment>
+    <Fragment slot="meta"><ul class="link-row small"><li><a href={repoTree('data/sources')}>Source records on GitHub</a></li></ul></Fragment>
+  </PageHero>
+  {sources.length === 0 && <div class="container sec--dense"><p class="muted">No sources have been recorded yet.</p></div>}
+  {groups.map((g) => (
+    <section class="sec--dense" aria-labelledby={`g-${g.code}`}>
+      <div class="container">
+        <Folio label={g.name} dense />
+        <div class="split">
+          <div class="source-group-head">
+            <h2 id={`g-${g.code}`}>{g.name} <span class="h2-count">{g.items.length} {g.items.length === 1 ? 'source' : 'sources'}</span></h2>
+            <DocTypeCounts ids={g.items.map((s) => s.id)} label={`${g.name}: sources by document type`} class="doc-counts--stack" />
+          </div>
+          <ul class="source-list source-register">
+            {g.items.map((s) => (
+              <li id={s.id}>
+                <span class="source-type" aria-hidden="true"><DocTypeIcon type={s.document_type} size="1.15rem" /></span>
+                <div class="source-main">
+                  <span class="doc-type">{DOC_TYPE_LABELS[s.document_type] ?? s.document_type}</span>
+                  <SourceCitation id={s.id} />
+                  {s.notes && (
+                    <details class="disclosure source-notes">
+                      <summary>Notes</summary>
+                      <p class="small muted">{s.notes}</p>
+                    </details>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  ))}
 </Base>

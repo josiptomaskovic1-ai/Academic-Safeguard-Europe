@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
 import ScopeIcon from '../../components/ScopeIcon.astro';
 import SafeguardScore from '../../components/SafeguardScore.astro';
 import { getCountries, getInstitutions, getSources, getEvidence } from '../../lib/data';
@@ -13,53 +15,58 @@ const exports = [
   { name: 'Rubric', n: '12 safeguards', file: 'rubric.json' },
 ];
 ---
-<Base title="Open data" description="Download Academic Safeguard Europe research data as YAML or JSON." crumbs={[{ label: 'Open data' }]}>
-  <div class="container">
-    <h1>Open data</h1>
-    <p class="lede">All research data, CC BY 4.0. The YAML in the repository is canonical; JSON is generated at every build.</p>
+<Base title="Open data" description="Download Academic Safeguard Europe research data as YAML or JSON." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Open data' }]} kicker="Evidence · Open data">
+    Open data
+    <Fragment slot="lede">All research data, CC BY 4.0. The YAML in the repository is canonical; JSON is generated at every build.</Fragment>
+  </PageHero>
 
-    <div class="data-grid">
-      <section aria-labelledby="exports">
-        <h2 id="exports" class="subhead">JSON exports</h2>
-        <div class="table-wrap stack-table" tabindex="0" role="region" aria-labelledby="exports-cap">
-          <table class="data-table">
-            <caption class="visually-hidden" id="exports-cap">JSON exports</caption>
-            <thead><tr><th scope="col">Dataset</th><th scope="col">Records</th><th scope="col">Download</th></tr></thead>
-            <tbody>
-              {exports.map((e) => (
-                <tr><th scope="row">{e.name}</th><td class="num" data-label="Records"><span>{e.n}</span></td><td data-label="Download"><a class="dl-link" href={url(`/data/${e.file}`)}><ScopeIcon name="download" size="1rem" />{e.file}</a></td></tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p class="caveat-line">
-          <ScopeIcon name="evidence" size="1.15rem" />
-          <span>Automated checks reject findings without sources before publication.</span>
-        </p>
-        <details class="disclosure">
-          <summary>Where the files live</summary>
-          <ul class="small">
-            <li><a href={repoTree('data/countries')}><code>data/countries/</code></a>: one file per Member State</li>
-            <li><a href={repoTree('data/institutions')}><code>data/institutions/</code></a>: one folder per country</li>
-            <li><a href={repoTree('data/sources')}><code>data/sources/</code></a>: the source register</li>
-            <li><a href={repoFile('methodology/scoring-rubric.yml')}><code>methodology/scoring-rubric.yml</code></a>: safeguard definitions</li>
-            <li><a href={repoTree('research')}><code>research/</code></a>: research dossiers, including verification notes</li>
-            <li><a href={repoFile('docs/data-model.md')}><code>docs/data-model.md</code></a>: field definitions</li>
+  <section class="sec--dense" aria-label="Downloads and responsible use">
+    <div class="container">
+      <Folio label="JSON exports" dense />
+      <div class="split split--even">
+        <section aria-labelledby="exports">
+          <h2 id="exports">JSON exports</h2>
+          <div class="table-wrap stack-table" tabindex="0" role="region" aria-labelledby="exports-cap">
+            <table class="data-table">
+              <caption class="visually-hidden" id="exports-cap">JSON exports</caption>
+              <thead><tr><th scope="col">Dataset</th><th scope="col">Records</th><th scope="col">Download</th></tr></thead>
+              <tbody>
+                {exports.map((e) => (
+                  <tr><th scope="row">{e.name}</th><td class="num" data-label="Records"><span>{e.n}</span></td><td data-label="Download"><a class="dl-link" href={url(`/data/${e.file}`)}><ScopeIcon name="download" size="1rem" />{e.file}</a></td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="caveat-line">
+            <ScopeIcon name="evidence" size="1.15rem" />
+            <span>Automated checks reject findings without sources before publication.</span>
+          </p>
+          <details class="disclosure">
+            <summary>Where the files live</summary>
+            <ul class="small">
+              <li><a href={repoTree('data/countries')}><code>data/countries/</code></a>: one file per Member State</li>
+              <li><a href={repoTree('data/institutions')}><code>data/institutions/</code></a>: one folder per country</li>
+              <li><a href={repoTree('data/sources')}><code>data/sources/</code></a>: the source register</li>
+              <li><a href={repoFile('methodology/scoring-rubric.yml')}><code>methodology/scoring-rubric.yml</code></a>: safeguard definitions</li>
+              <li><a href={repoTree('research')}><code>research/</code></a>: research dossiers, including verification notes</li>
+              <li><a href={repoFile('docs/data-model.md')}><code>docs/data-model.md</code></a>: field definitions</li>
+            </ul>
+          </details>
+        </section>
+
+        <section aria-labelledby="responsible">
+          <h2 id="responsible">Using the data responsibly</h2>
+          <ul class="rule-list">
+            <li><span class="rule-mark" aria-hidden="true">01</span><span>Keep <SafeguardScore result="NR" compact />, <SafeguardScore result="?" compact /> and <SafeguardScore result="0" compact /> separate. Never average them.</span></li>
+            <li><span class="rule-mark" aria-hidden="true">02</span><span><code>needs_review</code> means provisional and not human-verified. Each JSON file also carries a <code>verification_summary</code> and <code>caveats</code>.</span></li>
+            <li><span class="rule-mark" aria-hidden="true">03</span><span>Don't build rankings. The method isn't built for aggregation.</span></li>
+            <li><span class="rule-mark" aria-hidden="true">04</span><span>Cite the methodology version and download date.</span></li>
           </ul>
-        </details>
-      </section>
-
-      <section class="panel" aria-labelledby="responsible">
-        <h2 id="responsible" class="panel-title">Using the data responsibly</h2>
-        <ul class="rule-list">
-          <li><span class="rule-mark" aria-hidden="true">01</span><span>Keep <SafeguardScore result="NR" compact />, <SafeguardScore result="?" compact /> and <SafeguardScore result="0" compact /> separate. Never average them.</span></li>
-          <li><span class="rule-mark" aria-hidden="true">02</span><span><code>needs_review</code> means provisional and not human-verified. Each JSON file also carries a <code>verification_summary</code> and <code>caveats</code>.</span></li>
-          <li><span class="rule-mark" aria-hidden="true">03</span><span>Don't build rankings. The method isn't built for aggregation.</span></li>
-          <li><span class="rule-mark" aria-hidden="true">04</span><span>Cite the methodology version and download date.</span></li>
-        </ul>
-        <h3 class="subhead">Suggested citation</h3>
-        <pre class="citation-block"><code>Academic Safeguard Europe, research data (methodology v0.1), {REPO_URL}, accessed [date]. CC BY 4.0.</code></pre>
-      </section>
+          <h3 class="subhead">Suggested citation</h3>
+          <pre class="citation-block"><code>Academic Safeguard Europe, research data (methodology v0.1), {REPO_URL}, accessed [date]. CC BY 4.0.</code></pre>
+        </section>
+      </div>
     </div>
-  </div>
+  </section>
 </Base>

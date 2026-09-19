@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
 import SafeguardScore from '../components/SafeguardScore.astro';
 import SafeguardIcon from '../components/SafeguardIcon.astro';
 import IconList from '../components/IconList.astro';
@@ -16,21 +17,22 @@ const toc = [
 ];
 const sgItems = rubric.safeguards.map((s) => ({ icon: s.id, code: s.id, text: s.name, href: `#${s.slug}`, detail: SAFEGUARD_GLOSS[s.id] }));
 ---
-<Base title="Standard" description="The ASE Safeguarding Standard, an independent draft for consultation: twelve safeguards against abuse of academic authority, with observable scoring criteria." crumbs={[{ label: 'Standard' }]}>
-  <div class="container">
-    <p class="eyebrow">Version {frontmatter.version} · {frontmatter.status}</p>
-    <h1>{frontmatter.title}</h1>
-    <p class="lede">Twelve safeguards that let students raise concerns without risking their education, each defined by published rules.</p>
+<Base title="Standard" description="The ASE Safeguarding Standard, an independent draft for consultation: twelve safeguards against abuse of academic authority, with observable scoring criteria." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'ASE Standard' }]} kicker={`Version ${frontmatter.version} · ${frontmatter.status}`}>
+    {frontmatter.title}
+    <Fragment slot="lede">Twelve safeguards that let students raise concerns without risking their education, each defined by published rules.</Fragment>
+    <Fragment slot="meta">
+      <div class="statement">
+        <p><strong>A research framework, not the campaign.</strong> The Standard is ASE’s independent draft for consultation, used to evaluate published rules. It is not a legal or regulatory standard and does not replace the <abbr title="Standards and Guidelines for Quality Assurance in the European Higher Education Area">ESG</abbr> or national law. The reforms ASE wants policymakers to adopt are set out separately in <a href={url('/demands/')}>Our Demands</a>.</p>
+      </div>
+      <ul class="link-row small doc-links"><li><a href={repoFile('standard/standard-v0.1.md')}>Source text</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a></li><li><a href={url('/methodology/')}>Scoring methodology</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
+    </Fragment>
+  </PageHero>
 
+  <div class="container doc-wrap">
     <div class="doc-grid">
       <OnThisPage items={toc} />
       <div class="doc-main">
-        <p class="fact-line fact-line--scope draft-line">
-          <span class="fact-tag">An independent draft</span>
-          <span>ASE's own framework, published for consultation. It is not a legal or regulatory standard and does not replace the <abbr title="Standards and Guidelines for Quality Assurance in the European Higher Education Area">ESG</abbr> or national law.</span>
-        </p>
-        <ul class="link-row small doc-links"><li><a href={repoFile('standard/standard-v0.1.md')}>Source text</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a></li><li><a href={url('/methodology/')}>Scoring methodology</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
-
         <section aria-labelledby="at-a-glance" class="glance-block">
           <h2 id="at-a-glance" class="subhead">The twelve safeguards at a glance</h2>
           <IconList items={sgItems} layout="grid" label="The twelve safeguards" class="std-grid" />
@@ -38,18 +40,18 @@ const sgItems = rubric.safeguards.map((s) => ({ icon: s.id, code: s.id, text: s.
 
         <div class="prose doc-body"><Content /></div>
 
-        <h2 id="rubric">Rubric: criteria for each level</h2>
+        <h2 id="rubric" class="doc-h2">Rubric: criteria for each level</h2>
         <p class="prose muted">Every safeguard can also be recorded as <SafeguardScore result="?" /> or <SafeguardScore result="NR" />. Where two levels are plausible, the lower one is assigned.</p>
         {rubric.safeguards.map((s) => (
           <section id={s.slug} class="rubric-item" aria-labelledby={`${s.slug}-h`}>
             <div class="rubric-head">
-              <span class="icon-frame icon-frame--lg" aria-hidden="true"><SafeguardIcon id={s.id} size="2rem" /></span>
+              <span class="rubric-icon" aria-hidden="true"><SafeguardIcon id={s.id} size="1.5rem" /></span>
               <div>
                 <p class="eyebrow">{s.id}</p>
                 <h3 id={`${s.slug}-h`}>{s.name}</h3>
               </div>
             </div>
-            <p class="prose"><strong>Question:</strong> {s.question}</p>
+            <p class="prose rubric-question"><strong>Question:</strong> {s.question}</p>
             {s.notes && <p class="prose small muted">{s.notes}</p>}
             <details class="disclosure">
               <summary>{s.id} criteria for levels 0–3</summary>

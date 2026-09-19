@@ -1,0 +1,40 @@
+---
+/** National framework section of a country record (summary disclosure + layers diagram, or a short not-reviewed line). */
+import Folio from './Folio.astro';
+import LayersDiagram from './LayersDiagram.astro';
+import { url } from '../lib/url';
+import type { Country } from '../lib/data';
+interface Props { country: Country }
+const { country: c } = Astro.props;
+const summaryWords = c.national_framework.summary ? c.national_framework.summary.trim().split(/\s+/).length : 0;
+---
+<section class="sec--dense" aria-labelledby="nf">
+  <div class="container">
+    <Folio label="National framework" dense />
+    {c.national_framework.summary ? (
+      <div class="split split--even">
+        <div>
+          <h2 id="nf">National framework</h2>
+          <p class="muted">Summary of the laws and regulators reviewed ({summaryWords} words).</p>
+          <details class="disclosure">
+            <summary>Read the national framework summary</summary>
+            <div class="reading">
+              <p>{c.national_framework.summary}</p>
+              <p class="small muted">This summary describes published legal and regulatory texts. It does not describe how they are applied in practice.</p>
+            </div>
+          </details>
+          <details class="disclosure">
+            <summary>What counts as national rules</summary>
+            <p class="small prose">“National framework” here means legislation, regulations and national quality-assurance standards reviewed by ASE; each finding's sources show which is which. Accreditation standards are expectations, not statutory duties. Institutions may provide more.</p>
+          </details>
+        </div>
+        <LayersDiagram scope="national" label="Where national findings come from" />
+      </div>
+    ) : (
+      <>
+        <h2 id="nf">National framework</h2>
+        <p class="muted">Not reviewed yet. <a href={url('/contribute/')}>Know {c.name}'s higher-education law? Help research it →</a></p>
+      </>
+    )}
+  </div>
+</section>

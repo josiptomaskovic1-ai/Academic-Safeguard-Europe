@@ -1,17 +1,15 @@
 ---
 import { newIssue, url } from '../lib/url';
-import ScopeIcon from './ScopeIcon.astro';
 interface Props { target: string; name?: string }
 const { target } = Astro.props;
 const hid = `corr-${target.replace(/[^A-Za-z0-9_-]/g, '-')}`;
 ---
-<aside class="panel corr-banner" aria-labelledby={hid}>
-  <span class="icon-frame" aria-hidden="true"><ScopeIcon name="correction" size="1.3rem" /></span>
+<aside class="corr-banner" aria-labelledby={hid}>
+  <h2 id={hid}>Corrections and right of reply</h2>
   <div class="corr-body">
-    <h2 id={hid}>Corrections and right of reply</h2>
     <p>Know a policy we missed, or disagree with a finding? Ask for a correction. Changes are logged publicly, never silently overwritten.</p>
     <div class="actions">
-      <a class="btn btn-secondary" href={newIssue('correction.yml', `[Correction] ${target}`)}>Request a correction</a>
+      <a class="btn btn-secondary" href={newIssue('correction.yml', `[Correction] ${target}`)}>Request a correction on GitHub</a>
       <a class="btn btn-secondary" href={url('/corrections/')}>How corrections work</a>
     </div>
     <p class="small muted corr-meta">Record ID <code>{target}</code> · No personal data or allegations, please.</p>

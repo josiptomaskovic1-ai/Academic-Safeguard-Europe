@@ -1,0 +1,71 @@
+---
+interface LedgerItem {
+  value: string | number;
+  label: string;
+  href?: string;
+  tone?: 'default' | 'provisional';
+}
+
+interface Props {
+  items: LedgerItem[];
+  label?: string;
+}
+
+const { items, label = 'Current research status' } = Astro.props;
+---
+<dl class="research-ledger" aria-label={label}>
+  {items.map((item) => (
+    <div class="ledger-entry" data-tone={item.tone ?? 'default'}>
+      <dt>{item.href ? <a href={item.href} aria-label={`${item.label}: ${item.value}`}>{item.label}</a> : item.label}</dt>
+      <dd>{item.value}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .research-ledger {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.2rem), 1fr));
+    gap: 0;
+    margin: 1.75rem 0 0;
+    border-block: 1px solid var(--rule-strong);
+    background: var(--surface);
+  }
+
+  .ledger-entry {
+    position: relative;
+    display: grid;
+    align-content: start;
+    min-width: 0;
+    min-height: 5.25rem;
+    padding: 0.8rem 0.9rem 0.9rem;
+    border-inline-start: 1px solid var(--rule);
+  }
+
+  .ledger-entry:first-child { border-inline-start: 0; }
+  .ledger-entry[data-tone='provisional']::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 auto;
+    border-top: 2px dashed var(--provisional);
+  }
+
+  dt { margin: 0.35rem 0 0; color: var(--ink-2); font: 550 0.875rem/1.3 var(--sans); }
+  dt a { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 0.8rem 0.9rem 0.9rem; color: inherit; }
+  .ledger-entry:focus-within { z-index: 1; outline: 3px solid var(--focus); outline-offset: 2px; }
+  .ledger-entry:focus-within dt a { outline: none; }
+  dd { order: -1; margin: 0; color: var(--ink); font: 600 1.45rem/1.05 var(--serif); font-variant-numeric: lining-nums tabular-nums; }
+
+  @media (max-width: 38rem) {
+    .research-ledger { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ledger-entry { min-height: 5.75rem; border-bottom: 1px solid var(--rule); }
+    .ledger-entry:nth-child(odd) { border-inline-start: 0; }
+    .ledger-entry:last-child:nth-child(odd) { grid-column: 1 / -1; }
+    .ledger-entry:last-child { border-bottom: 0; }
+  }
+
+  @media (max-width: 19rem) {
+    .research-ledger { grid-template-columns: minmax(0, 1fr); }
+    .ledger-entry { min-height: 4.9rem; border-inline-start: 0; }
+  }
+</style>

@@ -1,13 +1,16 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import { Content, frontmatter } from '../../../methodology/changelog.md';
 import { REPO_URL, newIssue } from '../../lib/url';
 ---
-<Base title="Methodology changelog" description="Versioned history of changes to the ASE Safeguarding Standard and scoring methodology." crumbs={[{ label: 'Methodology', href: '/methodology/' }, { label: 'Changelog' }]}>
-  <div class="container">
-    <h1>{frontmatter.title}</h1>
-    <p class="lede">Every change to the Standard, rubric or methodology is versioned and recorded here. Changes to individual findings are recorded in the corrections log and the <a href={`${REPO_URL}/commits/main/data`}>data commit history</a>.</p>
-    <div class="prose" style="margin-top:2rem"><Content /></div>
-    <p><a class="btn btn-secondary" href={newIssue('methodology-proposal.yml')}>Propose a methodology change</a></p>
+<Base title="Methodology changelog" description="Versioned history of changes to the ASE Safeguarding Standard and scoring methodology." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Methodology', href: '/methodology/' }, { label: 'Changelog' }]} kicker="Methodology · Changelog">
+    {frontmatter.title}
+    <Fragment slot="lede">Every change to the Standard, rubric or methodology is versioned and recorded here. Changes to individual findings are recorded in the corrections log and the <a href={`${REPO_URL}/commits/main/data`}>data commit history</a>.</Fragment>
+  </PageHero>
+  <div class="container doc-wrap">
+    <div class="prose doc-body"><Content /></div>
+    <div class="actions doc-actions"><a class="btn btn-secondary" href={newIssue('methodology-proposal.yml')}>Propose a methodology change</a></div>
   </div>
 </Base>

@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Folio from '../components/Folio.astro';
+import ActionBand from '../components/ActionBand.astro';
+import AuthorityDiagram from '../components/AuthorityDiagram.astro';
+import { url } from '../lib/url';
+import { getRubric } from '../lib/data';
+import { POWERS, KEY_SENTENCE_LEAD, KEY_SENTENCE_ACCENT } from '../lib/campaign';
+
+// Structural risks: each names the safeguards in the Standard that answer it. No prevalence claims.
+// Codes are shown; the safeguard names come from the rubric and are read to screen readers.
+const safeguards = getRubric().safeguards;
+const sg = (id: string) => {
+  const s = safeguards.find((x) => x.id === id);
+  if (!s) throw new Error(`problem.astro references unknown safeguard ${id}`);
+  return { id: s.id, name: s.name };
+};
+const risks = [
+  { title: 'The complaint goes to the same hierarchy', text: 'If concerns are handled inside the department or by colleagues of the person involved, independence depends on goodwill.', map: ['S03', 'S04'] },
+  { title: 'Retaliation does not have to look like retaliation', text: 'A lower grade, a withdrawn supervisor, a delayed submission or a missing reference can each be explained another way.', map: ['S02', 'S05'] },
+  { title: 'Time works against the student', text: 'Degrees, contracts and funding run on fixed clocks. A complaint without deadlines can outlast the studies it concerns.', map: ['S06'] },
+  { title: 'Decisions without reasons cannot be challenged', text: 'Without a written, reasoned decision and a route to another body, an outcome is final however it was reached.', map: ['S07', 'S08'] },
+  { title: 'Harm to a student’s record can remain', text: 'Even when a concern is upheld, a grade, an evaluation or a lost supervision may never be revisited.', map: ['S10'] },
+].map((r) => ({ ...r, map: r.map.map(sg) }));
+---
+<Base title="The Problem" description="Why academic power needs safeguards: students can depend on one academic hierarchy for assessment, supervision, references, progression, funding and their future." campaign>
+  <PageHero tone="navy" crumbs={[{ label: 'The Problem' }]} kicker="The problem">
+    Where academic power exists, <span class="m-bar">safeguards</span> should exist too.
+    <Fragment slot="lede">The people who assess, supervise and recommend a student can also be the people a concern is about.</Fragment>
+  </PageHero>
+
+  <section class="sec on-paper" aria-labelledby="dependence">
+    <div class="container">
+      <Folio label="Dependence" />
+      <div class="split split--reading">
+        <div>
+          <h2 id="dependence" class="sec-title">One hierarchy. Almost everything.</h2>
+          <ul class="power-list" role="list">
+            {POWERS.map((p) => <li>{p.term}</li>)}
+          </ul>
+          <details class="disclosure">
+            <summary>What each dependence covers</summary>
+            <dl class="power-detail">
+              {POWERS.map((p) => <div><dt>{p.term}</dt><dd>{p.detail}</dd></div>)}
+            </dl>
+          </details>
+        </div>
+        <div class="split-figure">
+          <AuthorityDiagram />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec on-navy" aria-labelledby="core">
+    <div class="container">
+      <Folio label="The point" />
+      <h2 id="core" class="m-statement">{KEY_SENTENCE_LEAD}<em class="m-bar">{KEY_SENTENCE_ACCENT}</em></h2>
+      <p class="c-note band-note">A policy on paper protects only when reporting is safe, someone independent decides, and harm can be put right.</p>
+    </div>
+  </section>
+
+  <section class="sec on-paper" aria-labelledby="risks">
+    <div class="container">
+      <Folio label="Why ordinary routes fail" />
+      <h2 id="risks" class="sec-title">Five structural risks.</h2>
+      <p class="sec-lede">Design risks in how rules are written, not claims about how often abuse happens or about any university.</p>
+      <ol class="risk-list" role="list">
+        {risks.map((r, i) => (
+          <li>
+            <span class="risk-num" aria-hidden="true">{i + 1}</span>
+            <h3>{r.title}</h3>
+            <div class="risk-body">
+              <p>{r.text}</p>
+              <p class="principle-map"><span class="visually-hidden">Answered in the Standard by: </span><span aria-hidden="true">→ </span>{r.map.map((s, j) => <>{j > 0 && <span aria-hidden="true"> · </span>}<span aria-hidden="true">{s.id}</span><span class="visually-hidden">{s.name} ({s.id}){j < r.map.length - 1 ? ', ' : ''}</span></>)}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec on-paper" aria-labelledby="freedom">
+    <div class="container">
+      <Folio label="What we are not saying" />
+      <div class="split">
+        <h2 id="freedom" class="sec-title">Academic freedom is not freedom from accountability.</h2>
+        <div>
+          <div class="accept accept--flush">
+            <div class="accept-no">
+              <h3>Not claimed</h3>
+              <ul role="list">
+                <li>That European universities systematically abuse students.</li>
+                <li>That most academics misuse their authority.</li>
+                <li>That any named person or institution has done wrong.</li>
+              </ul>
+            </div>
+            <div class="accept-yes">
+              <h3>Our case</h3>
+              <ul role="list">
+                <li>Academic authority creates real dependence.</li>
+                <li>Where dependence exists, abuse must be safe to report.</li>
+                <li>Whether safeguards exist should be publicly verifiable.</li>
+              </ul>
+            </div>
+          </div>
+          <details class="disclosure">
+            <summary>Academic freedom, autonomy and fair process</summary>
+            <div class="reading reading--sm">
+              <p>Academic freedom protects teaching and research from outside pressure. University autonomy lets institutions govern themselves. Both are essential, and neither is threatened by fair procedures.</p>
+              <p>Good safeguards protect everyone involved: students who raise concerns, and staff who are entitled to a fair process, to be heard, and to the presumption that a complaint still has to be established.</p>
+            </div>
+          </details>
+          <div class="m-links page-links-row">
+            <a class="m-more" href={url('/demands/')}>What we want Europe to do <span aria-hidden="true">→</span></a>
+            <a class="m-more" href={url('/evidence/')}>See the evidence <span aria-hidden="true">→</span></a>
+            <a class="plain-more" href={url('/evidence/library/')}>Background research</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ActionBand id="close-title">
+    Safe to speak starts with <span class="m-ink-line"><span class="m-ink">safeguards.</span></span>
+    <Fragment slot="actions"><a class="btn btn-primary btn-xl" href={url('/take-action/')}>Support European Safeguards</a></Fragment>
+  </ActionBand>
+</Base>

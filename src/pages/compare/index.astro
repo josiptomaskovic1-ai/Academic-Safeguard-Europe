@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
 import SafeguardIcon from '../../components/SafeguardIcon.astro';
 import CountryDots from '../../components/CountryDots.astro';
 import { getRubric, getCountries } from '../../lib/data';
@@ -7,25 +9,31 @@ import { url } from '../../lib/url';
 const rubric = getRubric();
 const countries = getCountries();
 ---
-<Base title="Compare safeguards" description="Compare individual safeguards across EU Member States." crumbs={[{ label: 'Compare safeguards' }]}>
-  <div class="container">
-    <h1>Compare one safeguard at a time</h1>
-    <p class="lede">Results are never added into an overall score. Safeguards are not interchangeable, and coverage is still uneven.</p>
-    <ul class="sg-cards" role="list">
-      {rubric.safeguards.map((s) => {
-        const researched = countries.filter((c) => (c.safeguards[s.id]?.result ?? 'NR') !== 'NR');
-        const prov = researched.filter((c) => c.safeguards[s.id]?.verification !== 'verified');
-        return (
-          <li class="sg-card">
-            <div class="sg-card-head">
-              <span class="icon-frame" aria-hidden="true"><SafeguardIcon id={s.id} size="1.35rem" /></span>
-              <span class="sg-card-code">{s.id}</span>
-            </div>
-            <h2 class="sg-card-title"><a href={url(`/compare/${s.slug}/`)}>{s.name}</a></h2>
-            <CountryDots filled={researched.map((c) => c.iso_code)} provisional={prov.map((c) => c.iso_code)} context="for this safeguard" showCount class="sg-card-dots" />
-          </li>
-        );
-      })}
-    </ul>
-  </div>
+<Base title="Compare safeguards" description="Compare individual safeguards across EU Member States." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Compare safeguards' }]} kicker="Evidence · Compare">
+    Compare one safeguard at a time
+    <Fragment slot="lede">Results are never added into an overall score. Safeguards are not interchangeable, and coverage is still uneven.</Fragment>
+  </PageHero>
+
+  <section class="sec--dense" aria-label="Twelve safeguards">
+    <div class="container">
+      <Folio label="Twelve safeguards" dense />
+      <ul class="sg-cards" role="list">
+        {rubric.safeguards.map((s) => {
+          const researched = countries.filter((c) => (c.safeguards[s.id]?.result ?? 'NR') !== 'NR');
+          const prov = researched.filter((c) => c.safeguards[s.id]?.verification !== 'verified');
+          return (
+            <li class="sg-card">
+              <div class="sg-card-head">
+                <span class="sg-card-code">{s.id}</span>
+                <span class="sg-card-icon" aria-hidden="true"><SafeguardIcon id={s.id} size="1.35rem" /></span>
+              </div>
+              <h2 class="sg-card-title"><a href={url(`/compare/${s.slug}/`)}>{s.name}</a></h2>
+              <CountryDots filled={researched.map((c) => c.iso_code)} provisional={prov.map((c) => c.iso_code)} context="for this safeguard" showCount class="sg-card-dots" />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
 </Base>

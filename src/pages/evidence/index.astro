@@ -1,0 +1,126 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
+import ActionBand from '../../components/ActionBand.astro';
+import SafeguardScore from '../../components/SafeguardScore.astro';
+import VerificationBadge from '../../components/VerificationBadge.astro';
+import { getCountries, getEvidence, getRubric, hasFindings, COUNTRY_STATUS_LABELS, type Verification, type ResultValue } from '../../lib/data';
+import { url } from '../../lib/url';
+
+const rubric = getRubric();
+const example = getCountries().find((c) => hasFindings(c.safeguards));
+const exampleSafeguard = example ? Object.entries(example.safeguards).find(([, r]) => ['1', '2', '3'].includes(r.result))?.[0] : undefined;
+const meaning = (v: string) => rubric.result_values.find((r) => r.value === v)!.meaning;
+const vMeaning = (v: string) => rubric.verification_statuses.find((r) => r.value === v)!.meaning;
+const results: ResultValue[] = ['NR', '?', '0'];
+const verifications: Verification[] = ['needs_review', 'verified', 'disputed'];
+// Old links pointed at Evidence Library items on /evidence/#<id>; the compatibility script forwards them.
+const libraryIds = getEvidence().map((e) => e.id).join(' ');
+---
+<Base title="Evidence" description="How Academic Safeguard Europe's evidence works: follow any finding from Europe to country, safeguard, provision, source and verification status." campaign>
+  <PageHero tone="navy" crumbs={[{ label: 'Evidence' }]} kicker="Evidence">
+    Every finding traces to a <span class="m-bar">document.</span>
+    <Fragment slot="lede">A published standard, a versioned method, primary sources and a public corrections process.</Fragment>
+  </PageHero>
+
+  <section class="sec on-paper" aria-labelledby="path">
+    <div class="container">
+      <Folio label="Follow a finding" />
+      <h2 id="path" class="sec-title">From Europe to the exact provision.</h2>
+      <ol class="evidence-path">
+        <li><strong>Europe</strong><span>Research status in all 27 Member States.</span><a href={url('/europe/')}>Explore Europe <span aria-hidden="true">→</span></a></li>
+        <li><strong>Country or institution</strong><span>National framework, universities researched, known gaps.</span>{example && <a href={url(`/countries/${example.slug}/`)}>{example.name} <span aria-hidden="true">→</span></a>}</li>
+        <li><strong>Safeguard</strong><span>Result, rationale, confidence and verification status.</span>{example && exampleSafeguard && <a href={url(`/countries/${example.slug}/#sg-${exampleSafeguard.toLowerCase()}`)}>{example.name}, {exampleSafeguard} <span aria-hidden="true">→</span></a>}</li>
+        <li><strong>Source and locator</strong><span>The official document, the article relied on, access date and archive.</span><a href={url('/sources/')}>Source register <span aria-hidden="true">→</span></a></li>
+        <li><strong>Verification</strong><span>Who checked it, and how to challenge it.</span><a href={url('/methodology/#5-verification')}>How verification works <span aria-hidden="true">→</span></a></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec on-paper" aria-labelledby="explore">
+    <div class="container">
+      <Folio label="Research tools" />
+      <h2 id="explore" class="sec-title">Inspect the evidence base.</h2>
+      <ul class="tool-index" role="list">
+        <li><a href={url('/europe/')}>Europe explorer</a><p>Research status by Member State.</p></li>
+        <li><a href={url('/compare/')}>Compare a safeguard</a><p>One safeguard across countries, never ranked.</p></li>
+        <li><a href={url('/institutions/')}>Institution profiles</a><p>University rules researched so far.</p></li>
+        <li><a href={url('/sources/')}>Source register</a><p>Every official document cited in a finding.</p></li>
+        <li><a href={url('/evidence/library/')}>Evidence Library</a><p>Background standards, law and research. Not used for scores.</p></li>
+        <li><a href={url('/data/')}>Open data</a><p>All findings and sources as JSON and YAML, CC BY 4.0.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec on-paper" aria-labelledby="labels">
+    <div class="container">
+      <Folio label="Reading the labels" />
+      <div class="split">
+        <div>
+          <h2 id="labels" class="sec-title">What the status labels mean.</h2>
+          <p class="sec-lede sec-lede--flush">Coverage is still growing. A gap in the research is never evidence that a safeguard is missing.</p>
+          <a class="m-more m-more--tight" href={url('/standard/#rubric')}>Criteria for scores 1 to 3 <span aria-hidden="true">→</span></a>
+        </div>
+        <div>
+          <h3 class="subhead subhead--first">Countries</h3>
+          <dl class="status-glossary">
+            <div><dt>{COUNTRY_STATUS_LABELS.not_researched}</dt><dd>ASE has not yet started work on this country. It says nothing about its safeguards.</dd></div>
+            <div><dt>{COUNTRY_STATUS_LABELS.research_underway}</dt><dd>Sources are being collected and assessed. No findings are published yet.</dd></div>
+          </dl>
+          <h3 class="subhead">Safeguard results that are not scores</h3>
+          <dl class="status-glossary">
+            {results.map((r) => <div><dt><SafeguardScore result={r} /></dt><dd>{meaning(r)}</dd></div>)}
+          </dl>
+          <h3 class="subhead">Verification</h3>
+          <dl class="status-glossary">
+            {verifications.map((v) => <div><dt><VerificationBadge status={v} /></dt><dd>{vMeaning(v)}</dd></div>)}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec on-paper" aria-label="Accountability">
+    <div class="container">
+      <Folio label="Accountability" />
+      <div class="split split--even">
+        <div>
+          <h2 id="framework" class="acc-title">A standard and a method, both versioned.</h2>
+          <ul class="tool-index tool-index--single" role="list">
+            <li><a href={url('/standard/')}>ASE Standard v{rubric.methodology_version}</a><p>Twelve safeguards and the observable criteria for each level.</p></li>
+            <li><a href={url('/methodology/')}>Methodology</a><p>How findings are made, sourced, verified and corrected.</p></li>
+            <li><a href={url('/methodology/changelog/')}>Methodology changelog</a><p>Every change to the Standard or method.</p></li>
+            <li><a href={url('/methodology/#11-known-limitations-of-v01')}>Known limitations</a><p>What documentary research can and cannot show.</p></li>
+          </ul>
+        </div>
+        <div>
+          <h2 id="accountability" class="acc-title">Anyone can challenge a finding.</h2>
+          <div class="reading">
+            <p>Report a missed document, a newer version or a misreading. Disputes are shown next to the finding, outcomes are reasoned, earlier versions stay in the public history, and institutions have a right of reply.</p>
+            <p>Published rules show how safeguards are designed, not how well they work in practice.</p>
+          </div>
+          <a class="m-more m-more--tight" href={url('/corrections/')}>Corrections and right of reply <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ActionBand id="contribute-title" tone="paper">
+    Know a law we should read?
+    <Fragment slot="actions"><a class="btn btn-primary btn-xl" href={url('/contribute/')}>Contribute research</a></Fragment>
+  </ActionBand>
+
+  <div hidden data-legacy-library={libraryIds} data-library-url={url('/evidence/library/')}></div>
+  <script>
+    // Compatibility: /evidence/ used to be the Evidence Library, so forward old item links (#<item-id>).
+    // The fragment is only compared against the pre-rendered list of item ids, never used as markup or a selector.
+    const holder = document.querySelector<HTMLElement>('[data-legacy-library]');
+    let id = '';
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch { id = ''; }
+    const ids = holder?.dataset.legacyLibrary?.split(' ') ?? [];
+    if (holder && id && ids.includes(id) && !document.getElementById(id)) {
+      location.replace(`${holder.dataset.libraryUrl}#${encodeURIComponent(id)}`);
+    }
+  </script>
+</Base>

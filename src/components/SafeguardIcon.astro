@@ -53,8 +53,10 @@ const SAFEGUARD_ICON_PATHS: Record<SafeguardId, string> = {
   S12: '<circle cx="10" cy="10" r="7"/><path d="M15 15l6 6"/><path d="M6.75 8.5L10 6.25l3.25 2.25M8 9.75v3M12 9.75v3M6.75 14h6.5"/>',
 };
 
-const body = SAFEGUARD_ICON_PATHS[id as SafeguardId] ?? '<rect x="4" y="4" width="16" height="16" rx="1"/>';
-const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// set:html only ever receives the constant markup above plus an escaped title; own-property lookup keeps
+// data-derived ids like "constructor" from reaching it.
+const body = Object.hasOwn(SAFEGUARD_ICON_PATHS, id) ? SAFEGUARD_ICON_PATHS[id as SafeguardId] : '<rect x="4" y="4" width="16" height="16" rx="1"/>';
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const dim = typeof size === 'number' ? `${size}px` : size;
 ---
 <svg

@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
 import ResearchStatus from '../../components/ResearchStatus.astro';
 import LastReviewed from '../../components/LastReviewed.astro';
 import MethodologyVersion from '../../components/MethodologyVersion.astro';
@@ -9,7 +11,7 @@ import SafeguardStrip from '../../components/SafeguardStrip.astro';
 import SourceCitation from '../../components/SourceCitation.astro';
 import InstitutionCard from '../../components/InstitutionCard.astro';
 import CorrectionBanner from '../../components/CorrectionBanner.astro';
-import LayersDiagram from '../../components/LayersDiagram.astro';
+import NationalFramework from '../../components/NationalFramework.astro';
 import ScopeIcon from '../../components/ScopeIcon.astro';
 import DocTypeCounts from '../../components/DocTypeCounts.astro';
 import { getCountries, getInstitutionsFor, coverage, countryCoverageWithInstitutions, localNameParts, type Country } from '../../lib/data';
@@ -30,160 +32,154 @@ const gaps = c.evidence_gaps ?? [];
 // Display grouping only: gap text is shown unchanged.
 const unresolved = gaps.filter((g) => /^Unresolved:/i.test(g));
 const otherGaps = gaps.filter((g) => !/^Unresolved:/i.test(g));
-const summaryWords = c.national_framework.summary ? c.national_framework.summary.trim().split(/\s+/).length : 0;
 const nothingRecorded = !researched && institutions.length === 0 && gaps.length === 0 && sourceIds.length === 0;
+const showDossier = researched && !!c.research_dossier && (cov.provisional > 0 || !!c.research_method);
+const crumbs = [{ label: 'Europe', href: '/europe/' }, { label: c.name }];
 ---
-<Base title={c.name} description={`Published safeguards against abuse of academic authority in ${c.name}: research status, findings and sources.`} crumbs={[{ label: 'Europe', href: '/europe/' }, { label: c.name }]}>
-  <div class="container">
-    <p class="eyebrow">EU Member State · {c.iso_code}</p>
-    <h1>{c.name}{localParts.length > 0 && <> <span class="h1-local muted">{localParts.map((p, i) => <>{i > 0 && ' / '}<span lang={p.lang}>{p.text}</span></>)}</span></>}</h1>
-
-    <ul class="status-line" role="list" aria-label="Record status">
-      <li><ResearchStatus status={c.research_status} /></li>
-      {c.last_reviewed && <li>Reviewed <LastReviewed date={c.last_reviewed} /></li>}
-      <li><MethodologyVersion version={c.methodology_version} /></li>
-      <li>{cov.researched}/{cov.total} researched</li>
-      {researched && <li>{cov.verified} verified</li>}
-      {cov.provisional > 0 && <li class="status-line-prov">{cov.provisional} provisional</li>}
-      {cov.disputed > 0 && <li>{cov.disputed} disputed</li>}
-    </ul>
-
-    <div class="record-head">
-      <div class="panel record-glance">
-        <SafeguardStrip safeguards={c.safeguards} caption="National results, S01–S12" linkPrefix={researched ? '#sg-' : undefined} showKey={researched} />
-        {!researched && <p class="small muted record-glance-note">All twelve are <strong>NR</strong>: not researched.</p>}
-      </div>
-
-      <div class="record-notes">
-        {researched ? (
-          <>
-            {cov.provisional > 0 && (
-              <div class="notice provisional">
-                <p><strong>{cov.provisional} of {cov.researched} national findings are provisional.</strong> {c.research_method ?? 'They have not yet been verified by a human second reviewer.'} They may change.</p>
-                <ul class="link-row small">
-                  {c.research_dossier && <li><a href={repoFile(c.research_dossier)}>Research dossier</a></li>}
-                  {gaps.length > 0 && <li><a href="#gaps">Known gaps</a></li>}
-                </ul>
-              </div>
-            )}
-            {cov.provisional === 0 && c.research_method && <p class="small muted"><strong>Research method:</strong> {c.research_method}{c.research_dossier && <> <a href={repoFile(c.research_dossier)}>Research dossier</a>.</>}</p>}
-            {!complete && (
-              <p class="missing-note">
-                <svg class="info-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 7v4.5M8 4.6v.1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" /></svg>
-                <span>Research here is incomplete. <strong>Missing data is not absence of safeguards.</strong></span>
-              </p>
-            )}
-          </>
-        ) : (
-          <>
-            <div class="notice">
-              <p><strong>Not researched yet.</strong> Missing data is not absence of safeguards.</p>
-            </div>
-            {nothingRecorded && <p class="small muted">No institutions, sources or findings recorded yet. The whole jurisdiction is an evidence gap.</p>}
-            <p class="record-cta"><a href={url('/contribute/')}>Help research {c.name} →</a></p>
-          </>
-        )}
-      </div>
-    </div>
-
-    <details class="disclosure record-meta">
-      <summary>Record details</summary>
-      <dl class="meta-list">
-        <dt>Research status</dt><dd><ResearchStatus status={c.research_status} cov={countryCoverageWithInstitutions(c.iso_code)} /></dd>
-        <dt>Last reviewed</dt><dd><LastReviewed date={c.last_reviewed} /></dd>
-        <dt>Methodology</dt><dd><MethodologyVersion version={c.methodology_version} /></dd>
-        <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched at national level · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
-        {researched && <><dt>Human verification</dt><dd>{cov.verified === 0 ? 'Not yet carried out' : `${cov.verified} of ${cov.researched} findings verified`}</dd></>}
-        {c.confidence && <><dt title="Confidence in the evidence and interpretation, not a rating of the jurisdiction">Research confidence</dt><dd><ConfidenceLabel value={c.confidence} /></dd></>}
-        <dt>Data file</dt><dd><a href={repoFile(`data/countries/${c.slug}.yml`)}><code>data/countries/{c.slug}.yml</code></a></dd>
+<Base title={c.name} description={`Published safeguards against abuse of academic authority in ${c.name}: research status, findings and sources.`} campaign>
+  <PageHero crumbs={crumbs} kicker={`EU Member State · ${c.iso_code}`} class="record-hero">
+    {c.name}{localParts.length > 0 && <> <span class="h1-local">{localParts.map((p, i) => <>{i > 0 && ' / '}<span lang={p.lang}>{p.text}</span></>)}</span></>}
+    <Fragment slot="meta">
+      <dl class="facts">
+        <div><dt>Status</dt><dd><ResearchStatus status={c.research_status} /></dd></div>
+        {c.last_reviewed && <div><dt>Reviewed</dt><dd><LastReviewed date={c.last_reviewed} /></dd></div>}
+        <div><dt>Method</dt><dd><MethodologyVersion version={c.methodology_version} /></dd></div>
+        <div><dt>Coverage</dt><dd>{cov.researched}/{cov.total} researched</dd></div>
+        {researched && <div class:list={{ 'is-prov': cov.provisional > 0 }}><dt>Verification</dt><dd>{cov.verified} verified{cov.provisional > 0 && ` · ${cov.provisional} provisional`}{cov.disputed > 0 && ` · ${cov.disputed} disputed`}</dd></div>}
       </dl>
-    </details>
+    </Fragment>
+    <Fragment slot="aside">
+      <SafeguardStrip safeguards={c.safeguards} caption="National results, S01–S12" linkPrefix={researched ? '#sg-' : undefined} showKey={researched} />
+      {!researched && <p class="small muted record-glance-note">All twelve are <strong>NR</strong>: not yet researched.</p>}
+    </Fragment>
+  </PageHero>
 
-    <section class="section record-section" aria-labelledby="nf">
-      <h2 id="nf">National framework</h2>
-      {c.national_framework.summary ? (
-        <div class="nf-grid">
-          <div>
-            <p class="muted">Summary of the laws and regulators reviewed ({summaryWords} words).</p>
-            <details class="disclosure">
-              <summary>Read the national framework summary</summary>
-              <div class="prose">
-                <p>{c.national_framework.summary}</p>
-                <p class="small muted">This summary describes published legal and regulatory texts. It does not describe how they are applied in practice.</p>
-              </div>
-            </details>
-            <details class="disclosure">
-              <summary>What counts as national rules</summary>
-              <p class="small prose">“National framework” here means legislation, regulations and national quality-assurance standards reviewed by ASE; each finding's sources show which is which. Accreditation standards are expectations, not statutory duties. Institutions may provide more.</p>
-            </details>
-          </div>
-          <LayersDiagram scope="national" label="Where national findings come from" />
+  <div class="container record-status">
+    <div class="record-status-grid">
+      {researched ? (
+        <div class:list={['statement', { 'statement--provisional': cov.provisional > 0 }]}>
+          {cov.provisional > 0 && <p><strong>{cov.provisional} of {cov.researched} national findings are provisional.</strong> {c.research_method ?? 'They have not yet been verified by a human second reviewer.'} They may change.</p>}
+          {cov.provisional === 0 && c.research_method && <p><strong>Research method:</strong> {c.research_method}</p>}
+          {!complete && <p>Research here is incomplete. <strong>Missing data is not absence of safeguards.</strong></p>}
+          {(showDossier || gaps.length > 0) && (
+            <ul class="link-row small">
+              {showDossier && <li><a href={repoFile(c.research_dossier!)}>Research dossier</a></li>}
+              {gaps.length > 0 && <li><a href="#gaps">Known gaps</a></li>}
+            </ul>
+          )}
         </div>
       ) : (
-        <p class="muted">Not reviewed yet. <a href={url('/contribute/')}>Know {c.name}'s higher-education law? Help research it →</a></p>
+        <div class="statement">
+          <p><strong>Not yet researched.</strong> Missing data is not absence of safeguards.</p>
+          {nothingRecorded && <p class="muted">No institutions, sources or findings recorded yet. The whole jurisdiction is an evidence gap.</p>}
+          <a class="m-more" href={url('/contribute/')}>Help research {c.name} <span aria-hidden="true">→</span></a>
+        </div>
       )}
-    </section>
 
-    <section class="section record-section" aria-labelledby="matrix">
+      <details class="disclosure record-meta">
+        <summary>Record details</summary>
+        <dl class="meta-list">
+          <dt>Research status</dt><dd><ResearchStatus status={c.research_status} cov={countryCoverageWithInstitutions(c.iso_code)} /></dd>
+          <dt>Last reviewed</dt><dd><LastReviewed date={c.last_reviewed} /></dd>
+          <dt>Methodology</dt><dd><MethodologyVersion version={c.methodology_version} /></dd>
+          <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched at national level · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
+          {researched && <><dt>Human verification</dt><dd>{cov.verified === 0 ? 'Not yet carried out' : `${cov.verified} of ${cov.researched} findings verified`}</dd></>}
+          {c.confidence && <><dt title="Confidence in the evidence and interpretation, not a rating of the jurisdiction">Research confidence</dt><dd><ConfidenceLabel value={c.confidence} /></dd></>}
+          <dt>Data file</dt><dd><a href={repoFile(`data/countries/${c.slug}.yml`)}><code>data/countries/{c.slug}.yml</code></a></dd>
+        </dl>
+      </details>
+    </div>
+  </div>
+
+  {!researched && <NationalFramework country={c} />}
+
+  <section class="sec--dense" aria-labelledby="matrix">
+    <div class="container">
+      <Folio label={researched ? 'Findings' : 'Safeguards'} dense />
       <h2 id="matrix">Safeguards in national rules</h2>
       {researched ? (
         <>
-          <p class="muted">What national rules require of universities. Universities may add more. Select a safeguard for evidence.</p>
+          <p class="muted sec-note">What national rules require of universities; universities may add more. Select a safeguard for its evidence.</p>
           <p class="caveat-line caveat-line--matrix">
             <ScopeIcon name="practice" size="1.15rem" />
             <span>These are published rules, not evidence of how they work in practice.</span>
           </p>
-          <SafeguardMatrix safeguards={c.safeguards} />
+          <SafeguardMatrix safeguards={c.safeguards} correctionTarget={`country/${c.iso_code}`} />
         </>
       ) : (
         <>
-          <p class="muted">No safeguard has been researched here. <strong>NR</strong> says nothing about whether safeguards exist. <a href={url('/standard/')}>See the 12 safeguard questions →</a></p>
+          <p class="muted sec-note">No safeguard has been researched here. <strong>NR</strong> says nothing about whether safeguards exist. <a href={url('/standard/')}>See the 12 safeguard questions →</a></p>
           <details class="disclosure">
             <summary>Show all 12 safeguards</summary>
-            <SafeguardMatrix safeguards={c.safeguards} />
+            <SafeguardMatrix safeguards={c.safeguards} correctionTarget={`country/${c.iso_code}`} />
           </details>
         </>
       )}
-    </section>
+    </div>
+  </section>
 
-    {(researched || institutions.length > 0) && (
-      <section class="section record-section" aria-labelledby="inst">
+  {researched && <NationalFramework country={c} />}
+
+  {(researched || institutions.length > 0) && (
+    <section class="sec--dense" aria-labelledby="inst">
+      <div class="container">
+        <Folio label="Institutions" dense />
         <h2 id="inst">Institutions researched</h2>
         {institutions.length
-          ? <div class="grid inst-grid">{institutions.map((i) => <InstitutionCard institution={i} showCountry={false} />)}</div>
+          ? <div class="inst-rows">{institutions.map((i) => <InstitutionCard institution={i} showCountry={false} />)}</div>
           : <p class="muted">No institution in {c.name} has been researched yet.</p>}
-      </section>
-    )}
+      </div>
+    </section>
+  )}
 
-    {(researched || gaps.length > 0) && (
-      <section class="section record-section" id="gaps" aria-labelledby="gaps-h">
+  {(researched || gaps.length > 0) && (
+    <section class="sec--dense" aria-labelledby="gaps-h">
+      <div class="container" id="gaps">
+        <Folio label="Evidence gaps" dense />
         <h2 id="gaps-h">Known evidence gaps{gaps.length > 0 && ` (${gaps.length})`}</h2>
-        {gaps.length ? (
+        {gaps.length > 0 ? (
           <>
-            {otherGaps.length > 0 && <ul class="gap-list prose">{otherGaps.map((g) => <li>{g}</li>)}</ul>}
-            {unresolved.length > 0 && <><h3 class="subhead">Unresolved questions</h3><ul class="gap-list prose">{unresolved.map((g) => <li>{g}</li>)}</ul></>}
+            <p class="muted sec-note">What this research round did not locate, open or resolve.</p>
+            <details class="disclosure">
+              <summary>Show {gaps.length} evidence {gaps.length === 1 ? 'gap' : 'gaps'}{unresolved.length > 0 && ` · ${unresolved.length} unresolved ${unresolved.length === 1 ? 'question' : 'questions'}`}</summary>
+              {otherGaps.length > 0 && <ul class="gap-list prose">{otherGaps.map((g) => <li>{g}</li>)}</ul>}
+              {unresolved.length > 0 && <><h3 class="subhead">Unresolved questions</h3><ul class="gap-list prose">{unresolved.map((g) => <li>{g}</li>)}</ul></>}
+              {c.researcher_notes && (
+                <details class="disclosure" id="notes">
+                  <summary>Researcher notes</summary>
+                  <p class="prose">{c.researcher_notes}</p>
+                </details>
+              )}
+            </details>
           </>
-        ) : <p class="muted">No specific gaps recorded.</p>}
-        {c.researcher_notes && (
-          <details class="disclosure" id="notes">
-            <summary>Researcher notes</summary>
-            <p class="prose">{c.researcher_notes}</p>
-          </details>
+        ) : (
+          <>
+            <p class="muted">No specific gaps recorded.</p>
+            {c.researcher_notes && (
+              <details class="disclosure" id="notes">
+                <summary>Researcher notes</summary>
+                <p class="prose">{c.researcher_notes}</p>
+              </details>
+            )}
+          </>
         )}
-      </section>
-    )}
+      </div>
+    </section>
+  )}
 
-    {sourceIds.length > 0 && (
-      <section class="section record-section" id="sources" aria-labelledby="src">
+  {sourceIds.length > 0 && (
+    <section class="sec--dense" id="sources" aria-labelledby="src">
+      <div class="container">
+        <Folio label="Sources" dense />
         <h2 id="src">Sources ({sourceIds.length})</h2>
         <DocTypeCounts ids={sourceIds} />
         <details class="disclosure">
           <summary>Show all {sourceIds.length} citations</summary>
           <ul class="source-list prose">{sourceIds.map((id) => <li><SourceCitation id={id} full /></li>)}</ul>
         </details>
-      </section>
-    )}
+      </div>
+    </section>
+  )}
 
-    <div class="record-corrections"><CorrectionBanner target={`country/${c.iso_code}`} /></div>
-  </div>
+  <div class="sec--dense record-corrections"><div class="container"><CorrectionBanner target={`country/${c.iso_code}`} /></div></div>
 </Base>

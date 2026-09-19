@@ -5,6 +5,7 @@ on:
   push:
     branches-ignore: [main]
 
+# Read-only token. `pull_request` (never `pull_request_target`) gives forked PRs no secrets and no write access.
 permissions:
   contents: read
 
@@ -20,10 +21,25 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      # Lockfile-exact install; .npmrc sets ignore-scripts=true so dependency install scripts do not run.
       - run: npm ci
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
       - name: Validate research data
         run: npm run validate-data
       - name: Build site
-        run: npx astro build
+        run: npx --no-install astro build
       - name: Check internal links
         run: npm run check-links
+      - name: Security checks
+        run: npm run check-security
+
+  dependency-review:
+    # Blocks pull requests that add dependencies with known high-severity advisories.
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: high

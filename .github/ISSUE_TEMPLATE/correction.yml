@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping keep ASE accurate. **This issue is public.** Do not include personal data, names of staff or students, or allegations about individuals.
+        Thank you for helping keep ASE accurate. **This issue is public** and stays in the repository history. Do not include personal data (names of staff or students, student IDs, contact details, health information), allegations about individuals, personal case evidence, or confidential institutional documents.
         If you disagree with the methodology itself rather than how it was applied, use the *Methodology proposal* template instead.
   - type: input
     id: record

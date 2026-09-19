@@ -13,7 +13,7 @@ ASE evaluates institutional safeguards and published rules. **It does not rate i
 
 | Path | Contents |
 |---|---|
-| `standard/` | European Academic Safeguarding Standard v0.1 (prose) |
+| `standard/` | ASE Safeguarding Standard v0.1, independent draft (prose) |
 | `methodology/` | Scoring methodology, the machine-readable **scoring rubric** (`scoring-rubric.yml`) and the changelog |
 | `data/countries/` | One record per EU Member State (all 27) |
 | `data/institutions/` | Institution profiles, one folder per country |
@@ -50,14 +50,15 @@ See `docs/adversarial-review.md` for known credibility risks and the mitigations
 
 ## Running locally
 
-Requirements: Node.js 20 or later.
+Requirements: Node.js 22.12 or later.
 
 ```bash
-npm ci
-npm run dev             # http://localhost:4321/Academic-Safeguard-Europe/
+npm ci                  # exact lockfile install; dependency install scripts are disabled in .npmrc
+npm run dev             # http://localhost:4321/Academic-Safeguard-Europe/ (localhost only; never use --host)
 npm run validate-data   # check all research data
 npm run build           # validate + build static site into dist/
 npm run check-links     # after build: verify internal links and anchors
+npm run check-security  # after build: CSP, unsafe URLs/markup, pinned actions, secrets (see SECURITY.md)
 ```
 
 ## Deployment (€0)

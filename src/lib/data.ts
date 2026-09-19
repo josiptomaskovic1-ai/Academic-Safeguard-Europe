@@ -100,6 +100,12 @@ export interface Source {
   accessed: string;
   language: string;
   archived_url?: string | null;
+  /**
+   * False when the cited text is an unofficial consolidation (for example zakon.hr) rather than the
+   * official gazette text. Absent means the source is an official text. Surfaced in every citation,
+   * because a consolidation can lag or misstate the version in force.
+   */
+  official_text?: boolean;
   notes?: string | null;
 }
 
@@ -181,7 +187,7 @@ export const getEvidence = () => loadAll().evidence;
 export const getCorrections = () => loadAll().corrections;
 
 export const RESULT_LABELS: Record<ResultValue, string> = {
-  NR: 'Not researched',
+  NR: 'Not yet researched',
   '?': 'Unable to assess',
   '0': 'Not identified',
   '1': 'Limited',
@@ -190,7 +196,7 @@ export const RESULT_LABELS: Record<ResultValue, string> = {
 };
 
 export const COUNTRY_STATUS_LABELS: Record<string, string> = {
-  not_researched: 'Not researched',
+  not_researched: 'Not yet researched',
   research_underway: 'Research underway',
   partially_researched: 'Partially researched',
   national_framework_reviewed: 'National framework reviewed',
@@ -204,7 +210,7 @@ export const INSTITUTION_STATUS_LABELS: Record<string, string> = {
 };
 
 export const VERIFICATION_LABELS: Record<Verification, string> = {
-  verified: 'Verified',
+  verified: 'Independently verified',
   needs_review: 'Provisional — awaiting verification',
   disputed: 'Disputed',
 };

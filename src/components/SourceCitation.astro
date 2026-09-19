@@ -1,6 +1,6 @@
 ---
 import { getSource, DOC_TYPE_LABELS } from '../lib/data';
-import { url } from '../lib/url';
+import { url, externalUrl } from '../lib/url';
 interface Props { id: string; locator?: string; full?: boolean }
 const { id, locator, full = false } = Astro.props;
 const s = getSource(id);
@@ -11,7 +11,7 @@ const meta = s
 ---
 {s ? (
   <span class="citation" id={full ? id : undefined}>
-    <a class="cite-title" href={s.url} rel="noopener" lang={s.language || undefined}>{s.title}</a>{s.title_en && s.title_en !== s.title && <span class="cite-meta"> ({s.title_en})</span>}<span class="cite-meta">{meta}{locator && <> <strong>{locator}</strong>.</>} Accessed {s.accessed}.{s.archived_url && <> <a href={s.archived_url} rel="noopener">Archived copy</a>.</>}</span>{' '}<a class="source-id" href={url(`/sources/#${s.id}`)}>[{s.id}]</a>
+    <a class="cite-title" href={externalUrl(s.url)} rel="noopener" lang={s.language || undefined}>{s.title}</a>{s.title_en && s.title_en !== s.title && <span class="cite-meta"> ({s.title_en})</span>}<span class="cite-meta">{meta}{locator && <> <strong>{locator}</strong>.</>} Accessed {s.accessed}.{s.archived_url && <> <a href={externalUrl(s.archived_url)} rel="noopener">Archived copy</a>.</>}</span>{s.official_text === false && <> <span class="unofficial-text" title="Unofficial consolidated text, not the official gazette version">Unofficial consolidation</span></>}{' '}<a class="source-id" href={url(`/sources/#${s.id}`)}>[{s.id}]</a>
     {full && s.notes && <><br /><span class="small muted">{s.notes}</span></>}
   </span>
 ) : (

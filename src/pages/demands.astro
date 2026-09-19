@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Folio from '../components/Folio.astro';
+import ActionBand from '../components/ActionBand.astro';
+import { url } from '../lib/url';
+import { DEMANDS, CAMPAIGN_NAME } from '../lib/campaign';
+import { getRubric } from '../lib/data';
+
+const rubric = getRubric();
+// What each demand would mean in practice. Policy positions; they do not restate or change the rubric.
+const practice: Record<string, string[]> = {
+  'minimum-safeguards': [
+    'A shared European baseline covering, at minimum: protection from retaliation, independent complaint handling, conflict-of-interest rules, deadlines, written reasons, appeal and remedy.',
+    'The baseline sets a floor. Countries and universities stay free to go further and to design procedures that fit their systems.',
+    'Protection that does not depend on a student’s country, institution or nationality, including for mobile students and doctoral candidates.',
+  ],
+  quality: [
+    'Quality assurance asks whether institutions have effective, independent procedures for concerns about abuse of academic power.',
+    'Institutional reviews look at whether those procedures are known, used and followed up, not only whether a policy document exists.',
+    'Safeguarding is treated as part of academic quality, alongside teaching, assessment and student support.',
+  ],
+  monitoring: [
+    'Public, comparable information on which safeguards exist in each system and institution, with the sources behind it.',
+    'Regular review, so that changes to rules are visible and gaps are tracked over time.',
+    'Findings that institutions can correct and reply to, as ASE does with its own evidence base.',
+  ],
+};
+const actors = [
+  { who: 'European institutions', role: 'Setting common expectations for student protection across the European Union.' },
+  { who: 'National governments and parliaments', role: 'Writing minimum safeguards into higher-education law.' },
+  { who: 'Quality-assurance agencies', role: 'Making safeguarding an explicit part of institutional review.' },
+  { who: 'Universities and student representatives', role: 'Adopting and monitoring safeguards now, without waiting for legislation.' },
+];
+---
+<Base title="Our Demands" description="What Academic Safeguard Europe wants Europe to do: minimum safeguards against abuse of academic power, safeguarding in higher-education quality, and public monitoring." campaign>
+  <PageHero tone="navy" crumbs={[{ label: 'Our Demands' }]} kicker={`${CAMPAIGN_NAME} · Our demands`}>
+    Enforceable safeguards for <span class="m-bar">every student</span> in Europe.
+    <Fragment slot="lede">Three reforms: safer to report, fairer to decide, easier to put right.</Fragment>
+  </PageHero>
+
+  <section class="sec on-paper" aria-label="Three demands">
+    <div class="container">
+      <Folio label="Three demands" />
+      <ol class="m-demands demands-full" role="list">
+        {DEMANDS.map((d, i) => (
+          <li id={d.id}>
+            <span class="m-dem-num" aria-hidden="true">{i + 1}</span>
+            <div class="demand-body">
+              <h2 id={`${d.id}-h`}>{d.title}</h2>
+              <p class="demand-lede">{d.summary}</p>
+              <div>
+                <details class="disclosure">
+                  <summary>What it would mean</summary>
+                  <ul class="ruled-points" role="list">
+                    {practice[d.id].map((t) => <li>{t}</li>)}
+                  </ul>
+                </details>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec on-navy" aria-labelledby="not-asking">
+    <div class="container">
+      <Folio label="What we ask" />
+      <h2 id="not-asking" class="sec-title">A floor of protection, not outside control.</h2>
+      <div class="accept accept--flush">
+        <div class="accept-no">
+          <h3>Not asking for</h3>
+          <ul role="list">
+            <li>Outside control of teaching, research or academic judgement.</li>
+            <li>Weaker university autonomy.</li>
+            <li>A presumption that complaints are true, or that staff are at fault.</li>
+            <li>One identical procedure imposed on every institution.</li>
+          </ul>
+        </div>
+        <div class="accept-yes">
+          <h3>Asking for</h3>
+          <ul role="list">
+            <li>A common floor of protection.</li>
+            <li>Independent, timely and reasoned procedures.</li>
+            <li>Fair process for everyone involved.</li>
+            <li>Transparency about what protections exist.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec on-paper" aria-labelledby="audience">
+    <div class="container">
+      <Folio label="Who can act" />
+      <h2 id="audience" class="sec-title">Who can act.</h2>
+      <ul class="ruled-index ruled-index--4" role="list">
+        {actors.map((a) => <li><h3>{a.who}</h3><p>{a.role}</p></li>)}
+      </ul>
+      <p class="c-note distinction-note">These demands are advocacy and can be argued with. The <a href={url('/standard/')}>ASE Standard v{rubric.methodology_version}</a> is the separate research framework, so findings follow the evidence, not the campaign.</p>
+    </div>
+  </section>
+
+  <ActionBand id="close-title">
+    Put safeguards on <span class="m-ink-line"><span class="m-ink">Europe’s agenda.</span></span>
+    <Fragment slot="actions">
+      <a class="btn btn-primary btn-xl" href={url('/take-action/')}>Support European Safeguards</a>
+      <a class="m-more" href={url('/evidence/')}>See what the evidence shows <span aria-hidden="true">→</span></a>
+    </Fragment>
+  </ActionBand>
+</Base>

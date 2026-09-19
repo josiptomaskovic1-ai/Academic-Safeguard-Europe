@@ -1,29 +1,28 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
 import { url, REPO_URL } from '../lib/url';
 ---
-<Base title="Page not found" description="The requested page does not exist on Academic Safeguard Europe." noindex>
-  <div class="container nf-page">
-    <svg class="nf-art" viewBox="0 0 120 120" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M30 14h44l18 18v74H30z" stroke-dasharray="6 5" />
-      <path d="M74 14v18h18" stroke-dasharray="6 5" />
-      <path d="M44 56h34M44 68h22" opacity=".45" />
-      <circle cx="70" cy="80" r="15" />
-      <path d="M81 91l14 14" />
-    </svg>
-    <div>
-      <p class="eyebrow">404</p>
-      <h1>Page not found</h1>
-      <p class="lede">The page doesn't exist or has moved. Renamed records are in the <a href={`${REPO_URL}/commits/main`}>public history on GitHub</a>.</p>
-      <ul class="link-row page-links">
-        <li><a href={url('/')}>Home</a></li>
-        <li><a href={url('/europe/')}>Country explorer</a></li>
-        <li><a href={url('/institutions/')}>Institutions</a></li>
-        <li><a href={url('/compare/')}>Compare safeguards</a></li>
-        <li><a href={url('/standard/')}>Standard</a></li>
-        <li><a href={url('/corrections/')}>Corrections</a></li>
-        <li><a href={url('/data/')}>Open data</a></li>
-      </ul>
-    </div>
-  </div>
+<Base title="Page not found" description="The requested page does not exist on Academic Safeguard Europe." noindex campaign>
+  <PageHero kicker="Error 404" class="nf-hero">
+    Page not found
+    <Fragment slot="lede">The page doesn't exist or has moved. Renamed records are in the <a href={`${REPO_URL}/commits/main`}>public history on GitHub</a>.</Fragment>
+    <Fragment slot="meta">
+      <div class="m-links">
+        <a class="m-more" href={url('/')}>Home <span aria-hidden="true">→</span></a>
+        <a class="m-more" href={url('/europe/')}>Europe <span aria-hidden="true">→</span></a>
+        <a class="m-more" href={url('/evidence/')}>Evidence <span aria-hidden="true">→</span></a>
+        <a class="m-more" href={url('/take-action/')}>Take Action <span aria-hidden="true">→</span></a>
+      </div>
+    </Fragment>
+    <Fragment slot="aside">
+      <svg class="nf-art" viewBox="0 0 120 120" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M30 14h44l18 18v74H30z" stroke-dasharray="6 5" />
+        <path d="M74 14v18h18" stroke-dasharray="6 5" />
+        <path d="M44 56h34M44 68h22" opacity=".45" />
+        <circle cx="70" cy="80" r="15" />
+        <path d="M81 91l14 14" />
+      </svg>
+    </Fragment>
+  </PageHero>
 </Base>

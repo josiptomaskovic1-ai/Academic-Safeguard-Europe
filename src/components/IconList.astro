@@ -56,26 +56,28 @@ const isSafeguard = (s: string) => /^S\d{2}$/.test(s);
   .icon-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
   .il-item { margin: 0; display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: 0.8rem; align-items: start; min-width: 0; }
   .il-lead { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
-  .il-frame { --icon-knockout: var(--surface); width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border: 1px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); color: var(--accent); }
+  .il-frame { --icon-knockout: var(--ctx-bg); width: 2.4rem; height: 2.4rem; display: grid; place-items: center; border: 1.5px solid var(--ink); border-radius: 0; background: transparent; color: var(--ink); }
   .il-text { display: flex; flex-direction: column; gap: 0.05rem; padding-top: 0.35rem; min-width: 0; line-height: 1.4; }
   .il-main { font-weight: 550; color: var(--ink); }
   a.il-main { color: var(--accent); }
   .il-detail { font-size: 0.85rem; color: var(--ink-2); }
-  .il-code { font: 600 0.72rem/1.2 var(--mono); color: var(--ink-3); letter-spacing: 0.03em; }
+  .il-code { font: 600 0.875rem/1.2 var(--mono); color: var(--ink-3); letter-spacing: 0.03em; }
 
-  .icon-list[data-tone='doesnot'] .il-frame { --icon-knockout: var(--paper); border-style: dashed; border-color: var(--control); background: var(--paper); color: var(--ink-2); }
+  .icon-list[data-tone='doesnot'] .il-frame { --icon-knockout: var(--ctx-bg); border-style: dashed; border-color: var(--control); background: transparent; color: var(--ink-2); }
   .icon-list[data-tone='doesnot'] .il-main { font-weight: 450; color: var(--ink-2); }
 
-  .icon-list--grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); gap: 0.75rem; }
-  .icon-list--grid .il-item { position: relative; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); padding: 0.9rem 1rem 1rem; align-items: start; }
-  .icon-list--grid .il-item:has(a:hover) { border-color: var(--accent); }
-  .icon-list--grid .il-frame { border: 0; background: var(--accent-soft); }
+  /* Ruled index, not cards: 3 columns, 2 at <=60rem, 1 at <=40rem. */
+  .icon-list--grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 2rem; border-top: 3px solid var(--line); }
+  @media (max-width: 60rem) { .icon-list--grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 40rem) { .icon-list--grid { grid-template-columns: minmax(0, 1fr); } }
+  .icon-list--grid .il-item { position: relative; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 0.75rem; background: none; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; padding: 0.85rem 0 0.9rem; align-items: start; }
+  .icon-list--grid .il-frame { width: 1.5rem; height: auto; border: 0; background: none; color: var(--ink-2); }
   .icon-list--grid .il-text { padding-top: 0.1rem; }
-  .icon-list--grid .il-main { font-weight: 600; line-height: 1.3; }
-  .icon-list--grid a.il-main { text-decoration: none; }
+  .icon-list--grid .il-main { font: 600 1.0625rem/1.3 var(--serif); }
+  .icon-list--grid a.il-main { color: var(--ink); text-decoration: none; }
   .icon-list--grid a.il-main:hover { text-decoration: underline; }
   /* The whole card is the link target; the visible link text stays the accessible name. */
   .icon-list--grid a.il-main::after { content: ''; position: absolute; inset: 0; }
   .icon-list--grid .il-detail { margin-top: 0.25rem; }
-  @media (max-width: 34rem) { .icon-list--grid { gap: 0.5rem; } .icon-list--grid .il-item { padding: 0.75rem 0.85rem; gap: 0.7rem; } }
+  @media (max-width: 40rem) { .icon-list--grid .il-item { padding: 0.6rem 0; } .icon-list--grid .il-detail { font-size: 0.875rem; } }
 </style>

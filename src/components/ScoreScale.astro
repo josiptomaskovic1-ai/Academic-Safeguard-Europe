@@ -22,7 +22,7 @@ interface Props {
 }
 const { showProvisional = true, heading = 'How to read results', labels = {}, hints = {}, class: className } = Astro.props;
 const L = {
-  NR: 'Not researched', '?': 'Unable to assess', '0': 'Not identified', '1': 'Limited', '2': 'Substantial', '3': 'Strong',
+  NR: 'Not yet researched', '?': 'Unable to assess', '0': 'Not identified', '1': 'Limited', '2': 'Substantial', '3': 'Strong',
   ...labels,
 };
 const H: Record<string, string> = { NR: 'Not yet examined', '?': 'Sources unclear', '0': 'Searched, not found', '1': '', '2': '', '3': '', ...hints };
@@ -87,21 +87,21 @@ const scores = [
 
 <style>
   .scale { margin: 0; container-type: inline-size; font-size: 0.9rem; }
-  .scale-cap { font: 600 0.78rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.6rem; }
+  .scale-cap { font: 600 0.875rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.6rem; }
   .scale-groups { display: grid; gap: 0.75rem; grid-template-columns: minmax(0, 1fr); }
   @container (min-width: 40rem) { .scale-groups { grid-template-columns: minmax(0, 2fr) minmax(0, 4fr); gap: 1rem; } }
 
   .scale-group { border: 1px solid var(--rule); border-radius: var(--radius); background: var(--surface); padding: 0.6rem 0.75rem 0.7rem; min-width: 0; }
   /* The non-score group is framed with a dashed edge: it sits outside the scale, not at its bottom. */
   .scale-group--none { border-style: dashed; border-color: var(--control); background: transparent; }
-  .scale-group-label { font: 600 0.72rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3); margin: 0 0 0.55rem; }
+  .scale-group-label { font: 600 0.875rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-3); margin: 0 0 0.55rem; }
 
   .scale-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem 0.75rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr)); }
   .scale-item { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 0.4rem; min-width: 0; }
   .scale-mark { display: inline-flex; align-items: center; gap: 0.45rem; }
   .scale-text { display: grid; gap: 0.1rem; line-height: 1.25; min-width: 0; }
   .scale-label { font-weight: 600; color: var(--ink); }
-  .scale-hint { font-size: 0.78rem; color: var(--ink-3); }
+  .scale-hint { font-size: 0.875rem; color: var(--ink-3); }
 
   .scale-code { font: 600 0.8rem/1 var(--mono); min-width: 1.7rem; text-align: center; padding: 0.25rem 0.3rem; border-radius: 3px; border: 1px solid var(--control); background: var(--surface); color: var(--ink); }
   [data-result='NR'] .scale-code { border-style: dashed; color: var(--ink-3); }

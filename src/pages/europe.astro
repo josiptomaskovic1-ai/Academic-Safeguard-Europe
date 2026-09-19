@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Folio from '../components/Folio.astro';
 import EuropeTileMap from '../components/EuropeTileMap.astro';
 import ResearchStatus from '../components/ResearchStatus.astro';
 import LastReviewed from '../components/LastReviewed.astro';
@@ -17,36 +19,41 @@ const stats = [
   { value: results.filter((r) => r.verification === 'needs_review').length, label: 'findings', tone: 'provisional' as const },
 ];
 ---
-<Base title="Europe" description="Research status for all 27 EU Member States: which national frameworks and institutions ASE has researched so far, with provisional findings clearly marked." crumbs={[{ label: 'Europe' }]}>
-  <div class="container">
-    <h1>European country explorer</h1>
-    <p class="lede">Each tile shows how far our research has progressed in that Member State, not how well it performs.</p>
+<Base title="Europe" description="Research status for all 27 EU Member States: which national frameworks and institutions ASE has researched so far, with provisional findings clearly marked." campaign>
+  <PageHero crumbs={[{ label: 'Europe' }]} kicker={`Europe · ${countries.length} Member States`}>
+    Europe
+    <Fragment slot="lede">Research progress by Member State, one jurisdiction at a time. Shading shows how far research has got, not how well students are protected.</Fragment>
+    <Fragment slot="aside"><StatBlock items={stats} label="Research coverage" class="explorer-stats hero-stats" /></Fragment>
+  </PageHero>
 
-    <div class="explorer explorer--page">
-      <section aria-labelledby="map-h">
-        <h2 id="map-h" class="visually-hidden">Map</h2>
-        <EuropeTileMap withCounts />
-      </section>
-      <aside class="explorer-aside" aria-labelledby="read-h">
-        <h2 id="read-h" class="aside-title">How to read the map</h2>
-        <p class="missing-note missing-note--boxed">
-          <svg class="info-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 7v4.5M8 4.6v.1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" /></svg>
-          <span>Most Member States are not researched yet. <strong>Missing data is not absence of safeguards.</strong></span>
-        </p>
-        <StatBlock items={stats} label="Research coverage" class="explorer-stats" />
-        <p class="muted">Select a country for evidence and verification status.</p>
-        <ul class="link-list">
-          <li><a href={url('/compare/')}>Compare one safeguard across countries →</a></li>
-          <li><a href={url('/institutions/')}>Institution profiles →</a></li>
-          <li><a href={url('/contribute/')}>Help research a country →</a></li>
-        </ul>
-      </aside>
+  <section class="sec--dense" aria-labelledby="read-h">
+    <div class="container">
+      <Folio label="Map" dense />
+      <div class="explorer">
+        <div><EuropeTileMap withCounts /></div>
+        <div class="explorer-aside">
+          <h2 id="read-h">How to read the map</h2>
+          <div class="statement">
+            <p>Most Member States are not yet researched. <strong>“Not yet researched” never means that no safeguard exists.</strong></p>
+          </div>
+          <p class="muted sec-note">Select a country for its findings, evidence and verification status.</p>
+          <ul class="ruled-links" role="list">
+            <li><a href={url('/compare/')}>Compare one safeguard across countries <span aria-hidden="true">→</span></a></li>
+            <li><a href={url('/institutions/')}>Institution profiles <span aria-hidden="true">→</span></a></li>
+            <li><a href={url('/take-action/#researchers')}>Help research a country <span aria-hidden="true">→</span></a></li>
+          </ul>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <section aria-labelledby="table-h" class="section record-section">
+  <section class="sec--dense" aria-labelledby="table-h">
+    <div class="container">
+      <Folio label="All Member States" dense />
       <h2 id="table-h">All Member States</h2>
+      <p class="muted sec-note">Alphabetical, never ranked. Safeguards researched counts the national framework only.</p>
       <div class="table-wrap stack-table" tabindex="0" role="region" aria-labelledby="table-h">
-        <table>
+        <table class="table--compact country-table">
           <caption class="visually-hidden">Research status by EU Member State. Safeguards researched counts the national framework only.</caption>
           <thead>
             <tr><th scope="col">Country</th><th scope="col">Research status</th><th scope="col">National safeguards researched</th><th scope="col">Institutions</th><th scope="col">Last reviewed</th></tr>
@@ -59,8 +66,8 @@ const stats = [
                 <tr data-status={c.research_status}>
                   <th scope="row" class="nowrap"><a href={url(`/countries/${c.slug}/`)}>{c.name}</a> <span class="source-id">{c.iso_code}</span></th>
                   <td data-label="Status"><span><ResearchStatus status={c.research_status} cov={countryCoverageWithInstitutions(c.iso_code)} /></span></td>
-                  <td data-label="National safeguards"><span>{cov.researched === 0 ? <span class="muted" aria-hidden="true">—</span> : <>{cov.researched} of {cov.total}<span class="small muted"> · {cov.verified} verified, {cov.provisional} provisional</span></>}{cov.researched === 0 && <span class="visually-hidden">none</span>}</span></td>
-                  <td data-label="Institutions"><span>{inst || <><span class="muted" aria-hidden="true">—</span><span class="visually-hidden">none</span></>}</span></td>
+                  <td data-label="National safeguards" class="num"><span>{cov.researched === 0 ? <span class="muted" aria-hidden="true">—</span> : <>{cov.researched} of {cov.total}<span class="small muted"> · {cov.verified} verified, {cov.provisional} provisional</span></>}{cov.researched === 0 && <span class="visually-hidden">none</span>}</span></td>
+                  <td data-label="Institutions" class="num"><span>{inst || <><span class="muted" aria-hidden="true">—</span><span class="visually-hidden">none</span></>}</span></td>
                   <td data-label="Last reviewed" class="small"><span>{c.last_reviewed ? <LastReviewed date={c.last_reviewed} /> : <><span class="muted" aria-hidden="true">—</span><span class="visually-hidden">not yet reviewed</span></>}</span></td>
                 </tr>
               );
@@ -68,6 +75,6 @@ const stats = [
           </tbody>
         </table>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </Base>

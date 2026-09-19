@@ -35,7 +35,7 @@ const legendNeeded = variant === 'labelled';
 <div class:list={['cdots', `cdots--${variant}`, className]}>
   {variant === 'row' ? (
     <span class="cdots-row" role="img" aria-label={name}>
-      {countries.map((c) => <span class="cdot" data-state={state(c.iso_code)} title={`${c.iso_code} · ${set.has(c.iso_code) ? 'researched' : 'not researched'}`}></span>)}
+      {countries.map((c) => <span class="cdot" data-state={state(c.iso_code)} title={`${c.iso_code} · ${set.has(c.iso_code) ? 'researched' : 'not yet researched'}`}></span>)}
     </span>
   ) : (
     <>
@@ -44,7 +44,7 @@ const legendNeeded = variant === 'labelled';
           <li data-state={state(c.iso_code)}>
             <span class="cdot" aria-hidden="true"></span>
             <abbr class="cdot-iso" title={c.name} aria-hidden="true">{c.iso_code}</abbr>
-            <span class="visually-hidden">{c.name}: {set.has(c.iso_code) ? (prov.has(c.iso_code) ? 'researched, provisional' : 'researched') : 'not researched'}</span>
+            <span class="visually-hidden">{c.name}: {set.has(c.iso_code) ? (prov.has(c.iso_code) ? 'researched, provisional' : 'researched') : 'not yet researched'}</span>
           </li>
         ))}
       </ul>
@@ -52,7 +52,7 @@ const legendNeeded = variant === 'labelled';
         <p class="cdots-key" aria-hidden="true">
           {filled.length > provisional.length && <span><span class="cdot" data-state="done"></span> researched</span>}
           {provisional.length > 0 && <span><span class="cdot" data-state="prov"></span> researched, provisional</span>}
-          <span><span class="cdot" data-state="none"></span> not researched</span>
+          <span><span class="cdot" data-state="none"></span> not yet researched</span>
         </p>
       )}
     </>

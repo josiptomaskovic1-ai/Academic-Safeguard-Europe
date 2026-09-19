@@ -1,8 +1,10 @@
 ---
-import Base from '../layouts/Base.astro';
-import DocTypeIcon from '../components/DocTypeIcon.astro';
-import { getEvidence } from '../lib/data';
-import { repoFile, newIssue } from '../lib/url';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
+import DocTypeIcon from '../../components/DocTypeIcon.astro';
+import { getEvidence } from '../../lib/data';
+import { repoFile, newIssue, externalUrl } from '../../lib/url';
 
 const items = [...getEvidence()].sort((a, b) => (b.year ?? 0) - (a.year ?? 0) || a.title.localeCompare(b.title));
 const CATEGORY_LABELS: Record<string, string> = {
@@ -19,11 +21,14 @@ const usedCats = Object.keys(CATEGORY_LABELS).filter((c) => items.some((i) => i.
 const usedTypes = Object.keys(TYPE_LABELS).filter((t) => items.some((i) => i.source_type === t));
 const typeCounts = usedTypes.map((t) => ({ t, n: items.filter((i) => i.source_type === t).length }));
 ---
-<Base title="Evidence Library" description="Background sources on academic authority, retaliation, complaint procedures and student rights in European higher education." crumbs={[{ label: 'Evidence Library' }]}>
+<Base title="Evidence Library" description="Background sources on academic authority, retaliation, complaint procedures and student rights in European higher education." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Evidence Library' }]} kicker="Evidence · Background">
+    Evidence Library
+    <Fragment slot="lede">Background standards, laws and research for context. Scores rest only on the primary sources cited in each finding.</Fragment>
+  </PageHero>
+  <section class="sec--dense" aria-label="Library items">
   <div class="container">
-    <h1>Evidence Library</h1>
-    <p class="lede">Background standards, laws and research for context. Scores rest only on the primary sources cited in each finding.</p>
-
+    <Folio label="Background sources" dense />
     {items.length === 0 ? (
       <p class="muted">The Evidence Library is being compiled. <a href={newIssue('source-submission.yml')}>Suggest a source.</a></p>
     ) : (
@@ -46,7 +51,7 @@ const typeCounts = usedTypes.map((t) => ({ t, n: items.filter((i) => i.source_ty
             <li id={it.id} class="lib-item" data-cats={it.categories.join(' ')} data-jur={it.jurisdiction} data-type={it.source_type} data-text={`${it.title} ${it.author_body} ${it.summary}`.toLowerCase()}>
               <span class="lib-type" aria-hidden="true"><DocTypeIcon type={it.source_type} size="1.2rem" /></span>
               <div class="lib-body">
-                <h2 class="lib-title"><a href={it.url} rel="noopener">{it.title}</a></h2>
+                <h2 class="lib-title"><a href={externalUrl(it.url)} rel="noopener">{it.title}</a></h2>
                 <p class="lib-meta small muted"><span class="lib-type-label">{TYPE_LABELS[it.source_type]}</span> · {it.author_body}{it.year ? ` · ${it.year}` : ''} · {it.jurisdiction}{it.doi && <> · DOI <a href={`https://doi.org/${it.doi}`}>{it.doi}</a></>}</p>
                 <p class="lib-tags">
                   {it.categories.map((c) => <span class="tag">{CATEGORY_LABELS[c]}</span>)}
@@ -63,8 +68,9 @@ const typeCounts = usedTypes.map((t) => ({ t, n: items.filter((i) => i.source_ty
         </ul>
       </>
     )}
-    <p class="small muted" style="margin-top:2rem">Data: <a href={repoFile('evidence-library/items.yml')}><code>evidence-library/items.yml</code></a> · <a href={newIssue('source-submission.yml')}>Suggest a source</a></p>
+    <p class="small muted lib-foot">Data: <a href={repoFile('evidence-library/items.yml')}><code>evidence-library/items.yml</code></a> · <a href={newIssue('source-submission.yml')}>Suggest a source</a></p>
   </div>
+  </section>
   <script>
     // Progressive enhancement: without JavaScript, the full list is shown and the filter stays hidden.
     const wrap = document.getElementById('lib-filter-details') as HTMLDetailsElement | null;

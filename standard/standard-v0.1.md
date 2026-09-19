@@ -1,13 +1,13 @@
 ---
-title: European Academic Safeguarding Standard
-version: "0.1"
+title: ASE Safeguarding Standard (independent draft)
+version: "0.1.1"
 status: Draft for public consultation
 published: 2026-09-13
 ---
 
 ## Purpose
 
-The European Academic Safeguarding Standard describes the published institutional safeguards that allow students to raise concerns about the conduct of people who hold academic authority over them, without risking their education.
+The ASE Safeguarding Standard is an independent draft published for consultation by Academic Safeguard Europe. It is not an instrument of the European Union, the European Higher Education Area or any government or quality-assurance agency. It describes the published institutional safeguards that allow students to raise concerns about the conduct of people who hold academic authority over them, without risking their education.
 
 Academic authority is the power to assess, supervise, admit, progress, examine, recommend or credit a student. It is necessary and, in the great majority of cases, exercised responsibly. The Standard exists because, when it is misused, the student often depends on the person or unit they would need to complain about.
 
@@ -74,4 +74,4 @@ National and institutional results answer different questions and are never merg
 
 ## Versioning and consultation
 
-Version 0.1 is a draft for consultation. Proposals for changes are submitted through the methodology proposal process and recorded in the public changelog. Every finding records the methodology version it was assessed under, so results under different versions are never silently mixed.
+Version 0.1.1 is a draft for consultation. Proposals for changes are submitted through the methodology proposal process and recorded in the public changelog. Every finding records the methodology version it was assessed under, so results under different versions are never silently mixed.

@@ -1,0 +1,11 @@
+---
+/**
+ * Folio — numbered section label with a thick top rule (the homepage .m-folio, generalised).
+ * The number comes from a CSS counter reset on <main>, so conditional sections never mis-number.
+ * It is a <p>, never a heading: the section title that follows is the h2.
+ * dense = 3px rule and smaller numeral for research pages.
+ */
+interface Props { label: string; dense?: boolean; class?: string }
+const { label, dense = false, class: className } = Astro.props;
+---
+<p class:list={['folio', { 'folio--dense': dense }, className]}><span>{label}</span></p>

@@ -1,0 +1,57 @@
+name: Organisation interest
+description: Register an organisation's interest in endorsing ASE's principles or collaborating. This is not an endorsement.
+title: "[Organisation] "
+labels: [organisation]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **This issue is public** and stays in the repository history. Complete it on behalf of an organisation, not as an individual. Do not include personal data (names of staff or students, personal email addresses or phone numbers, health information), allegations about individuals, or confidential documents.
+
+        A formal endorsement process is not open yet. Registering interest does not list your organisation as a supporter. Before anything is published about an organisation's support, ASE will confirm it through the organisation's official public channels.
+  - type: input
+    id: organisation
+    attributes:
+      label: Organisation name
+    validations:
+      required: true
+  - type: input
+    id: website
+    attributes:
+      label: Official website
+      placeholder: https://
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Type of organisation
+      options: [Student union or representative body, Ombuds office, Civil-society organisation, Professional or academic association, University or faculty, Quality-assurance body, Other]
+    validations:
+      required: true
+  - type: input
+    id: countries
+    attributes:
+      label: Countries where the organisation works
+  - type: checkboxes
+    id: interest
+    attributes:
+      label: Interested in
+      options:
+        - label: Endorsing the campaign principles once endorsement opens
+        - label: Collaborating on research for a country or institution
+        - label: Joining a European network of supporting organisations
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else (optional)
+      description: Public. Organisation-level information only.
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I am authorised to register interest on behalf of this organisation.
+          required: true
+        - label: This submission contains no personal data and no allegations about individuals.
+          required: true

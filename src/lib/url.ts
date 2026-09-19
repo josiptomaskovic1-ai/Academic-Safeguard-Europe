@@ -8,6 +8,18 @@ export function url(p = '/'): string {
   return `${BASE}${clean}${hash ? `#${hash}` : ''}`;
 }
 
+// Same rule as isUrl in scripts/validate-data.mjs, enforced again at render time so a data URL can never become
+// a javascript:/data: link even when `astro build` or `astro dev` runs without validation. Fails the build rather
+// than silently dropping a citation. No whitespace, control or bidi characters, no userinfo, http(s) only.
+const UNSAFE_URL_CHARS = /[\u0000-\u0020\u007F-\u009F\u200E\u200F\u202A-\u202E\u2066-\u2069]/;
+export function externalUrl(u: unknown): string {
+  if (typeof u === 'string' && !UNSAFE_URL_CHARS.test(u) && URL.canParse(u)) {
+    const x = new URL(u);
+    if ((x.protocol === 'https:' || x.protocol === 'http:') && !x.username && !x.password && x.hostname.includes('.')) return u;
+  }
+  throw new Error(`Refusing to render unsafe external URL ${JSON.stringify(u)}. Run npm run validate-data.`);
+}
+
 // Private contact for corrections and right of reply. Set by the maintainer; never invent an address.
 // While null, the site states honestly that GitHub is the only route.
 export const CONTACT_EMAIL: string | null = null;

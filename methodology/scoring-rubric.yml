@@ -1,8 +1,8 @@
-# European Academic Safeguarding Standard — scoring rubric
+# ASE Safeguarding Standard (independent draft) — scoring rubric
 # This file is the machine-readable source of truth for safeguard IDs and score levels.
 # The site, the validator and the human-readable Standard all derive from it.
 
-methodology_version: "0.1"
+methodology_version: "0.1.1"
 published: "2026-09-13"
 status: draft-for-consultation
 
@@ -23,8 +23,10 @@ result_values:
     label: Not identified
     meaning: >-
       Research was carried out against the listed sources and no qualifying provision was
-      identified. This is not proof that no safeguard exists. Requires secondary verification
-      before publication.
+      identified. This is not proof that no safeguard exists. A 0 is never final until a second
+      reviewer has verified it. Until then it is published only as provisional, carries the
+      complete list of sources reviewed, and must not be presented as a finding that the
+      safeguard is absent.
   - value: "1"
     label: Limited
     meaning: >-
@@ -68,7 +70,8 @@ general_rules:
   - Where elements are split across several documents, they may be combined if each document is cited.
   - Where two levels are plausible, assign the lower level and explain the uncertainty in the rationale.
   - Every score other than NR must cite at least one source ID and a locator (article, section or page).
-  - A 0 must list which sources were reviewed. A 0 should be verified by a second reviewer before publication.
+  - A 0 must list every source reviewed. It stays provisional until a second reviewer has verified it, and
+    until then must be shown with a provisional notice and never stated as a finding that the safeguard is absent.
 
 safeguards:
   - id: S01

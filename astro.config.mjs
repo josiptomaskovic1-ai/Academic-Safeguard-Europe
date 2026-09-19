@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 
 // GitHub Pages project site. Override with SITE_URL / BASE_PATH for a custom domain.
 const site = process.env.SITE_URL ?? 'https://josiptomaskovic1-ai.github.io';
@@ -34,8 +35,13 @@ export default defineConfig({
   site,
   base,
   trailingSlash: 'always',
+  // Astro 7 defaults to JSX whitespace rules, which drop spaces between inline elements ("Limited1Limited").
+  // `true` keeps the lossless compression the site was designed and reviewed with.
+  compressHTML: true,
   build: { format: 'directory' },
-  markdown: { rehypePlugins: [rehypeTableRegions] },
+  // Remark/rehype pipeline kept so the Standard and methodology render exactly as before; raw HTML in
+  // Markdown is caught by scripts/check-security.mjs after the build.
+  markdown: { processor: unified({ rehypePlugins: [rehypeTableRegions] }) },
   // Emit every client script as a file so the CSP can use script-src 'self' without inline hashes.
   vite: { build: { assetsInlineLimit: 0 } },
 });

@@ -1,0 +1,17 @@
+---
+/**
+ * ActionBand — the shared campaign closer (echoes homepage section 05).
+ * Default: full signal-yellow band. tone="paper": quieter closer with a 6px rule (used on /evidence/).
+ * Slots: default = the band title (may wrap its last phrase in <span class="m-ink">);
+ *        actions = primary button (.btn .btn-primary .btn-xl) and an optional .m-more link.
+ * Hidden in print: it only contains calls to action.
+ */
+interface Props { id: string; tone?: 'signal' | 'paper'; class?: string }
+const { id, tone = 'signal', class: className } = Astro.props;
+---
+<section class:list={['sec', 'action-band', tone === 'paper' ? 'action-band--paper on-paper' : 'on-signal', className]} aria-labelledby={id}>
+  <div class="container">
+    <h2 id={id} class="band-title"><slot /></h2>
+    <div class="actions"><slot name="actions" /></div>
+  </div>
+</section>

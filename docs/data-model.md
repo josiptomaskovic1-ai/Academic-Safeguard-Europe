@@ -105,7 +105,8 @@ Each file contains `sources:`, a list. The file name is a grouping convenience (
 | `accessed` | yes | Date the source was last opened. |
 | `language` | yes | ISO 639-1. |
 | `archived_url` | no (warning) | Wayback Machine or similar. |
-| `notes` | no | Currency and consolidation caveats. |
+| `official_text` | no | `false` when the cited document is an unofficial consolidation (for example zakon.hr) rather than the official gazette text. Omit it for official texts. Every citation of a source marked `false` is labelled "Unofficial consolidation" on the site. |
+| `notes` | no | Currency and consolidation caveats. For an `official_text: false` source, say which official versions it consolidates. |
 
 ## Evidence Library — `evidence-library/items.yml`
 

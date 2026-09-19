@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import OnThisPage from '../../components/OnThisPage.astro';
 import ScoreScale from '../../components/ScoreScale.astro';
 import WorkflowDiagram from '../../components/WorkflowDiagram.astro';
@@ -13,16 +14,19 @@ const toc = [
   { slug: 'general-rules', text: 'General rules from the rubric', depth: 2 },
 ];
 ---
-<Base title="Methodology" description="How Academic Safeguard Europe assigns, verifies and corrects safeguard findings." crumbs={[{ label: 'Methodology' }]}>
-  <div class="container">
-    <p class="eyebrow">Version {frontmatter.version} · {frontmatter.status}</p>
-    <h1>{frontmatter.title}</h1>
-    <p class="lede">How a score is determined, what evidence it needs, how it is verified, and how it can be challenged.</p>
+<Base title="Methodology" description="How Academic Safeguard Europe assigns, verifies and corrects safeguard findings." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Methodology' }]} kicker={`Version ${frontmatter.version} · ${frontmatter.status}`}>
+    {frontmatter.title}
+    <Fragment slot="lede">How a score is determined, what evidence it needs, how it is verified, and how it can be challenged.</Fragment>
+    <Fragment slot="meta">
+      <ul class="link-row small doc-links"><li><a href={url('/standard/#rubric')}>Rubric criteria</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>scoring-rubric.yml</a></li><li><a href={repoFile('methodology/methodology-v0.1.md')}>Source text</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li><li><a href={url('/europe/')}>Findings by country</a></li></ul>
+    </Fragment>
+  </PageHero>
+
+  <div class="container doc-wrap">
     <div class="doc-grid">
       <OnThisPage items={toc} />
       <div class="doc-main">
-        <ul class="link-row small doc-links"><li><a href={url('/standard/#rubric')}>Rubric criteria</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>scoring-rubric.yml</a></li><li><a href={repoFile('methodology/methodology-v0.1.md')}>Source text</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
-
         <section class="glance-block" aria-labelledby="at-a-glance">
           <h2 id="at-a-glance" class="subhead">At a glance</h2>
           <div class="panel glance-panel">

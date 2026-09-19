@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
 import ResearchStatus from '../../components/ResearchStatus.astro';
 import LastReviewed from '../../components/LastReviewed.astro';
 import MethodologyVersion from '../../components/MethodologyVersion.astro';
@@ -12,7 +14,7 @@ import ScopeIcon from '../../components/ScopeIcon.astro';
 import DocTypeCounts from '../../components/DocTypeCounts.astro';
 import LayersDiagram from '../../components/LayersDiagram.astro';
 import { getInstitutions, getCountry, coverage, primaryLang, type Institution } from '../../lib/data';
-import { url, repoFile } from '../../lib/url';
+import { url, repoFile, externalUrl } from '../../lib/url';
 
 export function getStaticPaths() {
   return getInstitutions().map((institution) => ({ params: { id: institution.id }, props: { institution } }));
@@ -28,110 +30,125 @@ const gaps = i.evidence_gaps ?? [];
 // Display grouping only: gap text is shown unchanged.
 const unresolved = gaps.filter((g) => /^Unresolved:/i.test(g));
 const otherGaps = gaps.filter((g) => !/^Unresolved:/i.test(g));
+const showDossier = !!i.research_dossier && (cov.provisional > 0 || !!i.research_method);
+const links = showDossier || !!i.evidence_note || gaps.length > 0;
+const crumbs = [{ label: 'Europe', href: '/europe/' }, { label: country.name, href: `/countries/${country.slug}/` }, { label: i.canonical_name }];
 ---
-<Base title={i.canonical_name} description={`Published safeguards at ${i.canonical_name}: safeguard profile with evidence and sources.`} crumbs={[{ label: 'Europe', href: '/europe/' }, { label: country.name, href: `/countries/${country.slug}/` }, { label: i.canonical_name }]}>
-  <div class="container">
-    <p class="eyebrow">{typeLabel[i.institution_type]} · {country.name}</p>
-    <h1>{i.canonical_name}</h1>
-    {i.local_name && i.local_name !== i.canonical_name && <p class="h1-sub muted" lang={primaryLang(i.country)}>{i.local_name}</p>}
-
-    <ul class="status-line" role="list" aria-label="Record status">
-      <li><ResearchStatus status={i.research_status} kind="institution" /></li>
-      <li>Reviewed <LastReviewed date={i.last_reviewed} /></li>
-      <li><MethodologyVersion version={i.methodology_version} /></li>
-      <li>{cov.researched}/{cov.total} researched</li>
-      <li>{cov.verified} verified</li>
-      {cov.provisional > 0 && <li class="status-line-prov">{cov.provisional} provisional</li>}
-      {cov.disputed > 0 && <li>{cov.disputed} disputed</li>}
-    </ul>
-    <ul class="link-row record-links small">
-      <li><a href={i.website} rel="noopener">Official website <span class="muted">({i.website.replace(/^https?:\/\//, '').replace(/\/$/, '')})</span></a></li>
-      <li><a href={url(`/countries/${country.slug}/`)}>National rules in {country.name} →</a></li>
-    </ul>
-
-    <div class="record-head">
-      <div class="panel record-glance">
-        <SafeguardStrip safeguards={i.safeguards} caption="Institution results, S01–S12" linkPrefix="#sg-" />
-      </div>
-
-      <div class="record-notes">
-        <div class="notice notice--icon">
-          <ScopeIcon name="practice" size="1.2rem" class="notice-icon" />
-          <p><strong>University-wide rules only.</strong> Faculty rules may add protections. Formal policy is not proof of practice, and missing evidence is not proof of absence.</p>
-        </div>
-        {cov.provisional > 0 && (
-          <div class="notice provisional">
-            <p><strong>{cov.provisional} of {cov.researched} findings are provisional.</strong> {i.research_method ?? 'They have not yet been verified by a human second reviewer.'} They may change.</p>
-            <ul class="link-row small">
-              {i.research_dossier && <li><a href={repoFile(i.research_dossier)}>Research dossier</a></li>}
-              {i.evidence_note && <li><a href="#summary">Read the summary</a></li>}
-              {gaps.length > 0 && <li><a href="#gaps">Known gaps</a></li>}
-            </ul>
-          </div>
-        )}
-        {cov.provisional === 0 && i.research_method && <p class="small muted"><strong>Research method:</strong> {i.research_method}{i.research_dossier && <> <a href={repoFile(i.research_dossier)}>Research dossier</a>.</>}</p>}
-      </div>
-    </div>
-
-    <details class="disclosure record-meta">
-      <summary>Record details</summary>
-      <dl class="meta-list">
-        <dt>Country</dt><dd><a href={url(`/countries/${country.slug}/`)}>{country.name}</a></dd>
-        <dt>Official website</dt><dd><a href={i.website} rel="noopener">{i.website.replace(/^https?:\/\//, '')}</a></dd>
-        <dt>Research status</dt><dd><ResearchStatus status={i.research_status} kind="institution" cov={cov} /></dd>
-        <dt>Last reviewed</dt><dd><LastReviewed date={i.last_reviewed} /></dd>
-        <dt>Methodology</dt><dd><MethodologyVersion version={i.methodology_version} /></dd>
-        <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
-        {cov.researched > 0 && <><dt>Human verification</dt><dd>{cov.verified === 0 ? 'Not yet carried out' : `${cov.verified} of ${cov.researched} findings verified`}</dd></>}
-        {i.confidence && <><dt title="Confidence in the evidence and interpretation, not a rating of the institution">Research confidence</dt><dd><ConfidenceLabel value={i.confidence} /></dd></>}
-        <dt>Corrections</dt><dd>{{ none: 'No correction requests', open: 'Correction request open', resolved: 'Correction request resolved' }[i.correction_status]}</dd>
-        <dt>Data file</dt><dd><a href={repoFile(file)}><code>{file}</code></a></dd>
+<Base title={i.canonical_name} description={`Published safeguards at ${i.canonical_name}: safeguard profile with evidence and sources.`} campaign>
+  <PageHero crumbs={crumbs} kicker={`${typeLabel[i.institution_type]} · ${country.name}`} class="record-hero">
+    {i.canonical_name}
+    <Fragment slot="meta">
+      {i.local_name && i.local_name !== i.canonical_name && <p class="h1-sub" lang={primaryLang(i.country)}>{i.local_name}</p>}
+      <dl class="facts">
+        <div><dt>Status</dt><dd><ResearchStatus status={i.research_status} kind="institution" /></dd></div>
+        <div><dt>Reviewed</dt><dd><LastReviewed date={i.last_reviewed} /></dd></div>
+        <div><dt>Method</dt><dd><MethodologyVersion version={i.methodology_version} /></dd></div>
+        <div><dt>Coverage</dt><dd>{cov.researched}/{cov.total} researched</dd></div>
+        <div class:list={{ 'is-prov': cov.provisional > 0 }}><dt>Verification</dt><dd>{cov.verified} verified{cov.provisional > 0 && ` · ${cov.provisional} provisional`}{cov.disputed > 0 && ` · ${cov.disputed} disputed`}</dd></div>
       </dl>
-    </details>
+      <ul class="link-row record-links small">
+        <li><a href={externalUrl(i.website)} rel="noopener">Official website <span class="muted">({i.website.replace(/^https?:\/\//, '').replace(/\/$/, '')})</span></a></li>
+        <li><a href={url(`/countries/${country.slug}/`)}>National rules in {country.name} →</a></li>
+      </ul>
+    </Fragment>
+    <Fragment slot="aside">
+      <SafeguardStrip safeguards={i.safeguards} caption="Institution results, S01–S12" linkPrefix="#sg-" />
+    </Fragment>
+  </PageHero>
 
-    {i.evidence_note && (
-      <section class="section record-section" aria-labelledby="summary">
-        <h2 id="summary">Summary of published safeguards</h2>
-        <div class="nf-grid">
-          <div class="pull-panel"><p>{i.evidence_note}</p></div>
+  <div class="container record-status">
+    <div class="record-status-grid">
+      <div class:list={['statement', { 'statement--provisional': cov.provisional > 0 }]}>
+        {cov.provisional > 0 && <p><strong>{cov.provisional} of {cov.researched} findings are provisional.</strong> {i.research_method ?? 'They have not yet been verified by a human second reviewer.'} They may change.</p>}
+        {cov.provisional === 0 && i.research_method && <p><strong>Research method:</strong> {i.research_method}</p>}
+        <p class="statement-scope"><ScopeIcon name="practice" size="1.1rem" /><span><strong>University-wide rules only.</strong> Faculty rules may add protections. Formal policy is not proof of practice, and missing evidence is not proof of absence.</span></p>
+        {links && (
+          <ul class="link-row small">
+            {showDossier && <li><a href={repoFile(i.research_dossier!)}>Research dossier</a></li>}
+            {i.evidence_note && <li><a href="#summary">Read the summary</a></li>}
+            {gaps.length > 0 && <li><a href="#gaps">Known gaps</a></li>}
+          </ul>
+        )}
+      </div>
+
+      <details class="disclosure record-meta">
+        <summary>Record details</summary>
+        <dl class="meta-list">
+          <dt>Country</dt><dd><a href={url(`/countries/${country.slug}/`)}>{country.name}</a></dd>
+          <dt>Official website</dt><dd><a href={externalUrl(i.website)} rel="noopener">{i.website.replace(/^https?:\/\//, '')}</a></dd>
+          <dt>Research status</dt><dd><ResearchStatus status={i.research_status} kind="institution" cov={cov} /></dd>
+          <dt>Last reviewed</dt><dd><LastReviewed date={i.last_reviewed} /></dd>
+          <dt>Methodology</dt><dd><MethodologyVersion version={i.methodology_version} /></dd>
+          <dt>Coverage</dt><dd>{cov.researched} of {cov.total} safeguards researched · {cov.verified} verified · {cov.provisional} provisional{cov.disputed ? ` · ${cov.disputed} disputed` : ''}</dd>
+          {cov.researched > 0 && <><dt>Human verification</dt><dd>{cov.verified === 0 ? 'Not yet carried out' : `${cov.verified} of ${cov.researched} findings verified`}</dd></>}
+          {i.confidence && <><dt title="Confidence in the evidence and interpretation, not a rating of the institution">Research confidence</dt><dd><ConfidenceLabel value={i.confidence} /></dd></>}
+          <dt>Corrections</dt><dd>{{ none: 'No correction requests', open: 'Correction request open', resolved: 'Correction request resolved' }[i.correction_status]}</dd>
+          <dt>Data file</dt><dd><a href={repoFile(file)}><code>{file}</code></a></dd>
+        </dl>
+      </details>
+    </div>
+  </div>
+
+  {i.evidence_note && (
+    <section class="sec--dense" aria-labelledby="summary">
+      <div class="container">
+        <Folio label="Summary" dense />
+        <div class="split split--reading">
+          <div>
+            <h2 id="summary">Summary of published safeguards</h2>
+            <div class="pull-panel"><p>{i.evidence_note}</p></div>
+          </div>
           <LayersDiagram scope="institution" label="Where institution findings come from" />
         </div>
-      </section>
-    )}
-
-    <section class="section record-section" aria-labelledby="matrix">
-      <h2 id="matrix">Safeguard profile</h2>
-      <p class="muted">Select a safeguard for evidence, source and rationale.</p>
-      <SafeguardMatrix safeguards={i.safeguards} />
+      </div>
     </section>
+  )}
 
-    {gaps.length > 0 && (
-      <section class="section record-section" id="gaps" aria-labelledby="gaps-h">
+  <section class="sec--dense" aria-labelledby="matrix">
+    <div class="container">
+      <Folio label="Findings" dense />
+      <h2 id="matrix">Safeguard profile</h2>
+      <p class="muted sec-note">Select a safeguard for evidence, source and rationale.</p>
+      <SafeguardMatrix safeguards={i.safeguards} correctionTarget={i.id} />
+    </div>
+  </section>
+
+  {gaps.length > 0 && (
+    <section class="sec--dense" aria-labelledby="gaps-h">
+      <div class="container" id="gaps">
+        <Folio label="Evidence gaps" dense />
         <h2 id="gaps-h">Known evidence gaps</h2>
         <details class="disclosure">
           <summary>Show {gaps.length} evidence gaps{unresolved.length > 0 && ` · ${unresolved.length} unresolved questions`}</summary>
           {otherGaps.length > 0 && <ul class="gap-list prose">{otherGaps.map((g) => <li>{g}</li>)}</ul>}
           {unresolved.length > 0 && <><h3 class="subhead">Unresolved questions</h3><ul class="gap-list prose">{unresolved.map((g) => <li>{g}</li>)}</ul></>}
         </details>
-      </section>
-    )}
+      </div>
+    </section>
+  )}
 
-    <section class="section record-section" id="sources" aria-labelledby="src">
+  <section class="sec--dense" id="sources" aria-labelledby="src">
+    <div class="container">
+      <Folio label="Sources" dense />
       <h2 id="src">Sources ({sourceIds.length})</h2>
       <DocTypeCounts ids={sourceIds} />
       <details class="disclosure">
         <summary>Show all {sourceIds.length} citations</summary>
         <ul class="source-list prose">{sourceIds.map((id) => <li><SourceCitation id={id} full /></li>)}</ul>
       </details>
-    </section>
+    </div>
+  </section>
 
-    {i.replies?.length ? (
-      <section class="section record-section" aria-labelledby="replies">
+  {i.replies?.length ? (
+    <section class="sec--dense" aria-labelledby="replies">
+      <div class="container">
+        <Folio label="Reply" dense />
         <h2 id="replies">Statement of reply</h2>
-        {i.replies.map((r) => <blockquote class="prose"><p>{r.text}</p><footer class="small muted">{r.submitted_by}, received {r.received}. Published unedited under the <a href={url('/corrections/')}>right of reply</a>.</footer></blockquote>)}
-      </section>
-    ) : null}
+        <p class="muted sec-note">The institution's own text, published unedited.</p>
+        {i.replies.map((r) => <blockquote class="reading reply-text"><p>{r.text}</p><footer class="small muted">{r.submitted_by}, received {r.received}. Published unedited under the <a href={url('/corrections/')}>right of reply</a>.</footer></blockquote>)}
+      </div>
+    </section>
+  ) : null}
 
-    <div class="record-corrections"><CorrectionBanner target={i.id} /></div>
-  </div>
+  <div class="sec--dense record-corrections"><div class="container"><CorrectionBanner target={i.id} /></div></div>
 </Base>

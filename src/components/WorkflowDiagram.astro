@@ -20,7 +20,8 @@ interface Props {
   /** Accessible name / optional visible caption. */
   label?: string;
   showCaption?: boolean;
-  /** Inner SVG markup (24×24, stroked) per step; defaults to the research-workflow icons by position. */
+  /** Inner SVG markup (24×24, stroked) per step; defaults to the research-workflow icons by position.
+   *  Rendered with set:html: pass constant markup only, never data or user-derived strings. */
   icons?: string[];
   /** A generic process rather than progress: every step solid, no reached/not-reached state. */
   process?: boolean;
@@ -88,7 +89,7 @@ const iconSet = icons ?? ICONS;
 
 <style>
   .wf { margin: 1.5rem 0; container-type: inline-size; }
-  .wf-cap { font: 600 0.78rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.9rem; }
+  .wf-cap { font: 600 0.875rem/1.2 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin: 0 0 0.9rem; }
   .wf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
   .wf-step { --m: 2.75rem; position: relative; margin: 0; display: grid; grid-template-columns: var(--m) minmax(0, 1fr); gap: 0 0.9rem; padding-bottom: 1.1rem; min-width: 0; }
   .wf-step:last-child { padding-bottom: 0; }
@@ -108,13 +109,13 @@ const iconSet = icons ?? ICONS;
 
   /* text */
   .wf-body { display: flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; padding-top: 0.2rem; min-width: 0; }
-  .wf-num { font: 600 0.72rem/1.2 var(--mono); color: var(--ink-3); letter-spacing: 0.04em; }
+  .wf-num { font: 600 0.875rem/1.2 var(--mono); color: var(--ink-3); letter-spacing: 0.04em; }
   .wf-title { font: 600 1rem/1.25 var(--sans); color: var(--ink); }
   .wf-text { font-size: 0.86rem; line-height: 1.4; color: var(--ink-2); }
   .wf-step[data-state='todo'] .wf-title { color: var(--ink-2); }
   .wf-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }
   .wf-tags:empty { display: none; }
-  .wf-tag { font: 600 0.7rem/1.2 var(--sans); padding: 0.18rem 0.45rem; border-radius: 999px; border: 1px solid var(--control); white-space: nowrap; }
+  .wf-tag { font: 600 0.875rem/1.2 var(--sans); padding: 0.18rem 0.45rem; border-radius: 999px; border: 1px solid var(--control); white-space: nowrap; }
   .wf-tag--prov { border-color: var(--provisional); color: var(--provisional); background: var(--provisional-soft); }
   .wf-tag--here { border-color: var(--ink); color: var(--surface); background: var(--ink); }
 

@@ -4,18 +4,21 @@ import SafeguardScore from './SafeguardScore.astro';
 import VerificationBadge from './VerificationBadge.astro';
 import EvidencePanel from './EvidencePanel.astro';
 import SafeguardIcon from './SafeguardIcon.astro';
+import { newIssue } from '../lib/url';
 
-interface Props { safeguards: Record<string, SafeguardResult>; idPrefix?: string }
-const { safeguards, idPrefix = 'sg' } = Astro.props;
+interface Props { safeguards: Record<string, SafeguardResult>; idPrefix?: string; correctionTarget?: string }
+const { safeguards, idPrefix = 'sg', correctionTarget } = Astro.props;
 const { safeguards: defs } = getRubric();
 ---
 <ul class="matrix">
-  {defs.map((def) => {
+  {defs.map((def, index) => {
     const r = safeguards[def.id] ?? { result: 'NR' };
     const badge = r.result !== 'NR' && r.verification !== 'verified';
+    const previous = defs[index - 1];
+    const next = defs[index + 1];
     return (
       <li id={`${idPrefix}-${def.id.toLowerCase()}`}>
-        <details>
+        <details name={`${idPrefix}-safeguards`}>
           <summary>
             <span class="sg-id">{def.id}</span>
             <span class="sg-name"><SafeguardIcon id={def.id} size="1.25rem" class="sg-name-icon" /><span>{def.name}</span></span>
@@ -25,7 +28,18 @@ const { safeguards: defs } = getRubric();
             </span>
             <svg class="chev" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" /></svg>
           </summary>
-          <div class="sg-body"><EvidencePanel r={r} def={def} /></div>
+          <div class="sg-body">
+            <EvidencePanel r={r} def={def} />
+            <div class="sg-footer">
+              <nav class="sg-pager" aria-label={`${def.id} safeguard navigation`}>
+                {previous
+                  ? <a href={`#${idPrefix}-${previous.id.toLowerCase()}`}><span>Previous safeguard</span><strong>{previous.id}: {previous.name}</strong></a>
+                  : <span aria-hidden="true"></span>}
+                {next && <a class="sg-next" href={`#${idPrefix}-${next.id.toLowerCase()}`}><span>Next safeguard</span><strong>{next.id}: {next.name}</strong></a>}
+              </nav>
+              {correctionTarget && <a class="sg-correction" href={newIssue('correction.yml', `[Correction] ${correctionTarget} ${def.id}`)}>Correct this finding or add a source on GitHub</a>}
+            </div>
+          </div>
         </details>
       </li>
     );

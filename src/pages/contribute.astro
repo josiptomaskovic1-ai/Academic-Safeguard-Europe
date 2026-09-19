@@ -1,44 +1,78 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Folio from '../components/Folio.astro';
 import ScopeIcon from '../components/ScopeIcon.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import SafeguardScore from '../components/SafeguardScore.astro';
-import { REPO_URL, repoFile, newIssue } from '../lib/url';
+import { REPO_URL, repoFile, newIssue, url } from '../lib/url';
 ---
-<Base title="Contribute" description="How to contribute research, sources, verification and corrections to Academic Safeguard Europe." crumbs={[{ label: 'Contribute' }]}>
-  <div class="container">
-    <h1>Contribute research</h1>
-    <p class="lede">Coverage depends on people who read national law and university rules in the original language. No coding needed.</p>
+<Base title="Contribute" description="How to contribute research, sources, verification and corrections to Academic Safeguard Europe." campaign>
+  <PageHero crumbs={[{ label: 'Take Action', href: '/take-action/' }, { label: 'Contribute research' }]} kicker="Take action · Research">
+    Contribute research
+    <Fragment slot="lede">Coverage depends on people who read national law and university rules in the original language. No coding needed.</Fragment>
+  </PageHero>
 
-    <div class="grid contrib-grid page-grid">
-      <article class="card icon-card">
-        <span class="icon-frame" aria-hidden="true"><ScopeIcon name="contribute" size="1.3rem" /></span>
-        <h2 class="card-title">Add a source</h2>
-        <p>Record an official law, statute or procedure once, with a stable ID.</p>
-        <p class="icon-card-link"><a href={newIssue('source-submission.yml')}>Suggest a source</a> · <a href={repoFile('docs/researcher-guide.md#1-record-a-source')}>Guide</a></p>
-      </article>
-      <article class="card icon-card">
-        <span class="icon-frame" aria-hidden="true"><ScopeIcon name="finding" size="1.3rem" /></span>
-        <h2 class="card-title">Propose a country finding</h2>
-        <p>Assess national rules against the rubric, citing the article.</p>
-        <p class="icon-card-link"><a href={newIssue('research-contribution.yml')}>Open a proposal</a> · <a href={repoFile('docs/researcher-guide.md#2-propose-a-finding')}>Guide</a></p>
-      </article>
-      <article class="card icon-card">
-        <span class="icon-frame" aria-hidden="true"><ScopeIcon name="institution" size="1.3rem" /></span>
-        <h2 class="card-title">Add an institution</h2>
-        <p>Start with statutes, study regulations, ethics codes and complaint procedures.</p>
-        <p class="icon-card-link"><a href={repoFile('docs/researcher-guide.md#3-add-an-institution')}>Guide</a></p>
-      </article>
-      <article class="card icon-card icon-card--featured">
-        <span class="icon-frame" aria-hidden="true"><ScopeIcon name="verify" size="1.3rem" /></span>
-        <p class="featured-tag">Most needed</p>
-        <h2 class="card-title">Verify a finding</h2>
-        <p>Provisional findings need an independent second reviewer. Native speakers especially welcome.</p>
-        <p class="icon-card-link"><a href={repoFile('docs/researcher-guide.md#4-verify-a-finding')}>Verification guide</a></p>
-      </article>
+  <section class="sec--dense" aria-label="Ways to contribute">
+    <div class="container">
+      <Folio label="Ways to contribute" dense />
+      <div class="contrib-grid">
+        <article class="contrib-card">
+          <h2 class="card-title">Add a source</h2>
+          <p>Record an official law, statute or procedure once, with a stable ID.</p>
+          <ul class="card-links" role="list">
+            <li><a href={newIssue('source-submission.yml')}>Suggest a source</a></li>
+            <li><a href={repoFile('docs/researcher-guide.md#1-record-a-source')}>Guide</a></li>
+          </ul>
+        </article>
+        <article class="contrib-card">
+          <h2 class="card-title">Propose a country finding</h2>
+          <p>Assess national rules against the rubric, citing the article.</p>
+          <ul class="card-links" role="list">
+            <li><a href={newIssue('research-contribution.yml')}>Open a proposal</a></li>
+            <li><a href={repoFile('docs/researcher-guide.md#2-propose-a-finding')}>Guide</a></li>
+          </ul>
+        </article>
+        <article class="contrib-card">
+          <h2 class="card-title">Add an institution</h2>
+          <p>Start with a public statute, study regulation, ethics code or complaint procedure. A maintainer can use it to begin the profile.</p>
+          <ul class="card-links" role="list">
+            <li><a href={newIssue('source-submission.yml', '[Source] Institution — ')}>Suggest an institutional source on GitHub</a></li>
+            <li><a href={repoFile('docs/researcher-guide.md#3-add-an-institution')}>Read the institution guide</a></li>
+          </ul>
+        </article>
+        <article class="contrib-card contrib-card--featured" id="verify">
+          <p class="ss-mark ss-mark--sm featured-tag">Most needed</p>
+          <h2 class="card-title">Verify a finding</h2>
+          <p>Provisional findings need an independent second reviewer. Native speakers especially welcome.</p>
+          <ul class="card-links" role="list">
+            <li><a href={newIssue('research-contribution.yml', '[Verification] ')}>Start a verification on GitHub</a></li>
+            <li><a href={repoFile('docs/researcher-guide.md#4-verify-a-finding')}>Read the verification guide</a></li>
+          </ul>
+          <p class="small privacy-inline">The GitHub form is public. Use public documents only—no personal data, names, allegations or case details.</p>
+        </article>
+      </div>
     </div>
+  </section>
 
-    <section class="section record-section" aria-labelledby="workflow">
+  <section class="sec--dense" aria-labelledby="contribute-start">
+    <div class="container">
+      <Folio label="How" dense />
+      <h2 id="contribute-start">Contribute without editing code</h2>
+      <ol class="step-list">
+        <li>Choose the kind of contribution above and open its guide or structured GitHub form.</li>
+        <li>Use a GitHub account or a pseudonymous account. If you are not comfortable editing files, open the relevant issue form and a maintainer can turn it into a pull request.</li>
+        <li>Every proposal stays provisional until the evidence and method checks are complete.</li>
+      </ol>
+      <div class="statement statement--provisional">
+        <p><strong>GitHub submissions are public.</strong> Include only public documents—never personal data, names, allegations or case details. <a href={url('/take-action/#not-a-reporting-service')}>Contribute evidence, not accusations</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec--dense" aria-labelledby="workflow">
+    <div class="container">
+      <Folio label="Workflow" dense />
       <h2 id="workflow">Research workflow</h2>
       <WorkflowDiagram label="Research workflow" />
       <p class="caveat-line">
@@ -59,9 +93,12 @@ import { REPO_URL, repoFile, newIssue } from '../lib/url';
           <p>Automated validation runs on every pull request, and a PR cannot be merged until it passes.</p>
         </div>
       </details>
-    </section>
+    </div>
+  </section>
 
-    <section class="section record-section" aria-labelledby="rules">
+  <section class="sec--dense" aria-labelledby="rules">
+    <div class="container">
+      <Folio label="Ground rules" dense />
       <h2 id="rules">Ground rules</h2>
       <ul class="rule-list">
         <li><span class="rule-mark" aria-hidden="true">01</span><span>Never guess references, URLs, dates or quotes.</span></li>
@@ -74,6 +111,6 @@ import { REPO_URL, repoFile, newIssue } from '../lib/url';
         <a class="btn btn-primary" href={REPO_URL}>Go to the repository</a>
         <a class="btn btn-secondary" href={repoFile('CONTRIBUTING.md')}>CONTRIBUTING.md →</a>
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
 </Base>

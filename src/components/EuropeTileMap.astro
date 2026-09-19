@@ -15,15 +15,19 @@ const GRID: Record<string, [col: number, row: number]> = {
   IT: [4, 7], HR: [5, 7], BG: [7, 7],
   MT: [4, 8], GR: [6, 8], CY: [7, 8],
 };
-interface Props { withCounts?: boolean }
-const { withCounts = false } = Astro.props;
+interface Props {
+  withCounts?: boolean;
+  /** Legend lists only statuses that occur (homepage); the Europe page keeps the full scale. */
+  compact?: boolean;
+}
+const { withCounts = false, compact = false } = Astro.props;
 const countries = getCountries().map((c) => ({ c, cov: countryCoverageWithInstitutions(c.iso_code) }));
 const countFor = (s: string) => countries.filter(({ c }) => c.research_status === s).length;
-const statuses = Object.keys(COUNTRY_STATUS_LABELS);
+const statuses = Object.keys(COUNTRY_STATUS_LABELS).filter((s) => !compact || countFor(s) > 0);
 const anyProvisional = countries.some(({ cov }) => cov.provisional > 0);
 ---
 <div class="tilemap-block">
-  <ul class="tilemap" aria-label="EU Member States arranged approximately by geography">
+  <ul class="tilemap" aria-label="EU Member States; larger layouts are arranged approximately by geography">
     {countries.map(({ c, cov }) => {
       const [col, row] = GRID[c.iso_code];
       const provisional = cov.provisional > 0;

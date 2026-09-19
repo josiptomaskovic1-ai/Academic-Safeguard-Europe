@@ -1,28 +1,35 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
 import InstitutionCard from '../../components/InstitutionCard.astro';
-import ScopeIcon from '../../components/ScopeIcon.astro';
 import { getInstitutions } from '../../lib/data';
 import { url } from '../../lib/url';
 const institutions = getInstitutions();
 ---
-<Base title="Institutions" description="Safeguard profiles of individual European universities, based on their published rules, with evidence and verification status. No rankings." crumbs={[{ label: 'Institutions' }]}>
-  <div class="container">
-    <h1>Institution profiles</h1>
-    <p class="lede">Safeguards in each university's own published rules. No profile means not yet researched, not a judgement. No rankings.</p>
-    <ul class="link-row page-links"><li><a href={url('/compare/')}>Compare one safeguard across countries →</a></li></ul>
+<Base title="Institutions" description="Safeguard profiles of individual European universities, based on their published rules, with evidence and verification status. No rankings." campaign>
+  <PageHero crumbs={[{ label: 'Europe', href: '/europe/' }, { label: 'Institutions' }]} kicker="Evidence · Institutions">
+    Institution profiles
+    <Fragment slot="lede">Safeguards in each university's own published rules. No profile means not yet researched, not a judgement. No rankings.</Fragment>
+    <Fragment slot="meta"><div class="m-links"><a class="m-more" href={url('/compare/')}>Compare one safeguard across countries <span aria-hidden="true">→</span></a></div></Fragment>
+  </PageHero>
 
-    <h2 class="visually-hidden">Published profiles</h2>
-    {institutions.length
-      ? <div class="grid inst-grid page-grid">{institutions.map((i) => <InstitutionCard institution={i} />)}</div>
-      : <p class="muted">No institution profiles have been published yet.</p>}
+  <section class="sec--dense" aria-labelledby="profiles">
+    <div class="container">
+      <Folio label="Profiles" dense />
+      <h2 id="profiles">Published profiles</h2>
+      {institutions.length
+        ? <div class="inst-rows">{institutions.map((i) => <InstitutionCard institution={i} />)}</div>
+        : <p class="muted">No institution profiles have been published yet.</p>}
+    </div>
+  </section>
 
-    <aside class="panel cta-panel" aria-labelledby="suggest">
-      <span class="icon-frame" aria-hidden="true"><ScopeIcon name="contribute" size="1.3rem" /></span>
-      <div>
-        <h2 id="suggest">Suggest an institution</h2>
-        <p>Know a university's rules? <a href={url('/contribute/')}>Research an institution →</a></p>
-      </div>
-    </aside>
-  </div>
+  <section class="sec--dense" aria-labelledby="suggest">
+    <div class="container">
+      <Folio label="Suggest" dense />
+      <h2 id="suggest">Suggest an institution</h2>
+      <p class="muted sec-note">Know a university's rules? Start with a public statute, study regulation or complaint procedure.</p>
+      <a class="m-more m-more--tight" href={url('/contribute/')}>Research an institution <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
 </Base>

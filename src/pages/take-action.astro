@@ -1,0 +1,149 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Folio from '../components/Folio.astro';
+import { url, REPO_URL, repoFile, newIssue, CONTACT_EMAIL } from '../lib/url';
+import { CAMPAIGN_NAME } from '../lib/campaign';
+
+const demandsUrl = new URL(url('/demands/'), Astro.site).href;
+const shareText = `Academic power needs safeguards. Europe must protect students from abuse of academic power. ${demandsUrl}`;
+const jumps = [
+  { href: '#individuals', label: 'Individuals' },
+  { href: '#organisations', label: 'Organisations' },
+  { href: '#researchers', label: 'Researchers and experts' },
+  { href: '#not-a-reporting-service', label: 'Need help with your own situation?' },
+];
+---
+<Base title="Take Action" description="Support European safeguards against abuse of academic power: ways for individuals, organisations and researchers to help Academic Safeguard Europe." campaign>
+  <PageHero tone="navy" crumbs={[{ label: 'Take Action' }]} kicker={`${CAMPAIGN_NAME} · Take action`}>
+    Support European <span class="m-bar">safeguards.</span>
+    <Fragment slot="lede">Pick your route. Every action uses a tool that exists today and asks for no personal details.</Fragment>
+    <Fragment slot="meta">
+      <nav aria-label="Routes on this page">
+        <ul class="jump-tiles" role="list">
+          {jumps.map((j) => <li><a href={j.href}><span>{j.label}</span><span aria-hidden="true">→</span></a></li>)}
+        </ul>
+      </nav>
+    </Fragment>
+  </PageHero>
+
+  <div class="container mech-wrap">
+    <div class="statement statement--provisional">
+      <p><strong>How participation works today.</strong> ASE has no petition, mailing list or sign-up form yet. Actions use public GitHub forms: anyone can read them and they stay in the project’s history. A free GitHub account is needed; a pseudonymous one is fine.</p>
+      {!CONTACT_EMAIL && <p>There is no private way to contact ASE. Never send anything you would not want published.</p>}
+    </div>
+  </div>
+
+  <section class="sec on-paper action-group" id="individuals" aria-labelledby="individuals-h">
+    <div class="container">
+      <Folio label="For individuals" />
+      <h2 id="individuals-h" class="sec-title">Make the case heard.</h2>
+      <ul class="action-grid" role="list">
+        <li>
+          <h3>Support the principles</h3>
+          <p>Raise the three demands with your student union or representatives.</p>
+          <a class="m-more" href={url('/demands/')}>Read the demands <span aria-hidden="true">→</span></a>
+        </li>
+        <li>
+          <h3>Share the campaign</h3>
+          <p>Copy this; it links to the demands, not to anyone’s story.</p>
+          <span class="share-text">{shareText}</span>
+        </li>
+        <li>
+          <h3>Contribute a public source</h3>
+          <p>Know a law, statute or official complaint procedure? Public documents only.</p>
+          <a class="m-more" href={newIssue('source-submission.yml')}>Suggest a source on GitHub <span aria-hidden="true">→</span></a>
+        </li>
+        <li>
+          <h3>Follow developments</h3>
+          <p>No newsletter: choose <em>Watch</em> → <em>Custom</em> on the repository.</p>
+          <a class="m-more" href={REPO_URL}>Open the repository <span aria-hidden="true">→</span></a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec on-paper action-group" id="organisations" aria-labelledby="organisations-h">
+    <div class="container">
+      <Folio label="For organisations" />
+      <h2 id="organisations-h" class="sec-title">Stand behind the principles.</h2>
+      <p class="sec-lede">Student unions, ombuds offices, civil society, professional bodies and universities.</p>
+      <ul class="action-grid" role="list">
+        <li>
+          <h3>Register interest</h3>
+          <p>Endorsements are not open yet; registering interest tells ASE who wants to be involved. It is not an endorsement, and no organisation is listed as a supporter.</p>
+          <a class="m-more" href={newIssue('organisation-interest.yml', '[Organisation] ')}>Register interest on GitHub <span aria-hidden="true">→</span></a>
+        </li>
+        <li>
+          <h3>Collaborate on research</h3>
+          <p>Legal or policy knowledge of a country helps research its national rules and universities.</p>
+          <a class="m-more" href={url('/contribute/')}>How research contributions work <span aria-hidden="true">→</span></a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec on-paper action-group" id="researchers" aria-labelledby="researchers-h">
+    <div class="container">
+      <Folio label="For researchers" />
+      <h2 id="researchers-h" class="sec-title">Make the evidence stronger.</h2>
+      <ul class="action-grid" role="list">
+        <li>
+          <h3>Review evidence</h3>
+          <p>Every finding is provisional until someone who did not make it checks the source; native speakers especially needed.</p>
+          <a class="m-more" href={newIssue('research-contribution.yml', '[Verification] ')}>Start a verification on GitHub <span aria-hidden="true">→</span></a>
+        </li>
+        <li>
+          <h3>Legal or policy expertise</h3>
+          <p>Challenge how a safeguard is defined, or propose a better way to assess it.</p>
+          <a class="m-more" href={newIssue('methodology-proposal.yml', '[Methodology] ')}>Propose a methodology change <span aria-hidden="true">→</span></a>
+        </li>
+        <li>
+          <h3>Validate country research</h3>
+          <p>Assess national or university rules against the rubric, citing the exact provision.</p>
+          <a class="m-more" href={url('/contribute/')}>Read the contribution guide <span aria-hidden="true">→</span></a>
+        </li>
+        <li>
+          <h3>Correct a finding</h3>
+          <p>A missed document, a newer version or a misreading. Nothing is silently overwritten.</p>
+          <a class="m-more" href={url('/corrections/')}>Corrections and right of reply <span aria-hidden="true">→</span></a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec on-navy" id="not-a-reporting-service" aria-labelledby="boundary-h">
+    <div class="container">
+      <Folio label="Evidence, not accusations" />
+      <h2 id="boundary-h" class="sec-title">ASE is not a place to report a person.</h2>
+      <p class="sec-lede">ASE studies published rules; it is not a court, police body, disciplinary authority or complaints service. It cannot investigate a case, and GitHub forms are public.</p>
+      <div class="accept accept--flush">
+        <div class="accept-yes">
+          <h3>Welcome</h3>
+          <ul role="list">
+            <li>Laws and regulations</li>
+            <li>University statutes and policies</li>
+            <li>Official complaint and appeal procedures</li>
+            <li>Other public institutional documents</li>
+            <li>Documented corrections to existing research</li>
+          </ul>
+        </div>
+        <div class="accept-no">
+          <h3>Never post</h3>
+          <ul role="list">
+            <li>Names or identifying details of staff or students</li>
+            <li>Allegations about an individual</li>
+            <li>Personal case evidence, complaint files or correspondence</li>
+            <li>Health information, student IDs, phone numbers or addresses</li>
+            <li>Confidential or non-public institutional documents</li>
+          </ul>
+        </div>
+      </div>
+      <div class="help-block">
+        <h3 class="subhead">If you need help with your own situation</h3>
+        <p class="help-text">Contact your university’s student ombudsperson or complaints office, your student union, or a qualified legal adviser. If you are in danger, contact the emergency services.</p>
+        <p class="small muted">Contribution rules in full: <a href={repoFile('CONTRIBUTING.md')}>CONTRIBUTING.md</a></p>
+      </div>
+    </div>
+  </section>
+</Base>

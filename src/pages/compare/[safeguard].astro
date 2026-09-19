@@ -1,5 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Folio from '../../components/Folio.astro';
 import SafeguardScore from '../../components/SafeguardScore.astro';
 import VerificationBadge from '../../components/VerificationBadge.astro';
 import SafeguardIcon from '../../components/SafeguardIcon.astro';
@@ -39,41 +41,34 @@ const basis = (r: SafeguardResult) => {
 <Base
   title={`${def.name} across EU countries`}
   description={`${def.question} Results for national frameworks in EU Member States, one safeguard at a time. No ranking.`}
-  crumbs={[{ label: 'Compare safeguards', href: '/compare/' }, { label: def.name }]}
+  campaign
 >
-  <div class="container">
-    <div class="page-title-icon">
-      <span class="icon-frame icon-frame--lg" aria-hidden="true"><SafeguardIcon id={def.id} size="1.9rem" /></span>
-      <div>
-        <p class="eyebrow">{def.id} · National frameworks</p>
-        <h1>{def.name} across EU countries</h1>
-      </div>
-    </div>
-    <p class="lede">{def.question}</p>
-
-    <div class="notice-stack">
-      <div class="notice">
-        <p>National rules only; universities may provide more. Countries are alphabetical, not ranked. <a href={url(`/standard/#${def.slug}`)}>Rubric for this safeguard →</a></p>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Compare safeguards', href: '/compare/' }, { label: def.name }]} kicker={`${def.id} · National frameworks`}>
+    <SafeguardIcon slot="kicker-icon" id={def.id} size="1.25rem" />
+    {def.name} across EU countries
+    <Fragment slot="lede">{def.question}</Fragment>
+    <Fragment slot="meta">
+      <div class="statement">
+        <p>National rules only; universities may provide more. Countries are alphabetical, not ranked. <a class="nowrap" href={url(`/standard/#${def.slug}`)}>Rubric for this safeguard →</a></p>
+        {provisional.length > 0 && <p class="statement-prov"><strong>{provisional.length} of {n} {n === 1 ? 'result' : 'results'} provisional</strong>, not yet verified by a human reviewer.</p>}
         <details class="disclosure">
           <summary>What counts as national rules</summary>
           <p class="small">“National framework” here means legislation, regulations and national quality-assurance standards reviewed by ASE; each finding's sources show which is which. Accreditation standards are expectations, not statutory duties.</p>
         </details>
       </div>
-      {provisional.length > 0 && (
-        <div class="notice provisional">
-          <p><strong>{provisional.length} of {n} {n === 1 ? 'result' : 'results'} provisional</strong>, not yet verified by a human reviewer.</p>
-        </div>
-      )}
-    </div>
+    </Fragment>
+  </PageHero>
 
-    <section class="section record-section" aria-labelledby="so-far">
+  <section class="sec--dense" aria-labelledby="so-far">
+    <div class="container">
+      <Folio label="Results" dense />
       <h2 id="so-far">Results so far ({n} of {countries.length})</h2>
       {n === 0 ? (
-        <p class="muted">No Member State has been researched for this safeguard yet.</p>
+        <p class="muted sec-note">No Member State has been researched for this safeguard yet.</p>
       ) : n < MIN_COUNTRIES_FOR_TALLY ? (
-        <p class="muted">Too few countries for a comparison. Results are listed individually.</p>
+        <p class="muted sec-note">Too few countries for a comparison. Results are listed individually.</p>
       ) : (
-        <div class="table-wrap" tabindex="0" role="region" aria-labelledby="tally-cap" style="max-width:36rem">
+        <div class="table-wrap table-wrap--narrow" tabindex="0" role="region" aria-labelledby="tally-cap">
           <table>
             <caption class="visually-hidden" id="tally-cap">Number of researched Member States by result</caption>
             <thead><tr><th scope="col">Result</th><th scope="col">Countries</th><th scope="col">Of which provisional</th></tr></thead>
@@ -108,25 +103,28 @@ const basis = (r: SafeguardResult) => {
           </table>
         </div>
       )}
-    </section>
+    </div>
+  </section>
 
-    <section class="section record-section" aria-labelledby="not-researched">
+  <section class="sec--dense" aria-labelledby="not-researched">
+    <div class="container">
+      <Folio label="Not yet researched" dense />
       <h2 id="not-researched">Not researched yet ({notResearched.length} of {countries.length})</h2>
       <p class="missing-note">
         <svg class="info-glyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 7v4.5M8 4.6v.1" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" /></svg>
-        <span>"Not researched" says nothing about whether a safeguard exists.</span>
+        <span>"Not yet researched" says nothing about whether a safeguard exists.</span>
       </p>
       <div class="dots-block">
         <CountryDots variant="labelled" filled={researched.map((x) => x.c.iso_code)} provisional={provisional.map((x) => x.c.iso_code)} context="for this safeguard" />
       </div>
       {notResearched.length > 0 && (
         <details class="disclosure">
-          <summary>List of countries not researched</summary>
+          <summary>List of countries not yet researched</summary>
           <ul class="country-chips">
             {notResearched.map(({ c }) => <li><a href={url(`/countries/${c.slug}/`)}>{c.name}</a></li>)}
           </ul>
         </details>
       )}
-    </section>
-  </div>
+    </div>
+  </section>
 </Base>

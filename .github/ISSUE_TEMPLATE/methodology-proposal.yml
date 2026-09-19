@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Methodological disagreements are recorded publicly and considered for the next version. They do not change findings under the current version.
-        **This issue is public.** Do not include personal data, names of staff or students, or allegations about individuals. Only submit publicly available documents.
+        **This issue is public** and stays in the repository history. Do not include personal data (names of staff or students, student IDs, contact details, health information), allegations about individuals, or confidential or non-public documents. Only submit publicly available documents.
   - type: dropdown
     id: area
     attributes:
