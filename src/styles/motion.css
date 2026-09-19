@@ -554,3 +554,293 @@
     clip-path: inset(0 100% 0 0);
   }
 }
+
+/* =============================================================================
+   10. Buttons — a fill wipes across, and the press is felt
+   The text colour never changes mid-wipe: on navy the fill goes signal -> bone
+   under navy type, on paper navy -> accent-ink under bone type. Both ends clear
+   4.5:1, so contrast holds at every frame of the transition.
+   ============================================================================= */
+
+.btn {
+  transform: translate(var(--mx, 0px), var(--my, 0px)) scale(var(--press, 1));
+  transition: transform var(--dur-press) var(--ease-out-quart), background-color var(--dur-ui) var(--ease-out-quart),
+    color var(--dur-ui) var(--ease-out-quart), border-color var(--dur-ui) var(--ease-out-quart);
+}
+/* Touch gets the press instead of a hover. */
+.btn:active {
+  --press: 0.97;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--btn-hover-bg);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-ui) var(--ease-out-quart);
+  }
+  .btn-primary:hover::before,
+  .btn-primary:focus-visible::before {
+    transform: scaleX(1);
+  }
+  /* The pseudo-element is the whole effect, so the base fill and the type colour
+     stay exactly where they were. */
+  .btn-primary:hover,
+  .btn-primary:focus-visible {
+    background-color: var(--btn-bg);
+    color: var(--btn-fg);
+  }
+  /* On the signal band the hover fill is `transparent`, which cannot be wiped, so
+     that context keeps its original colour transition. */
+  .on-signal .btn-primary::before {
+    display: none;
+  }
+  .on-signal .btn-primary:hover,
+  .on-signal .btn-primary:focus-visible {
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-fg);
+  }
+}
+
+/* =============================================================================
+   11. Arrow links — the arrow leaves to the right and returns from the left,
+   and a fresh rule draws across the one already there.
+   ============================================================================= */
+
+.m-more {
+  position: relative;
+}
+.m-more span {
+  display: inline-block;
+}
+.m-more::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 3px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-ui) var(--ease-out-quart);
+}
+.on-navy .m-more::after {
+  background: var(--bone);
+}
+.m-more:hover::after,
+.m-more:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .m-more:hover span,
+  .m-more:focus-visible span {
+    animation: arrow-cycle 350ms var(--ease-out-quart);
+  }
+  /* Replaces the old 5px nudge. */
+  .m-more:hover span {
+    transform: none;
+  }
+}
+
+@keyframes arrow-cycle {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  44% {
+    transform: translateX(160%);
+    opacity: 0;
+  }
+  56% {
+    transform: translateX(-160%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* =============================================================================
+   12. Navigation and brand
+   ============================================================================= */
+
+.nav a {
+  position: relative;
+}
+.nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 3px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-ui) var(--ease-out-quart);
+}
+.nav a:hover::after,
+.nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+/* The current page keeps its marker with no motion at all. */
+.nav a[aria-current='page']::after {
+  transform: scaleX(1);
+  transition: none;
+}
+/* The action pill and the mobile panel draw their own current-page marks. */
+.nav a.nav-action::after {
+  display: none;
+}
+
+.brand-mark .mark-bar {
+  transform-box: fill-box;
+  transform-origin: left center;
+  transition: transform var(--dur-ui) var(--ease-out-quart);
+}
+@media (hover: hover) and (pointer: fine) {
+  .brand:hover .mark-bar,
+  .brand:focus-visible .mark-bar {
+    transform: scaleX(1.35);
+  }
+}
+
+/* =============================================================================
+   13. Reading progress — CSS only, and absent where scroll timelines are not
+   ============================================================================= */
+
+.reading-progress {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reading-progress {
+      display: block;
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: var(--signal);
+      transform: scaleX(0);
+      transform-origin: left;
+      z-index: var(--z-progress);
+      pointer-events: none;
+      animation: progress linear;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+@keyframes progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* =============================================================================
+   14. Cursor spotlight on navy sections
+   A soft wash of bone that follows the pointer. It sits behind the content, so
+   type contrast is unchanged; spotlight.ts only writes --sx and --sy.
+   ============================================================================= */
+
+section.on-navy {
+  position: relative;
+}
+section.on-navy > * {
+  position: relative;
+  z-index: var(--z-raised);
+}
+section.on-navy::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-base);
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    38rem circle at var(--sx, 50%) var(--sy, 50%),
+    rgba(243, 239, 230, 0.07),
+    transparent 68%
+  );
+  transition: opacity var(--dur-ui) var(--ease-out-quart);
+}
+section.on-navy[data-spot]::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  section.on-navy::before {
+    display: none;
+  }
+}
+
+/* =============================================================================
+   15. Mobile menu — the panel wipes open and the links follow
+   The nav is display:none when closed, so the open transition needs
+   @starting-style with transition-behavior: allow-discrete.
+   ============================================================================= */
+
+@media (max-width: 61.999rem) {
+  .site-header[data-nav-ready] .nav {
+    transition: clip-path 240ms var(--ease-out-quart), opacity 160ms var(--ease-out-quart), display 240ms allow-discrete;
+    transition-behavior: allow-discrete;
+  }
+  .site-header[data-nav-ready] .nav[data-open='true'] {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+  @starting-style {
+    .site-header[data-nav-ready] .nav[data-open='true'] {
+      clip-path: inset(0 0 100% 0);
+      opacity: 0;
+    }
+  }
+  .site-header[data-nav-ready] .nav[data-open='false'] {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+
+  .site-header[data-nav-ready] .nav[data-open='true'] li {
+    animation: nav-item 260ms var(--ease-out-quart) calc(60ms + var(--i, 0) * 30ms) backwards;
+  }
+}
+
+@keyframes nav-item {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+/* The hamburger morphs into the cross rather than swapping glyphs. */
+.nav-toggle svg path {
+  transition: opacity var(--dur-ui) var(--ease-out-quart), transform var(--dur-ui) var(--ease-out-quart);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.nav-toggle .nav-toggle-close {
+  display: inline;
+  opacity: 0;
+  transform: rotate(-45deg) scale(0.7);
+}
+.nav-toggle[aria-expanded='true'] .nav-toggle-menu {
+  display: inline;
+  opacity: 0;
+  transform: rotate(45deg) scale(0.7);
+}
+.nav-toggle[aria-expanded='true'] .nav-toggle-close {
+  opacity: 1;
+  transform: none;
+}

@@ -76,6 +76,7 @@ const csp = [
     <meta name="referrer" content="no-referrer" />
   </head>
   <body class:list={[pageClass]}>
+    <div class="reading-progress" aria-hidden="true"></div>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header on-navy" data-site-header>
       <div class="container container--wide bar">
@@ -92,9 +93,9 @@ const csp = [
         </button>
         <nav class="nav" id="site-navigation" aria-label="Main" data-site-navigation>
           <ul>
-            {nav.map((n) => {
+            {nav.map((n, i) => {
               const active = isCurrent(n);
-              return <li><a href={url(n.href)} class:list={{ 'nav-action': n.action }} aria-current={active ? 'page' : undefined}>{n.label}{active && <span class="nav-current" aria-hidden="true">Current</span>}</a></li>;
+              return <li style={`--i: ${i}`}><a href={url(n.href)} class:list={{ 'nav-action': n.action }} aria-current={active ? 'page' : undefined}>{n.label}{active && <span class="nav-current" aria-hidden="true">Current</span>}</a></li>;
             })}
           </ul>
         </nav>
@@ -131,6 +132,8 @@ const csp = [
     </footer>
     <script is:inline src={url('/scripts/print.js')} defer></script>
     <script>
+      import '../scripts/pointer.ts';
+
       const siteHeader = document.querySelector<HTMLElement>('[data-site-header]');
       const menuButton = siteHeader?.querySelector<HTMLButtonElement>('.nav-toggle');
       const siteNavigation = siteHeader?.querySelector<HTMLElement>('[data-site-navigation]');

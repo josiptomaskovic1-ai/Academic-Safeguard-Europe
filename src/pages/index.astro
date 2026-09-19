@@ -57,8 +57,8 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
       <div class="m-hero-foot">
         <p class="m-lede">When your grades, degree and career depend on the people you may need to report, speaking&nbsp;up must be safe.</p>
         <div class="actions">
-          <a class="btn btn-primary btn-lg" href={url('/take-action/')}>Support European Safeguards</a>
-          <a class="btn btn-secondary btn-lg" href={url('/evidence/')}>See the Evidence</a>
+          <a class="btn btn-primary btn-lg" href={url('/take-action/')} data-magnetic>Support European Safeguards</a>
+          <a class="btn btn-secondary btn-lg" href={url('/evidence/')} data-magnetic>See the Evidence</a>
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@ const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
         <span class="m-ink-line" style={`--i: ${triadLead.length}`}><span class="m-ink">{triadLast}</span></span>
       </h2>
       <div class="actions">
-        <a class="btn btn-primary btn-xl" href={url('/take-action/')}>Support European Safeguards</a>
+        <a class="btn btn-primary btn-xl" href={url('/take-action/')} data-magnetic>Support European Safeguards</a>
       </div>
     </div>
   </section>
