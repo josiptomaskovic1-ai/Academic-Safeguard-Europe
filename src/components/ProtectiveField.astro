@@ -1,0 +1,328 @@
+---
+/**
+ * ProtectiveField — the About page's one cinematic composition.
+ *
+ * Idea: protection is infrastructure. A student's academic future sits inside a field boundary;
+ * eight interdependent safeguards are stationed on that boundary. A concern enters the field above
+ * it and leaves below it as a reasoned outcome. The eight are not a sequence.
+ *
+ * Construction: a 3x3 grid whose centre cell IS the boundary, so each surrounding cell touches it at
+ * exactly the point where that safeguard's dot belongs — corner cells at a corner, edge cells at an
+ * edge midpoint. The dots are positioned on their own border box, so they land on the boundary at
+ * every viewport with no magic numbers. The SVG carries only the boundary stroke and is decorative;
+ * every word lives in semantic HTML, so the meaning survives with no CSS, no JS and no SVG.
+ *
+ * Safeguard names, slugs and links come from methodology/scoring-rubric.yml, so this can never
+ * describe a safeguard the Standard does not define.
+ */
+import { getRubric } from '../lib/data';
+import { url } from '../lib/url';
+
+const rubric = getRubric();
+const byId = (id: string) => {
+  const s = rubric.safeguards.find((x) => x.id === id);
+  if (!s) throw new Error(`ProtectiveField references unknown safeguard ${id}`);
+  return s;
+};
+
+/** Eight safeguards, each one-to-one with a safeguard the Standard defines and scores. */
+const NODES = [
+  { id: 'S03', cell: 'nw', label: 'Safe, independent reporting', text: 'A route to a body independent of the people involved.' },
+  { id: 'S02', cell: 'n', label: 'Protection from retaliation', text: 'Speaking up must not cost a student academically.' },
+  { id: 'S04', cell: 'ne', label: 'Managed conflicts of interest', text: 'Anyone with a stake steps aside from deciding.' },
+  { id: 'S05', cell: 'e', label: 'Interim protection', text: 'Teaching or supervision can move while a case runs.' },
+  { id: 'S06', cell: 'se', label: 'Reasonable timelines', text: 'Binding deadlines to acknowledge, investigate and decide.' },
+  { id: 'S07', cell: 's', label: 'Reasoned decisions', text: 'A written decision that states its reasons.' },
+  { id: 'S08', cell: 'sw', label: 'Meaningful review', text: 'The outcome can be challenged before another body.' },
+  { id: 'S10', cell: 'w', label: 'Repair of academic harm', text: 'A tainted grade or lost term can be put right.' },
+].map((n) => ({ ...n, def: byId(n.id) }));
+---
+
+<div class="af" data-field>
+  <p class="af-edge af-edge--in">A concern is raised</p>
+
+  <div class="af-stage">
+    {/* Decorative. The boundary it draws is described in words by the list below. */}
+    <svg class="af-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <rect class="af-ring" x="33.34" y="33.34" width="33.32" height="33.32" pathLength="100" vector-effect="non-scaling-stroke" />
+    </svg>
+
+    <div class="af-core">
+      <p class="af-core-text">A student’s academic future</p>
+      <p class="af-core-note">Grades, supervision, progression, references, funding, mobility.</p>
+    </div>
+
+    <ul class="af-nodes" role="list">
+      {NODES.map((n) => (
+        <li class={`af-node af-${n.cell}`}>
+          <span class="af-dot" aria-hidden="true"></span>
+          <a class="af-label" href={url(`/compare/${n.def.slug}/`)}>{n.label}</a>
+          <p class="af-text">{n.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <p class="af-edge af-edge--out">A reasoned outcome, or a documented gap</p>
+
+  <p class="af-foot">
+    The eight are interdependent, not a sequence: a student meets them as one system, or meets the gap
+    where one is missing. Each is scored in the <a href={url('/standard/')}>ASE Standard</a>.
+  </p>
+</div>
+
+<style>
+  .af {
+    --af-line: #34425a;
+    --af-dot: 0.6875rem;
+    margin-top: clamp(1.35rem, 2.4vw, 2.25rem);
+  }
+
+  /* The two ends of the path. Yellow marks procedure, never decoration. */
+  .af-edge {
+    margin: 0;
+    font: 700 0.8125rem/1.3 var(--sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bone);
+  }
+  .af-edge::before {
+    content: '';
+    display: block;
+    width: 2.75rem;
+    height: 3px;
+    margin-bottom: 0.6rem;
+    background: var(--signal);
+  }
+  .af-edge--out {
+    margin-top: clamp(1.1rem, 2vw, 1.6rem);
+    text-align: right;
+  }
+  .af-edge--out::before { margin-left: auto; }
+
+  .af-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    grid-template-areas: 'nw n ne' 'w core e' 'sw s se';
+    min-height: clamp(19rem, 27vw, 23.5rem);
+    margin-top: clamp(1.1rem, 2vw, 1.6rem);
+  }
+
+  .af-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .af-ring { fill: none; stroke: var(--signal); stroke-width: 2; }
+
+  .af-core {
+    grid-area: core;
+    align-self: center;
+    justify-self: center;
+    max-width: 17rem;
+    padding: 0 1.25rem;
+    text-align: center;
+  }
+  .af-core-text {
+    margin: 0;
+    font: 700 clamp(1.15rem, 1.7vw, 1.5rem)/1.2 var(--serif);
+    color: var(--bone);
+    text-wrap: balance;
+  }
+  .af-core-note {
+    margin: 0.5rem 0 0;
+    font: 400 0.8125rem/1.45 var(--sans);
+    color: var(--muted-d);
+  }
+
+  .af-nodes { display: contents; list-style: none; margin: 0; padding: 0; }
+
+  .af-node { position: relative; max-width: 15.5rem; margin: 0; }
+  .af-label {
+    display: block;
+    font: 700 clamp(0.9375rem, 1.05vw, 1.0625rem)/1.25 var(--sans);
+    color: var(--bone);
+    text-decoration-color: var(--rule-d);
+    text-underline-offset: 0.25em;
+  }
+  .af-label::after { content: ''; position: absolute; inset: 0; }
+  .af-label:hover { color: var(--signal); text-decoration-color: var(--signal); }
+  .af-node:hover .af-label { color: var(--signal); }
+  .af-text {
+    margin: 0.3rem 0 0;
+    font: 400 0.875rem/1.45 var(--sans);
+    color: var(--muted-d);
+    text-wrap: pretty;
+  }
+
+  /* The dot sits on the border box, which is flush with the boundary by construction. */
+  .af-dot {
+    position: absolute;
+    width: var(--af-dot);
+    height: var(--af-dot);
+    border-radius: 50%;
+    background: var(--navy);
+    border: 3px solid var(--signal);
+    transition: transform 160ms ease, background-color 160ms ease;
+  }
+  .af-node:hover .af-dot,
+  .af-node:focus-within .af-dot { background: var(--signal); transform: scale(1.35); }
+
+  /* Corner cells hug the boundary corner; edge cells hug the edge midpoint. */
+  .af-nw { grid-area: nw; justify-self: end; align-self: end; text-align: right; padding: 0 1.4rem 1.4rem 0; }
+  .af-nw .af-dot { right: 0; bottom: 0; transform: translate(50%, 50%); }
+  .af-nw:hover .af-dot, .af-nw:focus-within .af-dot { transform: translate(50%, 50%) scale(1.35); }
+
+  .af-n { grid-area: n; justify-self: center; align-self: end; text-align: center; padding: 0 1rem 1.4rem; }
+  .af-n .af-dot { left: 50%; bottom: 0; transform: translate(-50%, 50%); }
+  .af-n:hover .af-dot, .af-n:focus-within .af-dot { transform: translate(-50%, 50%) scale(1.35); }
+
+  .af-ne { grid-area: ne; justify-self: start; align-self: end; padding: 0 0 1.4rem 1.4rem; }
+  .af-ne .af-dot { left: 0; bottom: 0; transform: translate(-50%, 50%); }
+  .af-ne:hover .af-dot, .af-ne:focus-within .af-dot { transform: translate(-50%, 50%) scale(1.35); }
+
+  .af-w { grid-area: w; justify-self: end; align-self: center; text-align: right; padding-right: 1.4rem; }
+  .af-w .af-dot { right: 0; top: 50%; transform: translate(50%, -50%); }
+  .af-w:hover .af-dot, .af-w:focus-within .af-dot { transform: translate(50%, -50%) scale(1.35); }
+
+  .af-e { grid-area: e; justify-self: start; align-self: center; padding-left: 1.4rem; }
+  .af-e .af-dot { left: 0; top: 50%; transform: translate(-50%, -50%); }
+  .af-e:hover .af-dot, .af-e:focus-within .af-dot { transform: translate(-50%, -50%) scale(1.35); }
+
+  .af-sw { grid-area: sw; justify-self: end; align-self: start; text-align: right; padding: 1.4rem 1.4rem 0 0; }
+  .af-sw .af-dot { right: 0; top: 0; transform: translate(50%, -50%); }
+  .af-sw:hover .af-dot, .af-sw:focus-within .af-dot { transform: translate(50%, -50%) scale(1.35); }
+
+  .af-s { grid-area: s; justify-self: center; align-self: start; text-align: center; padding: 1.4rem 1rem 0; }
+  .af-s .af-dot { left: 50%; top: 0; transform: translate(-50%, -50%); }
+  .af-s:hover .af-dot, .af-s:focus-within .af-dot { transform: translate(-50%, -50%) scale(1.35); }
+
+  .af-se { grid-area: se; justify-self: start; align-self: start; padding: 1.4rem 0 0 1.4rem; }
+  .af-se .af-dot { left: 0; top: 0; transform: translate(-50%, -50%); }
+  .af-se:hover .af-dot, .af-se:focus-within .af-dot { transform: translate(-50%, -50%) scale(1.35); }
+
+  .af-foot {
+    max-width: 44rem;
+    margin: clamp(1.5rem, 2.6vw, 2.25rem) 0 0;
+    font: 400 1rem/1.6 var(--sans);
+    color: var(--muted-d);
+  }
+  .af-foot a { color: var(--bone); }
+
+  /* One orchestrated reveal: the boundary draws once, then the stations appear. */
+  .af[data-animate='pending'] .af-ring { stroke-dasharray: 100; stroke-dashoffset: 100; }
+  .af[data-animate='pending'] .af-node { opacity: 0; }
+  .af[data-animate='run'] .af-ring {
+    stroke-dasharray: 100;
+    animation: af-draw 700ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  .af[data-animate='run'] .af-node { animation: af-in 320ms cubic-bezier(0.22, 0.61, 0.36, 1) backwards; }
+  .af[data-animate='run'] .af-nw { animation-delay: 380ms; }
+  .af[data-animate='run'] .af-n { animation-delay: 420ms; }
+  .af[data-animate='run'] .af-ne { animation-delay: 460ms; }
+  .af[data-animate='run'] .af-e { animation-delay: 500ms; }
+  .af[data-animate='run'] .af-se { animation-delay: 540ms; }
+  .af[data-animate='run'] .af-s { animation-delay: 580ms; }
+  .af[data-animate='run'] .af-sw { animation-delay: 620ms; }
+  .af[data-animate='run'] .af-w { animation-delay: 660ms; }
+
+  @keyframes af-draw { to { stroke-dashoffset: 0; } }
+  @keyframes af-in { from { opacity: 0; transform: translateY(0.5rem); } to { opacity: 1; transform: none; } }
+
+  /* Tablet: the field keeps its shape but the copy thins out. */
+  @media (max-width: 64rem) {
+    .af-node { max-width: 12.5rem; }
+    .af-text { font-size: 0.8125rem; }
+    .af-core { max-width: 13rem; }
+  }
+
+  /* Phones: the same list becomes a vertical spine. No diagram to untangle. */
+  @media (max-width: 48rem) {
+    .af-stage {
+      display: block;
+      min-height: 0;
+      margin-top: 1rem;
+    }
+    .af-svg { display: none; }
+
+    .af-core {
+      max-width: none;
+      padding: 0 0 0 1.75rem;
+      text-align: left;
+      border-left: 3px solid var(--signal);
+      padding-block: 0.15rem 1.4rem;
+    }
+
+    .af-nodes {
+      display: block;
+      border-left: 3px solid var(--signal);
+      padding-left: 1.75rem;
+    }
+    .af-node,
+    .af-nw, .af-n, .af-ne, .af-e, .af-se, .af-s, .af-sw, .af-w {
+      max-width: none;
+      padding: 0 0 0.85rem;
+      text-align: left;
+    }
+    .af-node + .af-node { padding-top: 0; }
+    .af-node .af-dot,
+    .af-nw .af-dot, .af-n .af-dot, .af-ne .af-dot, .af-e .af-dot,
+    .af-se .af-dot, .af-s .af-dot, .af-sw .af-dot, .af-w .af-dot {
+      left: -1.75rem;
+      right: auto;
+      top: 0.4em;
+      bottom: auto;
+      transform: translateX(-50%);
+    }
+    .af-node:hover .af-dot, .af-node:focus-within .af-dot,
+    .af-nw:hover .af-dot, .af-n:hover .af-dot, .af-ne:hover .af-dot, .af-e:hover .af-dot,
+    .af-se:hover .af-dot, .af-s:hover .af-dot, .af-sw:hover .af-dot, .af-w:hover .af-dot {
+      transform: translateX(-50%) scale(1.35);
+    }
+    .af-text { font-size: 0.875rem; }
+    .af-edge--out { text-align: left; }
+    .af-edge--out::before { margin-left: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .af[data-animate] .af-ring { stroke-dasharray: none; stroke-dashoffset: 0; animation: none; }
+    .af[data-animate] .af-node { opacity: 1; animation: none; }
+    .af-dot { transition: none; }
+  }
+</style>
+
+<script>
+  // Progressive enhancement only: with no JS the field already renders in its final state.
+  // Whatever happens here, the field must end up revealed — the reveal is never left to chance.
+  const field = document.querySelector<HTMLElement>('[data-field]');
+  if (field && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let done = false;
+    const run = () => {
+      if (done) return;
+      done = true;
+      field.dataset.animate = 'run';
+    };
+
+    field.dataset.animate = 'pending';
+    // Failsafe: if the observer never fires (bfcache, print, headless capture, odd layouts),
+    // the field still appears rather than staying at opacity 0.
+    const failsafe = window.setTimeout(run, 1200);
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              window.clearTimeout(failsafe);
+              io.disconnect();
+              run();
+            }
+          }
+        },
+        { threshold: 0.15 },
+      );
+      io.observe(field);
+    } else {
+      window.clearTimeout(failsafe);
+      run();
+    }
+  }
+</script>

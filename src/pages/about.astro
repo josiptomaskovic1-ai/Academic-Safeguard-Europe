@@ -1,115 +1,255 @@
 ---
 import Base from '../layouts/Base.astro';
-import PageHero from '../components/PageHero.astro';
-import Folio from '../components/Folio.astro';
-import ActionBand from '../components/ActionBand.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ProtectiveField from '../components/ProtectiveField.astro';
 import { url, REPO_URL, repoFile } from '../lib/url';
 import { CAMPAIGN_NAME } from '../lib/campaign';
 import { getRubric } from '../lib/data';
+
 const rubric = getRubric();
+
+/** Evidence to a right a student can actually use. Genuinely sequential, so it is numbered. */
+const PATHWAY = [
+  { title: 'Evidence', text: 'What each country and university has actually published, article by article.', href: '/evidence/', link: 'Evidence base' },
+  { title: 'Standard', text: 'What credible protection must contain, as observable criteria.', href: '/standard/', link: `Standard v${rubric.methodology_version}` },
+  { title: 'Change', text: 'A documented gap becomes a specific, adoptable reform.', href: '/demands/', link: 'What we ask for' },
+  { title: 'Safeguards', text: 'Protection becomes ordinary procedure, not a policy statement.' },
+  { title: 'Usable rights', text: 'A student can act without risking their studies.' },
+];
+
+/** What exists today. Every line maps to something published in this repository. */
+const NOW = [
+  { t: 'Researching rules', d: 'National and university rules, read against the Standard.' },
+  { t: 'Traceable evidence', d: 'Sources, locator and gaps behind every finding.' },
+  { t: 'The Standard', d: 'Twelve safeguards, versioned in public.' },
+  { t: 'Correctable findings', d: 'Provisional until verified; anyone may challenge one.' },
+  { t: 'Advocacy', d: `The ${CAMPAIGN_NAME} campaign, separate from the research.` },
+];
+
+/** Direction of travel. Phrased as intent, never as an available service. */
+const NEXT = [
+  { t: 'Protection across Europe', d: 'Mechanisms in ordinary procedure, not only where institutions run well.' },
+  { t: 'Better procedure', d: 'Independent decisions, real deadlines, written reasons.' },
+  { t: 'Retaliation deterred', d: 'Consequences as concrete as students’ own duties.' },
+  { t: 'Referral routes', d: 'Only where legally and operationally in place.' },
+];
+
+const GOVERNANCE = [
+  { t: 'Independent', d: 'No university, government, party or funder controls a conclusion.' },
+  { t: 'Open', d: 'Sources, method, versions and limits are public. Code MIT, data CC BY 4.0.' },
+  { t: 'Correctable', d: 'Evidence can be challenged, institutions may reply, errors are fixed in public.' },
+  { t: 'Neutral', d: 'A finding assumes neither that staff are dangerous nor that a complaint is true.' },
+];
+
+const BOUNDARIES = [
+  'Rate individual academics, or decide whether an allegation is true.',
+  'Act as a court, police service, inspectorate or disciplinary body.',
+  'Rank universities or countries, or publish any overall score.',
+  'Take complaints through this site, or give legal advice.',
+  'Claim affiliation with the EU, a government, university or quality-assurance agency.',
+];
+
+const CAVEATS = [
+  'A written policy does not prove that it works in practice.',
+  'Not finding a published provision does not prove that no safeguard exists.',
+  'Findings describe documented rules, not the full reality of institutional practice.',
+];
 ---
-<Base title="About" description="About Academic Safeguard Europe: mission, independence, governance principles, limits of the research, and privacy." campaign pageClass="page-about">
-  <PageHero tone="navy" crumbs={[{ label: 'About' }]} kicker="About ASE">
-    Evidence about academic power, turned into a <span class="m-bar">European demand.</span>
-    <Fragment slot="lede">An independent, open-source project that researches published student safeguards and campaigns to make them enforceable.</Fragment>
-  </PageHero>
 
-  <section class="sec on-paper" aria-labelledby="two-parts">
-    <div class="container">
-      <Folio label="Two layers" />
-      <h2 id="two-parts" class="sec-title">One project, two layers.</h2>
-      <div class="layers">
-        <div>
-          <h3>{CAMPAIGN_NAME}</h3>
-          <p>The public campaign for European minimum safeguards.</p>
-          <a class="m-more" href={url('/demands/')}>Our demands <span aria-hidden="true">→</span></a>
+<Base
+  title="About"
+  description="Academic Safeguard Europe works to make safe reporting, independent decisions, protection from retaliation and real remedies part of how European higher education runs."
+  campaign
+  pageClass="about"
+>
+  {/* 1 — The mission. The only monumental element on the page. */}
+  <section class="ab-hero on-navy" aria-labelledby="page-title">
+    <div class="ab-wrap">
+      <Breadcrumbs crumbs={[{ label: 'About' }]} />
+      <div class="ab-hero-grid">
+        <div class="ab-hero-main">
+          <h1 id="page-title">Protection must exist before a student needs it.</h1>
+          <p class="ab-lede">
+            Academic Safeguard Europe works to make safe reporting, independent decisions, protection from
+            retaliation and real remedies part of how European higher education runs — so that using a right
+            does not put a student’s studies at risk.
+          </p>
         </div>
-        <div>
-          <h3>The evidence base</h3>
-          <p>Published rules assessed against the ASE Standard v{rubric.methodology_version}, sourced and correctable.</p>
-          <a class="m-more" href={url('/evidence/')}>How the evidence works <span aria-hidden="true">→</span></a>
+        <div class="ab-hero-aside">
+          <p class="ab-hero-side">
+            A right is only real if a student can use it — which depends on who hears a concern, who is kept
+            away from deciding it, and what happens afterwards.
+          </p>
+          <div class="ab-actions">
+            <a class="btn btn-primary btn-lg" href={url('/standard/')}>Explore the safeguard standard</a>
+            <a class="btn btn-secondary btn-lg" href={url('/contribute/')}>Contribute evidence</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sec on-paper" id="independence" aria-labelledby="independence-h">
-    <div class="container">
-      <Folio label="Governance" />
-      <h2 id="independence-h" class="sec-title">Independent, open and correctable.</h2>
-      <ul class="ruled-index ruled-index--3" role="list">
-        <li><h3>Independent</h3><p>Not affiliated with the European Union, any government, quality-assurance agency, university or political party. No advertising or sponsors.</p></li>
-        <li><h3>Neutral research</h3><p>Assumes neither that staff are dangerous nor that complaints are true. Campaign positions never change a finding.</p></li>
-        <li><h3>Open</h3><p>Standard, method, data and code are public. Code <a href={repoFile('LICENSE')}>MIT</a>; data and texts <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a>.</p></li>
-        <li><h3>Versioned</h3><p>Every method change is in the <a href={url('/methodology/changelog/')}>changelog</a>; every data change is a public commit.</p></li>
-        <li><h3>Correctable</h3><p>Anyone can challenge a finding, and institutions have a <a href={url('/corrections/')}>right of reply</a>.</p></li>
-      </ul>
+  {/* 2 + 3 — Why protection is structural, then the field it has to form. */}
+  <section class="ab-sec ab-field-sec on-navy" aria-labelledby="field-h">
+    <div class="ab-wrap">
+      <div class="ab-field-head">
+        <h2 id="field-h">A right is not effective if using it puts a student at risk.</h2>
+        <div class="ab-field-intro">
+          <p class="ab-body">
+            Most academic staff never misuse their position. The problem is structural: the people a student
+            may need to question often hold their assessment, supervision, references and funding. Protection
+            cannot rest on individual courage — it has to be built into the procedure.
+          </p>
+          <p class="ab-body">
+            That takes eight safeguards working as one field, because a gap in any one of them is a way
+            through. <a href={url('/problem/')}>How the dependency works</a>
+          </p>
+        </div>
+      </div>
+      <ProtectiveField />
     </div>
   </section>
 
-  <section class="sec on-navy" id="scope" aria-labelledby="scope-h">
-    <div class="container">
-      <Folio label="Scope" />
-      <h2 id="scope-h" class="sec-title">What ASE does, and does not do.</h2>
-      <div class="accept accept--flush">
-        <div class="accept-yes">
-          <h3>Does</h3>
-          <ul role="list">
-            <li>Evaluate national laws and university rules</li>
-            <li>Publish the evidence behind each finding</li>
-            <li>Campaign for enforceable student safeguards</li>
+  {/* 4 — How change happens. Sequential, so it is numbered. */}
+  <section class="ab-sec ab-path-sec on-paper" aria-labelledby="path-h">
+    <div class="ab-wrap">
+      <h2 id="path-h">How evidence turns into protection</h2>
+      <ol class="ab-path" role="list">
+        {PATHWAY.map((s, i) => (
+          <li>
+            <span class="ab-step" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+            {s.href && <a class="ab-link" href={url(s.href)}>{s.link}</a>}
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  {/* 5 — Current work against long-term mission. */}
+  <section class="ab-sec ab-now-sec on-paper" aria-labelledby="now-h">
+    <div class="ab-wrap">
+      <h2 id="now-h">What we do now, and what we are building toward</h2>
+      <div class="ab-two">
+        <div class="ab-col">
+          <h3 class="ab-minor">Current work</h3>
+          <ul class="ab-list" role="list">
+            {NOW.map((x) => (
+              <li><strong>{x.t}</strong><span>{x.d}</span></li>
+            ))}
           </ul>
         </div>
-        <div class="accept-no">
-          <h3>Does not</h3>
-          <ul role="list">
-            <li>Rate individual academics or judge whether allegations are true</li>
-            <li>Accept complaints or investigate cases</li>
-            <li>Give legal advice</li>
-            <li>Rank universities or countries</li>
+        <div class="ab-col">
+          <h3 class="ab-minor">Building toward</h3>
+          <ul class="ab-list ab-list--next" role="list">
+            {NEXT.map((x) => (
+              <li><strong>{x.t}</strong><span>{x.d}</span></li>
+            ))}
           </ul>
-        </div>
-      </div>
-      <p class="c-note band-note">Need help with your own situation? Contact your student ombudsperson, complaints office, student union or a legal adviser. <a href={url('/take-action/#not-a-reporting-service')}>Why ASE cannot take individual cases</a></p>
-    </div>
-  </section>
-
-  <div class="about-pair">
-  <section class="sec on-paper" id="limits" aria-labelledby="limits-h">
-    <div class="container">
-      <Folio label="Limits" />
-      <div class="split">
-        <h2 id="limits-h" class="sec-title">The limits of the research.</h2>
-        <div class="reading">
-          <p>A written policy does not show it works in practice, and not finding a provision does not prove a safeguard is missing.</p>
-          <p>Findings stay provisional until an independent human reviewer has checked them.</p>
-          <a class="m-more" href={url('/methodology/#11-known-limitations-of-v01')}>Known limitations <span aria-hidden="true">→</span></a>
+          <p class="ab-caution">
+            Direction, not description. ASE does not accept complaints, investigate cases, represent students,
+            or provide legal, psychological or health services.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sec on-paper" id="privacy" aria-labelledby="privacy-h">
-    <div class="container">
-      <Folio label="Privacy" />
-      <div class="split">
-        <h2 id="privacy-h" class="sec-title">Privacy.</h2>
+  {/* 6 + 7 — Governance charter, then boundaries and privacy. */}
+  <section class="ab-sec ab-gov-sec on-navy" id="independence" aria-labelledby="gov-h">
+    <div class="ab-wrap">
+      <div class="ab-gov-grid">
         <div>
-          <p class="reading">No cookies, analytics, trackers, third-party scripts or fonts, no forms that send data to ASE, and no personal data in the research.</p>
-          <details class="disclosure">
-            <summary>Hosting, GitHub and referrer details</summary>
-            <p class="small">The site is hosted on GitHub Pages. When you visit, GitHub, Inc. processes technical data such as your IP address to deliver and secure the site, and may keep it in logs. ASE has no access to these logs. Links to other websites send no referrer, so the sites you follow a link to are not told you came from ASE.</p>
-            <p class="small">Correction requests and contributions are made through GitHub, which has its own <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>. Links to github.com take you to GitHub, where GitHub’s own terms and cookies apply. Contributors may use a pseudonymous account.</p>
+          <h2 id="gov-h">Independent. Open. Correctable.</h2>
+          <p class="ab-body ab-gov-note" id="neutrality">
+            Research integrity is what makes any of this usable in an argument with an institution. The
+            campaign never changes a finding.
+          </p>
+          <p class="ab-gov-links">
+            <a href={url('/methodology/')}>Methodology</a>
+            <a href={url('/methodology/changelog/')}>Changelog</a>
+            <a href={url('/sources/')}>Sources</a>
+            <a href={url('/data/')}>Open data</a>
+            <a href={url('/corrections/')}>Right of reply</a>
+          </p>
+        </div>
+        <dl class="ab-charter">
+          {GOVERNANCE.map((g) => (
+            <div>
+              <dt>{g.t}</dt>
+              <dd>{g.d}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="ab-sec ab-scope-sec on-paper" id="scope" aria-labelledby="scope-h">
+    <div class="ab-wrap">
+      <div class="ab-scope-grid">
+        <div id="limits">
+          <h2 id="scope-h">What this project does not do</h2>
+          <p class="ab-body ab-body--tight">Academic Safeguard Europe does not:</p>
+          <ul class="ab-bounds" role="list">
+            {BOUNDARIES.map((b) => <li>{b}</li>)}
+          </ul>
+          <details class="ab-disc">
+            <summary>The limits of the research</summary>
+            <div class="ab-disc-body">
+              <ul class="ab-bounds ab-bounds--quiet" role="list">
+                {CAVEATS.map((c) => <li>{c}</li>)}
+              </ul>
+            </div>
           </details>
-          <p class="small muted privacy-links">Security reports: <a href={repoFile('SECURITY.md')}>security policy</a>. Source code: <a href={REPO_URL}>GitHub</a>.</p>
+          <p class="ab-fine">
+            <a href={url('/methodology/#11-known-limitations-of-v01')}>Known limitations of v{rubric.methodology_version}</a>
+            <a href={url('/take-action/#not-a-reporting-service')}>Why ASE cannot take individual cases</a>
+          </p>
+        </div>
+
+        <div id="privacy">
+          <h2 class="ab-h2-quiet">Privacy</h2>
+          <p class="ab-body">
+            No cookies, no analytics, no tracking, no third-party scripts, no remote fonts, and no personal
+            data in the research evidence base.
+          </p>
+          <details class="ab-disc">
+            <summary>Hosting, GitHub and referrer detail</summary>
+            <div class="ab-disc-body">
+              <p>
+                The site is hosted on GitHub Pages. GitHub, Inc. processes technical data such as your IP
+                address to deliver and secure the site, and may keep it in logs. ASE has no access to those
+                logs. Links out send no referrer.
+              </p>
+              <p>
+                Contributions and correction requests go through GitHub, where GitHub’s own
+                <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"> privacy statement</a>,
+                terms and cookies apply. A contributor may use a pseudonymous account.
+              </p>
+            </div>
+          </details>
+          <p class="ab-fine">
+            <a href={repoFile('SECURITY.md')}>Security policy</a>
+            <a href={REPO_URL}>Source</a>
+            <a href={repoFile('LICENSE-DATA.md')}>Data licence</a>
+          </p>
         </div>
       </div>
     </div>
   </section>
-  </div>
 
-  <ActionBand id="close-title">
-    Independent. Open. <span class="m-ink-line"><span class="m-ink">Correctable.</span></span>
-    <Fragment slot="actions"><a class="btn btn-primary btn-xl" href={url('/take-action/')}>Support European Safeguards</a></Fragment>
-  </ActionBand>
+  {/* 8 — One confident close. */}
+  <section class="ab-cta on-signal" aria-labelledby="cta-h">
+    <div class="ab-wrap">
+      <div class="ab-cta-grid">
+        <h2 id="cta-h">Build protection before it becomes urgent.</h2>
+        <div class="ab-cta-actions">
+          <a class="btn btn-primary btn-lg" href={url('/take-action/')}>Support student safeguards</a>
+          <a class="ab-link ab-link--cta" href={url('/europe/')}>See what Europe has published</a>
+        </div>
+      </div>
+    </div>
+  </section>
 </Base>

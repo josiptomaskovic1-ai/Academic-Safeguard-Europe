@@ -1269,116 +1269,364 @@ main.campaign { padding-block: 0; }
 /* 404 */
 .nf-hero .hero-aside { display: flex; justify-content: flex-end; }
 
-/* ---------- About page: tightened vertical rhythm ----------
-   Scoped to body.page-about, so no other page is affected. Palette, typography, copy and the
-   numbered folio structure are unchanged; only vertical space, the Governance grid proportions
-   and the pairing of the two short closing sections differ.
-   ----------------------------------------------------------- */
-
-/* Hero: less padding, slightly smaller h1, lede brought into view sooner. */
-.page-about .page-hero { padding-block: clamp(1.35rem, 3.2vw, 2.25rem) clamp(1.6rem, 3.6vw, 2.6rem); }
-.page-about .page-hero .breadcrumbs { margin-bottom: clamp(0.9rem, 2.2vw, 1.5rem); }
-.page-about .hero-kicker { margin-bottom: 0.8rem; }
-.page-about .page-hero--navy h1 { font-size: clamp(2.05rem, 6.5vw, 5.9rem); }
-.page-about .page-hero--navy .hero-lede {
-  margin-top: clamp(1.1rem, 2.2vw, 1.75rem);
-  padding-top: clamp(0.85rem, 1.6vw, 1.25rem);
+/* ---------- About page ----------
+   Scoped to body.about. The page runs on its own grid and type scale rather than the shared
+   section utilities, so nothing here can reach another page. The Protective Field brings its
+   own component-scoped styles.
+   --------------------------------- */
+.about {
+  --ab-max: 78rem;
+  --ab-gut: clamp(1.25rem, 4vw, 3.5rem);
+  --ab-sec: clamp(2.15rem, 3.3vw, 3.4rem);
+  --ab-h1: clamp(2.5rem, 5.4vw, 4.75rem);
+  --ab-h2: clamp(1.75rem, 3vw, 2.75rem);
+  --ab-h3: clamp(1.1875rem, 1.45vw, 1.4375rem);
+  --ab-body: clamp(1.0625rem, 0.95rem + 0.32vw, 1.1875rem);
+  --ab-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* The yellow accent reads as one deliberate bar rather than a fragment under each wrapped word.
-   It takes its own line and never wraps, so the h1 must stay narrow enough for it to fit. The phrase is
-   about 9.1x the font size wide, so the size tracks the viewport: full size from ~480px up, and only the
-   narrowest phones take a deeper cut, which is what keeps 320px free of horizontal overflow. */
-@media (max-width: 47.99rem) {
-  .page-about .page-hero--navy h1 { font-size: clamp(1.5rem, 9.9vw, 2.6rem); }
-  .page-about .page-hero--navy h1 .m-bar { display: block; width: fit-content; white-space: nowrap; }
+.about .ab-wrap {
+  width: 100%;
+  max-width: calc(var(--ab-max) + 2 * var(--ab-gut));
+  min-width: 0;
+  margin-inline: auto;
+  padding-inline: var(--ab-gut);
 }
 
-/* Sections: ~20-25% less vertical space, separation and numbering preserved. */
-.page-about .sec { padding-block: clamp(2.3rem, 5.2vw, 4.5rem); }
-.page-about .folio { margin-bottom: clamp(1.1rem, 2.8vw, 2rem); }
-.page-about .sec-title { margin-bottom: clamp(1rem, 2.6vw, 1.75rem); }
-.page-about .layers > div { padding: 0.9rem 0 1.35rem; }
-.page-about .layers .m-more { margin-top: 1rem; }
-.page-about .ruled-index > li { padding: 0.75rem 0 1.15rem; }
-.page-about .accept li { padding-block: 0.5rem; }
-.page-about .accept { gap: 1.25rem 3rem; }
-.page-about .band-note { margin-top: clamp(1.25rem, 2.6vw, 2rem); padding-top: 0.9rem; }
+.about .ab-sec { padding-block: var(--ab-sec); }
+.about .ab-body { max-width: 62ch; margin: 1rem 0 0; font: 400 var(--ab-body)/1.6 var(--sans); color: var(--ink-2); }
+.about .ab-body--tight { margin-top: 0.85rem; margin-bottom: -0.25rem; }
+.about h2 { margin: 0; font: 700 var(--ab-h2)/1.1 var(--serif); letter-spacing: -0.022em; color: var(--ink); text-wrap: balance; }
+.about h3 { margin: 0; font: 700 var(--ab-h3)/1.25 var(--sans); letter-spacing: -0.005em; color: var(--ink); }
+.about .ab-minor {
+  margin: 0 0 1rem;
+  font: 700 0.8125rem/1.3 var(--sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.about .ab-minor--sp { margin-top: 1.75rem; }
+.about .ab-h2-quiet { font-size: clamp(1.5rem, 2.1vw, 2rem); }
 
-/* Internal gaps inside reading blocks and the privacy disclosure. */
-.page-about .reading p { margin-bottom: 0.8rem; }
-.page-about .reading .m-more { margin-top: 1.25rem; }
-.page-about .disclosure { margin-top: 0.9rem; }
-.page-about .privacy-links { margin-top: 0.9rem; }
+/* Shared inline link: no appended arrow, a real underline that thickens. */
+.about .ab-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: 0.35rem;
+  font: 700 0.9375rem/1.4 var(--sans);
+  color: var(--accent);
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+}
+.about .ab-link:hover { text-decoration-thickness: 2px; }
 
-/* Governance: five items in a balanced 3 + 2 grid that fills the row, instead of 3 + 2 with a hole. */
-@media (min-width: 60rem) {
-  .page-about .ruled-index--3 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  .page-about .ruled-index--3 > li { grid-column: span 2; }
-  .page-about .ruled-index--3 > li:nth-child(4),
-  .page-about .ruled-index--3 > li:nth-child(5) { grid-column: span 3; }
-  .page-about .ruled-index--3 p { max-width: none; }
+/* ---- 1. Hero: the only monumental element ---- */
+.about .ab-hero { padding-block: clamp(0.85rem, 1.5vw, 1.35rem) clamp(1.9rem, 3.2vw, 2.9rem); }
+.about .ab-hero .breadcrumbs { margin: 0 0 clamp(1.35rem, 2.6vw, 2.25rem); }
+.about .ab-hero-grid {
+  display: grid;
+  gap: clamp(1.75rem, 3vw, 2.5rem) clamp(2rem, 5vw, 5rem);
+  grid-template-columns: minmax(0, 1fr);
+}
+.about .ab-hero-aside { display: flex; flex-direction: column; gap: clamp(1.25rem, 2.4vw, 2rem); }
+@media (min-width: 62rem) {
+  .about .ab-hero-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; }
+  .about .ab-hero-aside { justify-content: space-between; }
+  .about .ab-hero-side { margin-top: 0.5rem; }
+  .about .ab-actions { margin-top: 0; }
+}
+.about .ab-hero h1 {
+  margin: 0;
+  font: 700 var(--ab-h1)/1.03 var(--serif);
+  letter-spacing: -0.032em;
+  color: var(--bone);
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.about .ab-lede {
+  max-width: 48ch;
+  margin: clamp(1.25rem, 2.2vw, 1.85rem) 0 0;
+  font: 400 clamp(1.0625rem, 1.35vw, 1.25rem)/1.55 var(--sans);
+  color: var(--bone);
+}
+.about .ab-actions { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: clamp(1.25rem, 2.1vw, 1.75rem); }
+.about .ab-hero-side {
+  max-width: 34ch;
+  margin: 0;
+  padding-top: 1.15rem;
+  border-top: 3px solid var(--signal);
+  font: 400 clamp(1rem, 1.15vw, 1.0625rem)/1.6 var(--sans);
+  color: var(--muted-d);
 }
 
-/* "The limits of the research" and "Privacy" share one row on desktop and stack on mobile.
-   The wrapper carries the page gutter so each section's own .container can pass through.
-   Below 48rem nothing is overridden: the two sections stack exactly as before. */
-@media (min-width: 48rem) {
-  .page-about .about-pair {
-    width: 100%;
-    max-width: calc(var(--wide-c) + 2 * var(--gutter-c));
-    margin-inline: auto;
-    padding-inline: var(--gutter-c);
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0 clamp(2rem, 5vw, 4.5rem);
-    align-items: start;
-  }
-  /* Both columns start on the same line, so the adjacent-sibling "no double padding" rule is undone here. */
-  .page-about .about-pair > .sec.on-paper { padding-block: clamp(2.3rem, 5.2vw, 4.5rem); }
-  .page-about .about-pair > .sec > .container {
-    width: 100%;
-    max-width: none;
-    margin-inline: 0;
-    padding-inline: 0;
-  }
-  /* Narrow columns: the heading sits above its text rather than beside it. */
-  .page-about .about-pair .split { grid-template-columns: minmax(0, 1fr); gap: 0.85rem; }
-  .page-about .about-pair .split > .sec-title { margin-bottom: 0; }
-  .page-about .about-pair .reading .m-more { margin-top: 1.25rem; }
+/* ---- 2 + 3. Why protection is structural, and the field it has to form ---- */
+.about .ab-field-head { max-width: 72rem; }
+.about .ab-field-head h2 { max-width: 24ch; }
+.about .ab-field-intro {
+  display: grid;
+  gap: 0.35rem clamp(2rem, 4vw, 3.5rem);
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: 0.35rem;
+}
+@media (min-width: 62rem) {
+  .about .ab-field-intro { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.about .ab-field-intro .ab-body { max-width: 52ch; }
+.about .ab-field-sec h2 { color: var(--bone); }
+.about .ab-field-sec .ab-body { color: var(--muted-d); }
+
+/* ---- 4. How evidence turns into protection: genuinely sequential, so it is numbered ---- */
+.about .ab-path {
+  position: relative;
+  list-style: none;
+  display: grid;
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
+  padding: 0;
+}
+.about .ab-path::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--signal);
+}
+@media (min-width: 24rem) { .about .ab-path { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.25rem; } }
+@media (min-width: 48rem) { .about .ab-path { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 2rem; } }
+@media (min-width: 72rem) { .about .ab-path { grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 1.5rem; } }
+.about .ab-path > li {
+  position: relative;
+  margin: 0;
+  padding: 1.1rem 1.25rem 1.5rem 0;
+  border-top: 0;
 }
 
-/* Closing call to action: a shorter band that still carries the yellow. */
-.page-about .action-band { padding-block: clamp(2rem, 4.4vw, 3.5rem); }
-.page-about .band-title { margin-bottom: clamp(1.25rem, 3vw, 2rem); font-size: clamp(2rem, 5.4vw, 4.25rem); }
+.about .ab-step {
+  display: block;
+  font: 700 0.8125rem/1 var(--mono);
+  letter-spacing: 0.1em;
+  color: var(--ink-3);
+  margin-bottom: 0.65rem;
+}
+.about .ab-path h3 { margin-bottom: 0.4rem; }
+.about .ab-path p { margin: 0; font: 400 0.9375rem/1.55 var(--sans); color: var(--ink-2); }
+.about .ab-path .ab-link { margin-top: 0.2rem; font-size: 0.875rem; }
 
-/* Footer: tighter blocks. Link hit areas stay at 2.75rem (44px). */
-.page-about .site-footer { padding-block: clamp(2rem, 4vw, 3.25rem) 1.6rem; }
-.page-about .footer-trust { padding-top: 0.9rem; }
-.page-about .footer-row { margin-top: clamp(1.5rem, 3vw, 2.5rem); padding-top: 1.1rem; gap: 1rem 2.5rem; }
-.page-about .footer-id { gap: 0.8rem; }
+/* ---- 5. Now vs building toward ---- */
+.about .ab-two {
+  display: grid;
+  gap: clamp(2rem, 3.2vw, 2.75rem) clamp(2rem, 4.5vw, 4rem);
+  grid-template-columns: minmax(0, 1fr);
+  margin-top: clamp(1.75rem, 3vw, 2.5rem);
+  align-items: start;
+}
+@media (min-width: 58rem) { .about .ab-two { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.about .ab-list { list-style: none; margin: 0; padding: 0; }
+.about .ab-list > li {
+  margin: 0;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  gap: 0.1rem;
+}
+@media (min-width: 34rem) {
+  .about .ab-list > li { grid-template-columns: minmax(0, 9rem) minmax(0, 1fr); gap: 0.1rem 1rem; align-items: baseline; }
+}
+@media (min-width: 58rem) {
+  .about .ab-list > li { grid-template-columns: minmax(0, 10.5rem) minmax(0, 1fr); gap: 0.1rem 1.25rem; }
+}
+.about .ab-list > li:first-child { border-top: 3px solid var(--line); }
+.about .ab-list strong { font: 700 1rem/1.35 var(--sans); color: var(--ink); }
+.about .ab-list span { font: 400 0.9375rem/1.5 var(--sans); color: var(--ink-3); }
+/* The forward column is visibly the quieter one: intent, not inventory. */
+.about .ab-list--next > li:first-child { border-top-color: var(--rule-strong); }
+.about .ab-col--next { position: relative; }
+.about .ab-caution {
+  max-width: 52ch;
+  margin: 1rem 0 0;
+  padding: 0.8rem 1rem;
+  background: var(--surface-2);
+  border-left: 3px solid var(--control);
+  font: 400 0.9375rem/1.55 var(--sans);
+  color: var(--ink-2);
+}
 
-/* Phones: the same rhythm, compressed again. Type sizes stay large enough to keep the
-   editorial voice; only spacing and the two oversized display sizes come down. */
-@media (max-width: 47.99rem) {
-  .page-about .sec { padding-block: 1.6rem; }
-  .page-about .folio { margin-bottom: 0.85rem; padding-top: 0.6rem; }
-  .page-about .sec-title { margin-bottom: 0.85rem; }
-  .page-about .layers > div { padding: 0.7rem 0 0.95rem; }
-  .page-about .layers h3 { font-size: 1.6rem; }
-  .page-about .layers .m-more { margin-top: 0.85rem; }
-  .page-about .ruled-index > li { padding: 0.55rem 0 0.8rem; }
-  .page-about .accept { gap: 1rem 3rem; }
-  .page-about .accept li { padding-block: 0.4rem; }
-  .page-about .band-note { margin-top: 1.05rem; }
-  .page-about .split { gap: 1.05rem; }
-  .page-about .action-band { padding-block: 1.6rem; }
-  .page-about .band-title { margin-bottom: 1.05rem; }
-  .page-about .site-footer { padding-block: 1.6rem 1.25rem; }
-  .page-about .footer-trust { font-size: 1.2rem; }
-  .page-about .footer-row { margin-top: 1.35rem; padding-top: 1rem; }
-  /* Two columns of links: half the rows, full 44px targets. */
-  .page-about .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+/* ---- 6. Governance charter ---- */
+.about .ab-gov-sec h2 { color: var(--bone); }
+.about .ab-gov-grid {
+  display: grid;
+  gap: clamp(1.75rem, 3vw, 2.75rem) clamp(2rem, 5vw, 5rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+@media (min-width: 62rem) {
+  .about .ab-gov-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+.about .ab-gov-note { color: var(--muted-d); max-width: 34ch; }
+.about .ab-charter { margin: 0; display: grid; gap: 0; }
+.about .ab-charter > div {
+  display: grid;
+  gap: 0.1rem 1.5rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--rule-d);
+}
+.about .ab-charter > div:first-child { border-top: 3px solid var(--signal); }
+@media (min-width: 26rem) { .about .ab-charter > div { grid-template-columns: 7.5rem minmax(0, 1fr); } }
+@media (min-width: 62rem) { .about .ab-charter > div { grid-template-columns: 9.5rem minmax(0, 1fr); } }
+.about .ab-charter dt { font: 700 1.0625rem/1.4 var(--sans); color: var(--bone); }
+.about .ab-charter dd { margin: 0; font: 400 0.9375rem/1.55 var(--sans); color: var(--muted-d); }
+.about .ab-gov-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.5rem;
+  margin: 1.1rem 0 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--rule-d);
+}
+.about .ab-gov-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font: 700 0.9375rem/1.4 var(--sans);
+  color: var(--bone);
+  text-underline-offset: 0.25em;
+}
+.about .ab-gov-links a:hover { color: var(--signal); }
+
+/* ---- 7. Boundaries and privacy: quiet, dense, still fully visible ---- */
+.about .ab-scope-grid {
+  display: grid;
+  gap: clamp(2rem, 3.4vw, 3rem) clamp(2rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+@media (min-width: 62rem) {
+  .about .ab-scope-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+}
+.about .ab-bounds { list-style: none; margin: 1rem 0 0; padding: 0; max-width: 60ch; }
+.about .ab-bounds > li {
+  position: relative;
+  margin: 0;
+  padding: 0.45rem 0 0.45rem 1.6rem;
+  font: 400 1rem/1.55 var(--sans);
+  color: var(--ink-2);
+  border-top: 1px solid var(--rule);
+}
+.about .ab-bounds > li:first-child { border-top: 0; }
+.about .ab-bounds > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 1.15em;
+  width: 0.75rem;
+  height: 2px;
+  background: var(--control);
+}
+.about .ab-bounds--quiet > li { font-size: 0.9375rem; color: var(--ink-3); }
+.about .ab-fine { display: flex; flex-wrap: wrap; gap: 0 1.5rem; margin: 1.1rem 0 0; }
+.about .ab-fine a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font: 700 0.875rem/1.4 var(--sans);
+  color: var(--accent);
+  text-underline-offset: 0.25em;
+}
+.about .ab-disc { margin: 1.1rem 0 0; border-top: 1px solid var(--rule); }
+.about .ab-disc > summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  font: 700 0.9375rem/1.4 var(--sans);
+  color: var(--ink);
+  list-style: none;
+}
+.about .ab-disc > summary::-webkit-details-marker { display: none; }
+.about .ab-disc > summary::before {
+  content: '';
+  flex: none;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  transform: rotate(45deg) translate(-0.1em, -0.1em);
+  transition: transform 180ms var(--ab-ease);
+}
+.about .ab-disc[open] > summary::before { transform: rotate(225deg) translate(-0.1em, -0.1em); }
+.about .ab-disc > summary:focus-visible { outline-offset: -3px; }
+.about .ab-disc-body { padding-bottom: 0.9rem; }
+.about .ab-disc-body p { max-width: 62ch; margin: 0 0 0.75rem; font: 400 0.9375rem/1.6 var(--sans); color: var(--ink-3); }
+.about .ab-disc-body p:last-child { margin-bottom: 0; }
+
+/* ---- 8. Close ---- */
+.about .ab-cta { padding-block: clamp(2.25rem, 3.6vw, 3.25rem); }
+.about .ab-cta-grid {
+  display: grid;
+  gap: 1.5rem 3rem;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+}
+@media (min-width: 56rem) {
+  .about .ab-cta-grid { grid-template-columns: minmax(0, 1fr) auto; }
+}
+.about .ab-cta h2 {
+  max-width: 20ch;
+  font-size: clamp(1.6rem, 2.9vw, 2.5rem);
+  line-height: 1.08;
+  color: var(--signal-ink);
+}
+.about .ab-cta-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
+.about .ab-link--cta { margin-top: 0; color: var(--signal-ink); }
+
+/* ---- 9. Footer: calm utility ending ---- */
+.about .site-footer { padding-block: clamp(1.9rem, 3.4vw, 3rem) 1.5rem; }
+.about .footer-trust {
+  padding-top: 0.85rem;
+  border-top-width: 3px;
+  max-width: 44ch;
+  font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+}
+.about .footer-row { margin-top: clamp(1.4rem, 2.6vw, 2.25rem); padding-top: 1rem; gap: 1rem 2.5rem; }
+.about .footer-id { gap: 0.7rem; }
+
+/* Phones */
+@media (max-width: 48rem) {
+  .about { --ab-sec: 1.55rem; }
+  .about .site-footer { padding-block: 1.6rem 1.2rem; }
+  .about .footer-row { margin-top: 1.2rem; }
+  .about .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; }
+  .about .ab-charter > div { padding-block: 0.55rem; }
+  .about .ab-bounds > li { padding-block: 0.4rem; }
+  .about .ab-gov-links { gap: 0 1.1rem; margin-top: 0.9rem; }
+  .about .ab-field-intro { gap: 0.2rem; }
+  .about .ab-lede { margin-top: 0.9rem; }
+  .about .ab-hero-side { padding-top: 0.85rem; }
+  .about .ab-path > li { padding-right: 0; }
+  .about .ab-path p { font-size: 0.875rem; line-height: 1.5; }
+  .about .ab-path .ab-link { margin-top: 0.1rem; }
+  .about .ab-step { margin-bottom: 0.45rem; }
+  .about .ab-caution { margin-top: 0.85rem; }
+  .about .ab-disc { margin-top: 0.85rem; }
+  .about .ab-fine { margin-top: 0.6rem; }
+  .about .ab-body { margin-top: 0.75rem; }
+  .about .ab-path > li { padding-block: 0.85rem 1.05rem; }
+  .about .ab-path { margin-top: 1.1rem; }
+  .about .ab-two { margin-top: 1.1rem; gap: 1.4rem; }
+  .about .ab-list > li { padding-block: 0.55rem; }
+  .about .ab-minor { margin-bottom: 0.7rem; }
+  .about .ab-gov-grid { gap: 1.25rem; }
+  .about .ab-scope-grid { gap: 1.6rem; }
+  .about .ab-hero-grid { gap: 1.35rem; }
+  .about .ab-hero h1 { max-width: none; }
+  .about .ab-hero-side { padding-top: 1rem; }
+  .about .ab-path > li { padding-right: 0; }
+  .about .ab-cta-actions .btn { width: 100%; }
 }
 
 /* ---------- print ---------- */
