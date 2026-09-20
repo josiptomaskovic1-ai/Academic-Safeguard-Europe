@@ -1,115 +1,496 @@
 ---
+/**
+ * Evidence — the section landing page, built as an exhibit rather than an index.
+ *
+ * The page mounts one real finding (University of Zagreb S02) at full size and then supplies the
+ * apparatus a reader needs to check it: the rubric level that was rejected, the document record with
+ * its missing archive, the automated cross-check that is explicitly not verification, the live
+ * distribution of every result value, the whole schedule of findings, and the limits.
+ *
+ * Nothing here is hardcoded except the two quoted sentences, which are asserted against the record at
+ * build time so the page can never drift from the YAML. Every count is derived.
+ */
 import Base from '../../layouts/Base.astro';
-import PageHero from '../../components/PageHero.astro';
-import Folio from '../../components/Folio.astro';
-import ActionBand from '../../components/ActionBand.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import SafeguardScore from '../../components/SafeguardScore.astro';
 import VerificationBadge from '../../components/VerificationBadge.astro';
-import { getCountries, getEvidence, getRubric, hasFindings, COUNTRY_STATUS_LABELS, type Verification, type ResultValue } from '../../lib/data';
-import { url } from '../../lib/url';
+import LastReviewed from '../../components/LastReviewed.astro';
+import ResearchLedger from '../../components/ResearchLedger.astro';
+import {
+  getRubric, getCountries, getInstitutions, getInstitution, getSource, getSources, getEvidence, getCorrections,
+  hasFindings, DOC_TYPE_LABELS, type ResultValue,
+} from '../../lib/data';
+import { url, externalUrl, repoFile } from '../../lib/url';
+import { ORG_NAME, ORG_SEAT } from '../../lib/campaign';
 
 const rubric = getRubric();
-const example = getCountries().find((c) => hasFindings(c.safeguards));
-const exampleSafeguard = example ? Object.entries(example.safeguards).find(([, r]) => ['1', '2', '3'].includes(r.result))?.[0] : undefined;
-const meaning = (v: string) => rubric.result_values.find((r) => r.value === v)!.meaning;
-const vMeaning = (v: string) => rubric.verification_statuses.find((r) => r.value === v)!.meaning;
-const results: ResultValue[] = ['NR', '?', '0'];
-const verifications: Verification[] = ['needs_review', 'verified', 'disputed'];
+
+/* ---- the specimen, named explicitly and asserted, never discovered by a find() ---- */
+const inst = getInstitution('hr-unizg');
+const def = rubric.safeguards.find((s) => s.id === 'S02');
+const r = inst?.safeguards.S02;
+const src = getSource('hr-unizg-ethics-code-2007');
+if (!inst || !def || !r || !src) throw new Error('Evidence page: the specimen (University of Zagreb S02) is missing from the data.');
+if (r.result !== '1' || r.verification !== 'needs_review') {
+  throw new Error('Evidence page: the copy describes the specimen as a provisional "1". Re-check the copy or choose a new specimen.');
+}
+const QUOTE_HR = 'Na osobu koja je odbila uznemirivanje ili prijavila takvu vrstu ponašanja ne smije se vršiti nikakav pritisak.';
+const QUOTE_EN = 'No pressure may be exerted on a person who rejected harassment or reported such behaviour.';
+if (!r.evidence?.includes(QUOTE_HR) || !r.evidence?.includes(QUOTE_EN)) {
+  throw new Error('Evidence page: the quoted sentence is no longer in the University of Zagreb S02 record.');
+}
+// "Code of Ethics Art. 12(5)" -> ["Code of Ethics", "Art. 12(5)"], so the article number can hang in the margin.
+const locatorParts = (r.locator ?? '').split(/\s(?=Art\.)/);
+const locatorDoc = locatorParts.length > 1 ? locatorParts[0] : (r.locator ?? '');
+const locatorArt = locatorParts.length > 1 ? locatorParts.slice(1).join(' ') : '';
+
+/* ---- every figure on the page, derived ---- */
+const countries = getCountries();
+const institutions = getInstitutions();
+const croatia = countries.find((c) => c.slug === 'croatia');
+if (!croatia) throw new Error('Evidence page: the Croatia record is missing.');
+const allResults = [...countries, ...institutions].flatMap((x) => Object.values(x.safeguards));
+const researched = allResults.filter((x) => x.result !== 'NR');
+const verifiedCount = researched.filter((x) => x.verification === 'verified').length;
+const countOf = (v: ResultValue) => allResults.filter((x) => x.result === v).length;
+const confidenceCount = (v: string) => researched.filter((x) => x.confidence === v).length;
+const startedCountries = countries.filter((c) => hasFindings(c.safeguards)).length;
+const blankCountries = countries.filter((c) => c.research_status === 'not_researched').length;
+const sources = getSources();
+const allSourcesCroatian = sources.every((s) => s.country === 'HR');
+const noArchiveAnywhere = sources.every((s) => !s.archived_url);
+const unofficialCount = sources.filter((s) => s.official_text === false).length;
+const corrections = getCorrections();
+const libraryCount = getEvidence().length;
+// How much of this university's picture rests on the one 2007 document.
+const restOnThisSource = Object.values(inst.safeguards).filter((x) => x.source_ids?.includes(src.id)).length;
+const asAt = [croatia.last_reviewed, inst.last_reviewed].filter(Boolean).sort().at(-1) ?? null;
+const lowerLevelRule = rubric.general_rules.find((g) => g.startsWith('Where two levels are plausible'));
+const verifiedMeaning = rubric.verification_statuses.find((v) => v.value === 'verified')?.meaning ?? '';
+
+/* ---- the whole result vocabulary, with a live count and one plain gloss each ---- */
+const GLOSS: Record<string, { text: string; href?: string; link?: string }> = {
+  NR: { text: `Nobody has looked. ${blankCountries} Member States sit here, ${rubric.safeguards.length} safeguards each.`, href: url('/europe/'), link: 'Research status by Member State' },
+  '?': { text: 'Croatia, written and reasoned decisions. The texts did not settle whether the national administrative-procedure rules reach complaints about staff conduct, and the plausible answers ran from 0 to 3.', href: url('/countries/croatia/#sg-s07'), link: 'Read that finding' },
+  '0': { text: 'Croatia S11, and the specimen university’s S05. Each one publishes every document that was read and found not to contain a qualifying provision — eight of them for S05.', href: url('/institutions/hr-unizg/#sg-s05'), link: 'Read the University of Zagreb one' },
+  '1': { text: 'The commonest answer in this evidence base, and what the sentence above was graded.' },
+  '2': { text: 'The highest answer anywhere in this evidence base.' },
+  '3': { text: 'No finding here reaches it. That is what the evidence base looks like today, not a conclusion about European higher education.' },
+};
+const answers = rubric.result_values.map((v) => ({ ...v, count: countOf(v.value), gloss: GLOSS[v.value] }));
+
+/* ---- the schedule: all findings, both records, side by side ---- */
+const schedule = rubric.safeguards.map((s) => ({ def: s, nat: croatia.safeguards[s.id], ins: inst.safeguards[s.id] }));
+
+const ledger = [
+  { value: `${startedCountries} of ${countries.length}`, label: 'Member States researched', href: url('/europe/') },
+  { value: institutions.length, label: 'Institution profiles', href: url('/institutions/') },
+  { value: researched.length, label: 'Findings, every one provisional', tone: 'provisional' as const },
+  { value: sources.length, label: allSourcesCroatian ? 'Sources, all Croatian' : 'Sources in the register', href: url('/sources/') },
+  { value: corrections.length, label: 'Correction requests received', href: url('/corrections/') },
+];
+
 // Old links pointed at Evidence Library items on /evidence/#<id>; the compatibility script forwards them.
 const libraryIds = getEvidence().map((e) => e.id).join(' ');
 ---
-<Base title="Evidence" description="How Academic Safeguard Europe's evidence works: follow any finding from Europe to country, safeguard, provision, source and verification status." campaign>
-  <PageHero tone="navy" crumbs={[{ label: 'Evidence' }]} kicker="Evidence">
-    Every finding traces to a <span class="m-bar">document.</span>
-    <Fragment slot="lede">A published standard, a versioned method, primary sources and a public corrections process.</Fragment>
-  </PageHero>
+<Base
+  title="Evidence"
+  description={`One finding in full, and the apparatus to check it: the article relied on, the level that was rejected, the document record, and the ${researched.length} provisional findings behind it.`}
+  campaign
+  pageClass="evidence"
+>
+  {/* The exhibit. The document is set larger than our own headline. */}
+  <section class="ev-sec ev-exhibit on-navy" aria-labelledby="page-title">
+    <div class="ev-wrap">
+      <Breadcrumbs crumbs={[{ label: 'Evidence' }]} />
+      <h1 id="page-title">Every finding here is one document, one article and a reason.</h1>
+      <p class="ev-lede">
+        Here is one of the {researched.length} in full: the whole of the University of Zagreb’s university-wide
+        protection for a student who reports, as far as we could find it in the university’s own published rules.
+        Nobody has checked it yet. That is true of all {researched.length}.
+      </p>
+      <p class="ev-dateline">
+        Records as at <LastReviewed date={asAt} />. Assessed against ASE Standard v{rubric.methodology_version}, a {rubric.status.replace(/-/g, ' ')}.
+      </p>
 
-  <section class="sec on-paper" aria-labelledby="path">
-    <div class="container">
-      <Folio label="Follow a finding" />
-      <h2 id="path" class="sec-title">From Europe to the exact provision.</h2>
-      <ol class="evidence-path">
-        <li><strong>Europe</strong><span>Research status in all 27 Member States.</span><a href={url('/europe/')}>Explore Europe <span aria-hidden="true">→</span></a></li>
-        <li><strong>Country or institution</strong><span>National framework, universities researched, known gaps.</span>{example && <a href={url(`/countries/${example.slug}/`)}>{example.name} <span aria-hidden="true">→</span></a>}</li>
-        <li><strong>Safeguard</strong><span>Result, rationale, confidence and verification status.</span>{example && exampleSafeguard && <a href={url(`/countries/${example.slug}/#sg-${exampleSafeguard.toLowerCase()}`)}>{example.name}, {exampleSafeguard} <span aria-hidden="true">→</span></a>}</li>
-        <li><strong>Source and locator</strong><span>The official document, the article relied on, access date and archive.</span><a href={url('/sources/')}>Source register <span aria-hidden="true">→</span></a></li>
-        <li><strong>Verification</strong><span>Who checked it, and how to challenge it.</span><a href={url('/methodology/#5-verification')}>How verification works <span aria-hidden="true">→</span></a></li>
-      </ol>
+      <div class="ev-mount">
+        <dl class="ev-plate">
+          <div>
+            <dt>Safeguard</dt>
+            <dd><span class="ev-id">{def.id}</span> {def.name}</dd>
+          </div>
+          <div>
+            <dt>Record</dt>
+            <dd><a href={url('/institutions/hr-unizg/')}>{inst.canonical_name}</a></dd>
+          </div>
+          <div>
+            <dt>Article relied on</dt>
+            <dd>{locatorDoc}{locatorArt && <><br /><span class="ev-id ev-id--art">{locatorArt}</span></>}</dd>
+          </div>
+          <div>
+            <dt>Document date</dt>
+            <dd><LastReviewed date={typeof src.publication_date === 'string' ? src.publication_date : null} /></dd>
+          </div>
+          <div>
+            <dt>Still in force?</dt>
+            <dd>Not confirmed — 2023 Statute Art. 129(1)</dd>
+          </div>
+          <div>
+            <dt>Language read</dt>
+            <dd>Croatian</dd>
+          </div>
+        </dl>
+
+        <div class="ev-object">
+          <p class="ev-question"><span class="ev-fieldlabel">We asked</span>{def.question}</p>
+          {/* No cite="" here: check-security.mjs treats any external URL in an attribute as a remote
+              resource. The document is linked, with its access date, in the provenance record below. */}
+          <blockquote class="ev-quote" lang="hr">{QUOTE_HR}</blockquote>
+          <p class="ev-trans"><span class="ev-fieldlabel">Translation</span>{QUOTE_EN}</p>
+          <div class="ev-verdict">
+            <SafeguardScore result={r.result} verification={r.verification} badgeShown />
+            <VerificationBadge status={r.verification} />
+            <span class="ev-reviewed">Reviewed <LastReviewed date={r.reviewed} /></span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="sec on-paper" aria-labelledby="explore">
-    <div class="container">
-      <Folio label="Research tools" />
-      <h2 id="explore" class="sec-title">Inspect the evidence base.</h2>
-      <ul class="tool-index" role="list">
-        <li><a href={url('/europe/')}>Europe explorer</a><p>Research status by Member State.</p></li>
-        <li><a href={url('/compare/')}>Compare a safeguard</a><p>One safeguard across countries, never ranked.</p></li>
-        <li><a href={url('/institutions/')}>Institution profiles</a><p>University rules researched so far.</p></li>
-        <li><a href={url('/sources/')}>Source register</a><p>Every official document cited in a finding.</p></li>
-        <li><a href={url('/evidence/library/')}>Evidence Library</a><p>Background standards, law and research. Not used for scores.</p></li>
-        <li><a href={url('/data/')}>Open data</a><p>All findings and sources as JSON and YAML, CC BY 4.0.</p></li>
+  {/* The method doing work: the level that was rejected, beside the one assigned. */}
+  <section class="ev-sec on-paper" aria-labelledby="judgement">
+    <div class="ev-wrap">
+      <h2 id="judgement">Why this is a 1 and not a 2.</h2>
+      <p class="ev-intro">
+        The Standard asks the same question of every rule and grades the answer against written criteria.
+        These are the two levels that were in play, in the Standard’s own words.
+      </p>
+
+      <div class="ev-levels">
+        <div class="ev-level is-assigned">
+          <p class="ev-fieldlabel">Level 1 — assigned</p>
+          <p class="ev-leveltext">{def.levels['1']}</p>
+        </div>
+        <div class="ev-level is-rejected">
+          <p class="ev-fieldlabel">Level 2 — not reached</p>
+          <p class="ev-leveltext">{def.levels['2']}</p>
+        </div>
+      </div>
+
+      <div class="ev-reasoning">
+        <div>
+          <p class="ev-fieldlabel">Our reasoning</p>
+          <p class="ev-reason">{r.rationale}</p>
+        </div>
+        {lowerLevelRule && (
+          <figure class="ev-rule">
+            <blockquote>{lowerLevelRule}</blockquote>
+            <figcaption>ASE Standard v{rubric.methodology_version}, general scoring rules</figcaption>
+          </figure>
+        )}
+      </div>
+
+      <div class="ev-closers">
+        <p class="ev-gaps"><span class="ev-fieldlabel">What this finding does not cover</span>{r.gaps}</p>
+        <p class="ev-scope">
+          <span class="ev-fieldlabel">How far this finding reaches</span>
+          We read the University’s university-wide rules. Faculty rules were not opened, and faculty-level harassment
+          rules do appear to exist at some faculties, so this finding describes the university-wide layer only.
+          National law also sits above it: Croatia’s Anti-Discrimination Act protects anyone who reports discrimination
+          in good faith, which is assessed separately in the Croatia record.
+        </p>
+      </div>
+      <p class="ev-links">
+        <a class="ev-link" href={url('/standard/#anti-retaliation')}>The full criteria for {def.id}, levels 0 to 3</a>
+        <a class="ev-link" href={url('/institutions/hr-unizg/#sg-s02')}>This record, and the other eleven safeguards at this university</a>
+      </p>
+    </div>
+  </section>
+
+  {/* Provenance: the register record, including the two things we cannot claim. */}
+  <section class="ev-sec on-paper" aria-labelledby="provenance">
+    <div class="ev-wrap">
+      <h2 id="provenance">Where the sentence comes from.</h2>
+      <p class="ev-intro">Every finding names one document and the article inside it. This is the whole record behind the sentence above.</p>
+
+      <dl class="ev-record">
+        <div>
+          <dt>Document</dt>
+          <dd><span lang="hr">{src.title}</span>{src.title_en && <span class="ev-sub">{src.title_en}</span>}</dd>
+        </div>
+        <div><dt>Issued by</dt><dd>{src.issuing_body}</dd></div>
+        <div><dt>Document type</dt><dd>{DOC_TYPE_LABELS[src.document_type] ?? src.document_type}</dd></div>
+        {src.official_reference && <div><dt>Official reference</dt><dd class="ev-mono">{src.official_reference}</dd></div>}
+        <div><dt>Published</dt><dd><LastReviewed date={typeof src.publication_date === 'string' ? src.publication_date : null} /></dd></div>
+        <div><dt>Article relied on</dt><dd>{r.locator}</dd></div>
+        <div>
+          <dt>Text status</dt>
+          <dd>
+            Official text, published by the University; the file is the 2009 print edition, and the 2018 amendments
+            are published separately. Of the {sources.length} sources in our register, {unofficialCount} are
+            unofficial consolidations rather than official gazette texts. This is not one of them.
+          </dd>
+        </div>
+        <div>
+          <dt>Accessed</dt>
+          <dd><LastReviewed date={src.accessed} /> — <a href={externalUrl(src.url)} rel="noopener">open the PDF on unizg.hr</a></dd>
+        </div>
+        <div class="ev-absent">
+          <dt>Archived copy</dt>
+          <dd>
+            <span class="ev-none">None</span>
+            {noArchiveAnywhere && <> — we have not archived a single one of the {sources.length} sources yet, so if a document moves or changes, the version we read is gone.</>}
+          </dd>
+        </div>
+        <div><dt>Register entry</dt><dd><a class="ev-mono" href={url(`/sources/#${src.id}`)}>[{src.id}]</a></dd></div>
+      </dl>
+
+      <div class="notice provisional ev-currency">
+        <p>
+          <strong>We cannot confirm this Code is still in force.</strong> It was adopted in 2007 under the University’s
+          2005 Statute, and Article 129(1) of the 2023 Statute required acts adopted under the previous Statute to be
+          aligned by 1 October 2024. We found no re-adopted or consolidated Code, and the 2007 text is still published
+          on the University’s regulations page. {restOnThisSource} of our {Object.keys(inst.safeguards).length} findings
+          at this university cite it.
+          Our own cross-check recommended writing to the University to ask whether it remains in force. That is still open.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {/* The cross-check, and the refusal to call it verification. */}
+  <section class="ev-sec ev-check on-navy" aria-labelledby="crosscheck">
+    <div class="ev-wrap">
+      <h2 id="crosscheck">Someone re-read every word. That is still not verification.</h2>
+
+      <div class="ev-checkhead">
+        <figure class="ev-pull">
+          <blockquote>{inst.research_method}</blockquote>
+          <figcaption>from the Croatia record and the University of Zagreb record, word for word</figcaption>
+        </figure>
+
+        <p class="ev-body">
+          On <LastReviewed date={asAt} /> an independent automated cross-check re-downloaded every source cited in both
+          Croatian dossiers, converted them to text and read every cited article verbatim, without using the
+          researchers’ summaries. Some scanned documents were read as images, and one was only read in part. It agreed
+          with 22 findings and asked for two to change.
+        </p>
+      </div>
+
+      <dl class="ev-record ev-record--dark">
+        <div><dt>Confirmed</dt><dd>22 findings</dd></div>
+        <div>
+          <dt>Adjusted</dt>
+          <dd>2 findings — Croatia S04 and S06, from “Unable to assess” to “Limited”. Both changes were made before publication.</dd>
+        </div>
+        <div>
+          <dt>On this specimen</dt>
+          <dd>
+            “Code Art. 12(5) was verified verbatim, and the quotation is exact.” It also asked us to make the reason for
+            the lower level explicit; the first sentence of the reasoning above is the wording it proposed.
+          </dd>
+        </div>
+      </dl>
+
+      <p class="ev-statement">
+        An automated cross-check is not verification. Our own rubric reserves that word for something that has not
+        happened: “{verifiedMeaning}” Nobody has done that for any of the {researched.length} findings, and a reviewer
+        may not verify their own work.
+      </p>
+
+      <p class="ev-links">
+        <a class="ev-link" href={repoFile('research/pending/hr-verification.yml')}>The full cross-check, in the repository</a>
+        <a class="ev-link" href={url('/methodology/#5-verification')}>How verification is supposed to work</a>
+      </p>
+    </div>
+  </section>
+
+  {/* The live distribution of every result value, and the three states that must never be equated. */}
+  <section class="ev-sec on-paper" aria-labelledby="answers">
+    <div class="ev-wrap">
+      <h2 id="answers">What a result can mean.</h2>
+      <p class="ev-intro">
+        The sentence above came out as “Limited”. A safeguard can come out six ways, and they are not six points on
+        one scale — three of them are statements about our research rather than about an institution’s rules.
+      </p>
+
+      <ul class="ev-answers" role="list">
+        {answers.map((a) => (
+          <li class:list={['ev-answer', { 'is-empty': a.count === 0 }]}>
+            <div class="ev-answer-mark">
+              <SafeguardScore result={a.value} compact />
+              <p class="ev-count"><span>{a.count}</span>{a.count === 1 ? 'safeguard' : 'safeguards'}</p>
+            </div>
+            <div class="ev-answer-body">
+              <p class="ev-meaning">{a.meaning}</p>
+              {a.gloss && <p class="ev-ourgloss">{a.gloss.text}</p>}
+              {a.gloss?.href && a.gloss.link && <a class="ev-link" href={a.gloss.href}>{a.gloss.link}</a>}
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <p class="ev-confidence">
+        No finding is high confidence. {confidenceCount('medium')} are medium, {confidenceCount('low')} are low.
+      </p>
+      <p class="ev-statement ev-statement--paper">
+        Never average these, never add them up, and never turn a “not researched” into a zero. Not looking, looking and
+        finding nothing, and establishing what a rule says are three different statements.
+      </p>
+    </div>
+  </section>
+
+  {/* The whole evidence base at once: the schedule, the ledger, and the number that matters. */}
+  <section class="ev-sec on-paper" aria-labelledby="all">
+    <div class="ev-wrap">
+      <h2 id="all">All {researched.length} findings.</h2>
+      <p class="ev-intro">
+        Croatia’s national framework and one university are different objects: one sets what institutions must do, the
+        other is what this university has written for itself. Read them side by side, not against each other.
+      </p>
+
+      {/* stack-table is the house behaviour under 40rem: each row becomes a labelled card (labels come
+          from the data-label attributes below), so a phone never scrolls this sideways. */}
+      <div class="ev-table-wrap stack-table" role="region" aria-label="Schedule of findings" tabindex="0">
+        <table class="ev-schedule">
+          <caption class="visually-hidden">Every safeguard in the Standard, with the result recorded for Croatia’s national framework and for the University of Zagreb. All results are provisional.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Safeguard</th>
+              <th scope="col"><a href={url('/countries/croatia/')}>Croatia</a><span class="ev-sub">national framework</span></th>
+              <th scope="col"><a href={url('/institutions/hr-unizg/')}>University of Zagreb</a><span class="ev-sub">university-wide rules</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {schedule.map((row) => (
+              <tr>
+                <th scope="row">
+                  <span class="ev-id">{row.def.id}</span>
+                  <a href={url(`/standard/#${row.def.slug}`)}>{row.def.name}</a>
+                </th>
+                <td data-label="Croatia, national framework">
+                  <a href={url(`/countries/croatia/#sg-${row.def.id.toLowerCase()}`)}>
+                    <SafeguardScore result={row.nat?.result ?? 'NR'} verification={row.nat?.verification} compact />
+                  </a>
+                </td>
+                <td data-label="University of Zagreb">
+                  <a href={url(`/institutions/hr-unizg/#sg-${row.def.id.toLowerCase()}`)}>
+                    <SafeguardScore result={row.ins?.result ?? 'NR'} verification={row.ins?.verification} compact />
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ev-minor">How small this is</h3>
+      <ResearchLedger items={ledger} label="The scale of the evidence base" />
+
+      <div class="ev-bottomline">
+        <p class="ev-bottomline-label">Findings independently verified</p>
+        <p class="ev-bottomline-figure">{verifiedCount}</p>
+        <p class="ev-bottomline-note">
+          No human second reviewer has confirmed a single finding. Until that changes, everything here is a proposal
+          with its sources attached.
+        </p>
+      </div>
+
+      <p class="ev-absence">
+        {blankCountries} Member States have a record and no research. Nobody has opened their rules. That is a statement
+        about how far we have got, not about their students’ protection, and it is never evidence that a safeguard
+        is missing.
+      </p>
+
+      <ul class="ev-index" role="list">
+        <li>
+          <a href={url('/evidence/library/')}>Evidence Library</a>
+          <p>{libraryCount} background standards, laws and studies we read for context. Nothing in it sets a score.</p>
+        </li>
+        <li>
+          <a href={url('/data/')}>Open data</a>
+          <p>Every finding, source and rubric entry. The YAML in the repository is canonical. Our own text and data are CC BY 4.0; the documents we cite are not ours to license.</p>
+        </li>
       </ul>
     </div>
   </section>
 
-  <section class="sec on-paper" aria-labelledby="labels">
-    <div class="container">
-      <Folio label="Reading the labels" />
-      <div class="split">
+  {/* The limits, and the route to challenge any of it. */}
+  <section class="ev-sec on-paper" aria-labelledby="limits">
+    <div class="ev-wrap">
+      <div class="ev-two">
         <div>
-          <h2 id="labels" class="sec-title">What the status labels mean.</h2>
-          <p class="sec-lede sec-lede--flush">Coverage is still growing. A gap in the research is never evidence that a safeguard is missing.</p>
-          <a class="m-more m-more--tight" href={url('/standard/#rubric')}>Criteria for scores 1 to 3 <span aria-hidden="true">→</span></a>
+          <h2 id="limits">What a finding is not.</h2>
+          <p class="ev-body">
+            <strong>Not a place to report.</strong> We cannot take a complaint, act on one, or advise on a case, and we
+            have no private channel. If something is happening to you now, start here.
+          </p>
+          <p class="ev-body">
+            We read documents. We do not observe practice. A rule can be well written and ignored, or thin on paper and
+            handled well in person. A finding says what an institution has committed to in writing — nothing about how
+            any real case was handled, and nothing about any individual.
+          </p>
+          <p class="ev-body">
+            Academic Safeguard Europe is not a court, inspectorate, regulator or disciplinary body. We do not decide
+            whether anything happened, we do not assess individuals, and we do not rank universities or countries.
+            There is no overall score, and there will not be one.
+          </p>
+          <p class="ev-body">
+            This is a research programme of {ORG_NAME}, a non-profit association based in {ORG_SEAT}. No funder,
+            university, government or party decides a conclusion, changes an assessment, or sees a finding before
+            it is published.
+          </p>
+          <p class="ev-links">
+            <a class="ev-link" href={url('/take-action/#not-a-reporting-service')}>Where to get help instead</a>
+            <a class="ev-link" href={url('/methodology/#11-known-limitations-of-v01')}>Known limitations of v{rubric.methodology_version}</a>
+          </p>
         </div>
+
         <div>
-          <h3 class="subhead subhead--first">Countries</h3>
-          <dl class="status-glossary">
-            <div><dt>{COUNTRY_STATUS_LABELS.not_researched}</dt><dd>ASE has not yet started work on this country. It says nothing about its safeguards.</dd></div>
-            <div><dt>{COUNTRY_STATUS_LABELS.research_underway}</dt><dd>Sources are being collected and assessed. No findings are published yet.</dd></div>
-          </dl>
-          <h3 class="subhead">Safeguard results that are not scores</h3>
-          <dl class="status-glossary">
-            {results.map((r) => <div><dt><SafeguardScore result={r} /></dt><dd>{meaning(r)}</dd></div>)}
-          </dl>
-          <h3 class="subhead">Verification</h3>
-          <dl class="status-glossary">
-            {verifications.map((v) => <div><dt><VerificationBadge status={v} /></dt><dd>{vMeaning(v)}</dd></div>)}
-          </dl>
+          <h2>Tell us what we got wrong.</h2>
+          <p class="ev-body">
+            A document we missed, a newer version, a misread article, a broken link. Requests go through a public form
+            on GitHub, and a pseudonymous account works. There is no private route yet. That is a gap, not a policy.
+          </p>
+          <p class="ev-body">
+            A request that raises a substantive question marks the finding disputed in public while someone other than
+            its author reviews it, and nothing is taken down while that happens. A disagreement with the rubric itself
+            is recorded and answered in the changelog rather than treated as an error.
+          </p>
+          <p class="ev-body">
+            <strong>Right of reply.</strong> Any institution with a profile, and any national authority whose framework
+            we have assessed, may publish a statement of up to 300 words beside its findings, whatever those findings
+            say. We publish it dated and unedited, removing only personal data or unlawful content. It does not give an
+            institution editorial control, approval before publication, or the removal of a sourced finding. Before a
+            new institutional profile goes up, we aim to write to the institution first.
+          </p>
+          {corrections.length === 0
+            ? <p class="ev-state">No correction request has been received. The log is empty.</p>
+            : <p class="ev-state">{corrections.length} correction {corrections.length === 1 ? 'request has' : 'requests have'} been received.</p>}
+          <p class="ev-links">
+            <a class="ev-link" href={url('/corrections/#reply')}>Corrections and right of reply</a>
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sec on-paper" aria-label="Accountability">
-    <div class="container">
-      <Folio label="Accountability" />
-      <div class="split split--even">
+  {/* The one number that needs changing. */}
+  <section class="ev-sec ev-cta on-signal" aria-labelledby="cta">
+    <div class="ev-wrap">
+      <div class="ev-cta-grid">
+        <h2 id="cta">{researched.length} findings. No second reader.</h2>
         <div>
-          <h2 id="framework" class="acc-title">A standard and a method, both versioned.</h2>
-          <ul class="tool-index tool-index--single" role="list">
-            <li><a href={url('/standard/')}>ASE Standard v{rubric.methodology_version}</a><p>Twelve safeguards and the observable criteria for each level.</p></li>
-            <li><a href={url('/methodology/')}>Methodology</a><p>How findings are made, sourced, verified and corrected.</p></li>
-            <li><a href={url('/methodology/changelog/')}>Methodology changelog</a><p>Every change to the Standard or method.</p></li>
-            <li><a href={url('/methodology/#11-known-limitations-of-v01')}>Known limitations</a><p>What documentary research can and cannot show.</p></li>
-          </ul>
-        </div>
-        <div>
-          <h2 id="accountability" class="acc-title">Anyone can challenge a finding.</h2>
-          <div class="reading">
-            <p>Report a missed document, a newer version or a misreading. Disputes are shown next to the finding, outcomes are reasoned, earlier versions stay in the public history, and institutions have a right of reply.</p>
-            <p>Published rules show how safeguards are designed, not how well they work in practice.</p>
-          </div>
-          <a class="m-more m-more--tight" href={url('/corrections/')}>Corrections and right of reply <span aria-hidden="true">→</span></a>
+          <p class="ev-body">
+            Nobody has verified a single finding yet, and that is the number we would most like to be wrong about.
+            Verifying one means opening the document we cited, finding the article, and saying whether the level is
+            right. Native speakers of the language a document is written in are especially welcome.
+          </p>
+          <a class="btn btn-primary btn-lg" href={url('/contribute/#verify')}>Verify a finding</a>
         </div>
       </div>
     </div>
   </section>
-
-  <ActionBand id="contribute-title" tone="paper">
-    Know a law we should read?
-    <Fragment slot="actions"><a class="btn btn-primary btn-xl" href={url('/contribute/')}>Contribute research</a></Fragment>
-  </ActionBand>
 
   <div hidden data-legacy-library={libraryIds} data-library-url={url('/evidence/library/')}></div>
   <script>
