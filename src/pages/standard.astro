@@ -17,13 +17,13 @@ const toc = [
 ];
 const sgItems = rubric.safeguards.map((s) => ({ icon: s.id, code: s.id, text: s.name, href: `#${s.slug}`, detail: SAFEGUARD_GLOSS[s.id] }));
 ---
-<Base title="Standard" description="The ASE Safeguarding Standard, an independent draft for consultation: twelve safeguards against abuse of academic authority, with observable scoring criteria." campaign>
-  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'ASE Standard' }]} kicker={`Version ${frontmatter.version} · ${frontmatter.status}`}>
+<Base title="Standard" description="The StudentSafe Standard, an independent draft for consultation: twelve safeguards against abuse of academic authority, with observable scoring criteria." campaign>
+  <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'StudentSafe Standard' }]} kicker={`Version ${frontmatter.version} · ${frontmatter.status}`}>
     {frontmatter.title}
     <Fragment slot="lede">Twelve safeguards that let students raise concerns without risking their education, each defined by published rules.</Fragment>
     <Fragment slot="meta">
       <div class="statement">
-        <p><strong>A research framework, not the campaign.</strong> The Standard is ASE’s independent draft for consultation, used to evaluate published rules. It is not a legal or regulatory standard and does not replace the <abbr title="Standards and Guidelines for Quality Assurance in the European Higher Education Area">ESG</abbr> or national law. The reforms ASE wants policymakers to adopt are set out separately in <a href={url('/demands/')}>Our Demands</a>.</p>
+        <p><strong>A research framework, not the campaign.</strong> The Standard is StudentSafe Europe’s independent draft for consultation, used to evaluate published rules. It is not a legal or regulatory standard and does not replace the <abbr title="Standards and Guidelines for Quality Assurance in the European Higher Education Area">ESG</abbr> or national law. The reforms ASE wants policymakers to adopt are set out separately in <a href={url('/demands/')}>Our Demands</a>.</p>
       </div>
       <ul class="link-row small doc-links"><li><a href={repoFile('standard/standard-v0.1.md')}>Source text</a></li><li><a href={repoFile('methodology/scoring-rubric.yml')}>Machine-readable rubric (YAML)</a></li><li><a href={url('/methodology/')}>Scoring methodology</a></li><li><a href={url('/methodology/changelog/')}>Changelog</a></li></ul>
     </Fragment>

@@ -15,7 +15,7 @@ const groups = [...new Set(sources.map((s) => s.country))].sort().map((code) => 
   items: sources.filter((s) => s.country === code).sort((a, b) => a.id.localeCompare(b.id)),
 }));
 ---
-<Base title="Sources" description="Every primary source cited in ASE findings, with stable IDs." campaign>
+<Base title="Sources" description="Every primary source cited in StudentSafe Europe findings, with stable IDs." campaign>
   <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Source register' }]} kicker="Evidence · Sources">
     Source register
     <Fragment slot="lede">Every cited source has a stable ID, access date and, where available, an archived copy.</Fragment>

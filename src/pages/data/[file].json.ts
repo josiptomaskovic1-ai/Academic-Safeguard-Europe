@@ -34,7 +34,7 @@ export const GET: APIRoute = ({ params }) => {
       "Findings may have been prepared with AI assistance; see each record's research_method.",
       '0 means no qualifying provision was identified in the sources reviewed; it is not proof that no safeguard exists.',
       'Do not aggregate results into overall scores or rankings.',
-      'ASE evaluates published rules, not individuals or implementation.',
+      'StudentSafe Europe evaluates published rules, not individuals or implementation.',
     ],
     docs: {
       methodology: `${REPO_URL}/blob/main/methodology/methodology-v0.1.md`,

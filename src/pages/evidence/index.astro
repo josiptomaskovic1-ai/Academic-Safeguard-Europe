@@ -110,7 +110,7 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
         Nobody has checked it yet. That is true of all {researched.length}.
       </p>
       <p class="ev-dateline">
-        Records as at <LastReviewed date={asAt} />. Assessed against ASE Standard v{rubric.methodology_version}, a {rubric.status.replace(/-/g, ' ')}.
+        Records as at <LastReviewed date={asAt} />. Assessed against StudentSafe Standard v{rubric.methodology_version}, a {rubric.status.replace(/-/g, ' ')}.
       </p>
 
       <div class="ev-mount">
@@ -185,7 +185,7 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
         {lowerLevelRule && (
           <figure class="ev-rule">
             <blockquote>{lowerLevelRule}</blockquote>
-            <figcaption>ASE Standard v{rubric.methodology_version}, general scoring rules</figcaption>
+            <figcaption>StudentSafe Standard v{rubric.methodology_version}, general scoring rules</figcaption>
           </figure>
         )}
       </div>

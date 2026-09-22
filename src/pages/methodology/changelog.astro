@@ -4,7 +4,7 @@ import PageHero from '../../components/PageHero.astro';
 import { Content, frontmatter } from '../../../methodology/changelog.md';
 import { REPO_URL, newIssue } from '../../lib/url';
 ---
-<Base title="Methodology changelog" description="Versioned history of changes to the ASE Safeguarding Standard and scoring methodology." campaign>
+<Base title="Methodology changelog" description="Versioned history of changes to the StudentSafe Safeguarding Standard and scoring methodology." campaign>
   <PageHero crumbs={[{ label: 'Evidence', href: '/evidence/' }, { label: 'Methodology', href: '/methodology/' }, { label: 'Changelog' }]} kicker="Methodology · Changelog">
     {frontmatter.title}
     <Fragment slot="lede">Every change to the Standard, rubric or methodology is versioned and recorded here. Changes to individual findings are recorded in the corrections log and the <a href={`${REPO_URL}/commits/main/data`}>data commit history</a>.</Fragment>
