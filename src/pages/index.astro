@@ -1,149 +1,161 @@
 ---
 import Base from '../layouts/Base.astro';
-import Marquee from '../components/Marquee.astro';
 import { getCountries, getInstitutions, getRubric, hasFindings } from '../lib/data';
 import { url } from '../lib/url';
-import { CAMPAIGN_NAME, PRINCIPLES, DEMANDS, KEY_SENTENCE, KEY_SENTENCE_LEAD, KEY_SENTENCE_ACCENT, TRIAD } from '../lib/campaign';
+import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SEAT, PROGRAMME_NAME, STANDARD_NAME, DEMANDS } from '../lib/campaign';
 
 const countries = getCountries();
 const institutions = getInstitutions();
+const rubric = getRubric();
+
 const researchedCountries = countries.filter((c) => hasFindings(c.safeguards));
 const researchedInstitutions = institutions.filter((i) => hasFindings(i.safeguards));
 const results = [...countries, ...institutions].flatMap((r) => Object.values(r.safeguards)).filter((r) => r.result !== 'NR');
 const verified = results.filter((r) => r.verification === 'verified').length;
-// Only disclose AI assistance as universal when every record with findings says so in its research_method.
+const disputed = results.filter((r) => r.verification === 'disputed').length;
+const safeguardCount = rubric.safeguards.length;
+
+// AI assistance is disclosed as universal only when every record with findings says so.
 const recordsWithFindings = [...researchedCountries, ...researchedInstitutions];
 const allAiAssisted = recordsWithFindings.length > 0 && recordsWithFindings.every((r) => /\bAI\b/.test(r.research_method ?? ''));
-// Institution names such as "University of Zagreb" read naturally with a leading article; the data stays unchanged.
-const withArticle = (name: string) => (/^(University|Academy|Institute)\b/.test(name) ? `the ${name}` : name);
-const pilotNames = [...researchedCountries.map((c) => c.name), ...researchedInstitutions.map((i) => withArticle(i.canonical_name))];
-const safeguardCount = getRubric().safeguards.length;
+
 const listFormat = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
+const withArticle = (name: string) => (/^(University|Academy|Institute)\b/.test(name) ? `the ${name}` : name);
+const placeNames = [...researchedCountries.map((c) => c.name), ...researchedInstitutions.map((i) => withArticle(i.canonical_name))];
 
-// Scope grid: one square per Member State in scope. Filled = research has started (any status other than
-// "not yet researched"); outlined = not yet researched, which says nothing about whether safeguards exist.
-const started = countries.filter((c) => c.research_status !== 'not_researched').sort((a, b) => a.name.localeCompare(b.name));
-const notStarted = countries.filter((c) => c.research_status === 'not_researched');
-const cells = [...started.map(() => true), ...notStarted.map(() => false)];
-const startedNames = listFormat.format(started.map((c) => c.name));
-const findingsLine = verified === 0
-  ? `All findings are provisional${allAiAssisted ? ' and AI-assisted' : ''}.`
-  : 'Findings not yet independently verified are marked provisional.';
-const roman = ['I', 'II', 'III', 'IV', 'V', 'VI'];
-// Hero headline, split at build time for the word-by-word rise. The last word keeps
-// the signal underline. HERO_SENTENCE is what assistive technology announces.
-const HERO_SENTENCE = 'Academic power needs safeguards.';
-// The problem statement, split at build time so each word can ink in on scroll.
-// The full sentence stays in one visually-hidden span, so the h2 is announced once.
-const STATEMENT_WORDS = KEY_SENTENCE_LEAD.trim().split(/\s+/);
-const HERO_WORDS = [
-  { text: 'Academic', bar: false },
-  { text: 'power', bar: false },
-  { text: 'needs', bar: false },
-  { text: 'safeguards.', bar: true },
+/**
+ * The three workstreams. "now" is what exists in this repository today; "next" is
+ * intent. They are rendered as separate lines so the two can never be read as one
+ * claim. Nothing here describes a service the association does not operate.
+ */
+const WORK = [
+  {
+    title: STANDARD_NAME,
+    now: `${safeguardCount} safeguards with observable criteria, published as v${rubric.methodology_version}, a draft for consultation.`,
+    next: 'Independent review of the criteria before a stable version.',
+    href: '/standard/',
+    link: 'Read the Standard',
+  },
+  {
+    title: 'Research',
+    now: 'Published national and university rules read against the Standard, with the source and article behind every finding.',
+    next: 'More Member States, and a human second reviewer for every finding.',
+    href: '/evidence/',
+    link: 'See the evidence',
+  },
+  {
+    title: 'Advocacy',
+    now: 'Three policy asks argued from the research, kept separate from it.',
+    next: 'Minimum safeguards recognised across the European Higher Education Area.',
+    href: '/demands/',
+    link: 'Read the asks',
+  },
 ];
-const [triadLead, triadLast] = [TRIAD.slice(0, -1), TRIAD[TRIAD.length - 1]];
+
+/** Real routes only. Nothing here promises intake, advice or a mailing list. */
+const PATHS = [
+  { who: 'Researchers and reviewers', what: 'Check a finding against its source, or propose one with a locator and rationale.', href: '/contribute/', link: 'How to contribute' },
+  { who: 'Institutions', what: 'Challenge a finding about your institution. Every record carries a right of reply.', href: '/corrections/', link: 'Right of reply' },
+  { who: 'Students', what: 'See what your country and university have actually published, and what is missing.', href: '/europe/', link: 'Browse by country' },
+  { who: 'Supporters', what: 'Read the asks and use them. There is no mailing list or petition to sign yet.', href: '/take-action/', link: 'Ways to help' },
+];
 ---
-<Base title="Home" campaign>
-  <section class="m-hero on-navy" aria-labelledby="hero-title">
-    <div class="container container--wide">
-      <p class="ss-mark"><span class="ss-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="ss-word">{CAMPAIGN_NAME}</span></p>
-      <h1 id="hero-title">
-        <span class="visually-hidden">{HERO_SENTENCE}</span>
-        <span class="hero-line" aria-hidden="true">{HERO_WORDS.map((w, i) => (
-          <><span class="hw"><span class="hw-i" style={`--i: ${i}`}>{w.bar ? <span class="m-bar">{w.text}</span> : w.text}</span></span>{i < HERO_WORDS.length - 1 ? ' ' : ''}</>
-        ))}</span>
-      </h1>
-      <div class="m-hero-foot">
-        <p class="m-lede">When your grades, degree and career depend on the people you may need to report, speaking&nbsp;up must be safe.</p>
-        <div class="actions">
-          <a class="btn btn-primary btn-lg" href={url('/take-action/')} data-magnetic>Support European Safeguards</a>
-          <a class="btn btn-secondary btn-lg" href={url('/evidence/')} data-magnetic>See the Evidence</a>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <Marquee />
-
-  <section class="m-section on-paper" aria-labelledby="problem">
+<Base title="Home" campaign pageClass="home">
+  {/* 1 — Who, what, and two actions that exist. */}
+  <section class="hm-hero" aria-labelledby="hero-title">
     <div class="container container--wide">
-      <p class="m-folio"><span>The problem</span></p>
-      <h2 id="problem" class="m-statement">
-        <span class="visually-hidden">{KEY_SENTENCE}</span>
-        <span aria-hidden="true">{STATEMENT_WORDS.map((w, i) => (
-          <><span class="sw" style={`--i: ${i}`}>{w}</span>{' '}</>
-        ))}<em class="m-bar sw" style={`--i: ${STATEMENT_WORDS.length}`}>{KEY_SENTENCE_ACCENT}</em></span>
-      </h2>
-      <a class="m-more" href={url('/problem/')}>Understand the problem <span aria-hidden="true">→</span></a>
-    </div>
-  </section>
-
-  <section class="m-section on-navy" aria-labelledby="guarantees" data-reveal>
-    <div class="container container--wide">
-      <p class="m-folio"><span>Guarantees</span></p>
-      <h2 id="guarantees" class="m-title">What must be guaranteed.</h2>
-      <ol class="m-articles">
-        {PRINCIPLES.map((p, i) => <li style={`--i: ${i}`}><span class="m-art-num" aria-hidden="true">{roman[i]}</span><div><h3>{p.title}</h3><p class="m-art-text">{p.text}</p></div></li>)}
-      </ol>
-      <a class="m-more" href={url('/standard/')}>See all {safeguardCount} safeguards <span aria-hidden="true">→</span></a>
-    </div>
-  </section>
-
-  <section class="m-section on-paper" aria-labelledby="demands" data-reveal>
-    <div class="container container--wide">
-      <p class="m-folio"><span>Our demands</span></p>
-      <h2 id="demands" class="m-title">What we want Europe to&nbsp;do.</h2>
-      <ol class="m-demands">
-        {DEMANDS.map((d, i) => <li style={`--i: ${i}`}><span class="m-dem-num" aria-hidden="true"><span>{i + 1}</span></span><div><h3>{d.title}</h3><p class="m-dem-text">{d.summary}</p></div></li>)}
-      </ol>
-      <a class="m-more" href={url('/demands/')}>Read our demands <span aria-hidden="true">→</span></a>
-    </div>
-  </section>
-
-  <section class="m-section on-navy" aria-labelledby="evidence" data-reveal>
-    <div class="container container--wide">
-      <p class="m-folio"><span>Evidence</span></p>
-      <div class="m-evidence">
+      <div class="hm-hero-grid">
         <div>
-          <h2 id="evidence" class="m-title">The evidence.</h2>
-          <p class="m-body">{pilotNames.length > 0 ? <>Research has started with {listFormat.format(pilotNames)}. {findingsLine}</> : 'Research has not started yet.'}</p>
-          <div class="m-links">
-            <a class="m-more" href={url('/evidence/')}>See the evidence <span aria-hidden="true">→</span></a>
-            <a class="m-more" href={url('/europe/')}>Explore Europe <span aria-hidden="true">→</span></a>
+          <h1 id="hero-title">Students should be safe to speak up.</h1>
+          <p class="hm-lede">
+            {ORG_NAME} works to make protection from retaliation, fair complaint procedures and
+            effective remedies part of higher education across Europe.
+          </p>
+          <div class="hm-actions">
+            <a class="btn btn-primary btn-lg" href={url('/about/')}>Explore our work</a>
+            <a class="btn btn-secondary btn-lg" href={url('/evidence/')}>View our research</a>
           </div>
         </div>
-        <figure class="m-scope">
-          <p class="m-scope-figure"><span class="m-scope-num"><span class="visually-hidden">{countries.length}</span><span aria-hidden="true" data-count={String(countries.length)}>{countries.length}</span></span><span class="m-scope-cap">EU Member States<br />in scope</span></p>
-          <div class="m-grid" aria-hidden="true">
-            {cells.map((on, i) => <span class="m-cell" data-on={on ? '' : undefined} style={`--i: ${i}`}></span>)}
-          </div>
-          <p class="visually-hidden">One square per Member State in scope. {started.length > 0 ? `Research has started in ${started.length}: ${startedNames}.` : 'Research has not started in any yet.'} {notStarted.length} not yet researched, which does not mean safeguards are absent.</p>
-          <figcaption class="m-legend" aria-hidden="true">
-            {started.length > 0 && <p class="m-key"><span class="m-sw" data-on=""></span><span>Research started ({startedNames})</span></p>}
-            <p class="m-key"><span class="m-sw"></span><span>Not yet researched — no conclusion drawn</span></p>
-          </figcaption>
-        </figure>
+        <p class="hm-provenance">
+          An independent non-profit association based in {ORG_SEAT}, working across the European
+          Higher Education Area. Not affiliated with the EU, any government or any university.
+        </p>
       </div>
     </div>
   </section>
 
-  <section class="m-section m-action on-signal" id="safe-to-speak" aria-labelledby="act" data-reveal>
+  {/* 2 — What we do, with now and next kept apart. */}
+  <section class="hm-sec" aria-labelledby="work-h">
     <div class="container container--wide">
-      <p class="m-folio"><span>Take action</span></p>
-      <h2 id="act" class="m-triad">
-        {triadLead.map((line, i) => <><span style={`--i: ${i}`}>{line}</span>{' '}</>)}
-        <span class="m-ink-line" style={`--i: ${triadLead.length}`}><span class="m-ink">{triadLast}</span></span>
-      </h2>
-      <div class="actions">
-        <a class="btn btn-primary btn-xl" href={url('/take-action/')} data-magnetic>Support European Safeguards</a>
+      <h2 id="work-h" class="hm-h2">What we do</h2>
+      <ul class="hm-work" role="list">
+        {WORK.map((w) => (
+          <li>
+            <h3>{w.title}</h3>
+            <p class="hm-now"><span class="hm-tag">Now</span>{w.now}</p>
+            <p class="hm-next"><span class="hm-tag hm-tag--next">Building</span>{w.next}</p>
+            <a class="hm-link" href={url(w.href)}>{w.link}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {/* 3 — Where the research actually stands. Scope before scale. */}
+  <section class="hm-sec hm-sec--panel on-navy" aria-labelledby="scope-h">
+    <div class="container container--wide">
+      <div class="hm-scope">
+        <div>
+          <h2 id="scope-h" class="hm-h2">Where the research stands</h2>
+          <p class="hm-body">
+            {placeNames.length > 0
+              ? <>Research has begun in {listFormat.format(placeNames)}. It has not begun in the other {countries.length - researchedCountries.length} Member States, which says nothing about whether safeguards exist there.</>
+              : <>Research has not begun yet.</>}
+          </p>
+          <a class="hm-link" href={url('/evidence/')}>See the evidence and its limits</a>
+        </div>
+        <dl class="hm-figures">
+          <div>
+            <dt>Findings published</dt>
+            <dd>{results.length}</dd>
+          </div>
+          <div>
+            <dt>Independently verified</dt>
+            <dd>{verified}</dd>
+          </div>
+          <div>
+            <dt>Under dispute</dt>
+            <dd>{disputed}</dd>
+          </div>
+        </dl>
       </div>
+      <p class="hm-caution">
+        Every finding is provisional{allAiAssisted ? ' and AI-assisted' : ''}, and none has yet been
+        checked by an independent human reviewer. A published rule is not proof of what happens in
+        practice, and a safeguard we did not find is not a safeguard that is absent.
+      </p>
+    </div>
+  </section>
+
+  {/* 4 — Real paths, honest boundaries. */}
+  <section class="hm-sec" aria-labelledby="paths-h">
+    <div class="container container--wide">
+      <h2 id="paths-h" class="hm-h2">Choose a path</h2>
+      <ul class="hm-paths" role="list">
+        {PATHS.map((p) => (
+          <li>
+            <h3>{p.who}</h3>
+            <p>{p.what}</p>
+            <a class="hm-link" href={url(p.href)}>{p.link}</a>
+          </li>
+        ))}
+      </ul>
+      <p class="hm-boundary">
+        This website is not a reporting channel. {ORG_NAME} does not receive confidential cases,
+        investigate individuals, give legal or psychological advice, or rank universities.
+        {' '}<a href={url('/take-action/#not-a-reporting-service')}>Why, and where to go instead</a>
+      </p>
     </div>
   </section>
 </Base>
-
-<script>
-  import '../scripts/hero.ts';
-  import '../scripts/reveal.ts';
-  import '../scripts/marquee.ts';
-</script>

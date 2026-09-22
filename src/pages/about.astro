@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ProtectiveField from '../components/ProtectiveField.astro';
 import { url, REPO_URL, repoFile } from '../lib/url';
-import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SHORT, ORG_SEAT } from '../lib/campaign';
+import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SHORT, ORG_SEAT, PROGRAMME_NAME, STANDARD_NAME, STANDARD_NAME_LEGACY } from '../lib/campaign';
 import { getRubric } from '../lib/data';
 
 const rubric = getRubric();
@@ -58,7 +58,7 @@ const CAVEATS = [
 
 <Base
   title="About"
-  description="Academic Safeguard Europe works to make safe reporting, independent decisions, protection from retaliation and real remedies part of how European higher education runs."
+  description="StudentSafe Europe (StudentSafe Europa) is an independent non-profit association in Zagreb working to make safe reporting, independent decisions, protection from retaliation and real remedies part of higher education across Europe."
   campaign
   pageClass="about"
 >
@@ -68,11 +68,12 @@ const CAVEATS = [
       <Breadcrumbs crumbs={[{ label: 'About' }]} />
       <div class="ab-hero-grid">
         <div class="ab-hero-main">
-          <h1 id="page-title">Protection must exist before a student needs it.</h1>
+          <p class="ab-kicker">About the association</p>
+          <h1 id="page-title">StudentSafe Europe</h1>
           <p class="ab-lede">
-            Academic Safeguard Europe works to make safe reporting, independent decisions, protection from
-            retaliation and real remedies part of how European higher education runs — so that using a right
-            does not put a student’s studies at risk.
+            An independent non-profit association, legally {ORG_NAME_LEGAL}, based in {ORG_SEAT}. We work to
+            make safe reporting, independent decisions, protection from retaliation and real remedies part of
+            higher education across Europe — so that using a right does not put a student’s studies at risk.
           </p>
         </div>
         <div class="ab-hero-aside">
@@ -167,9 +168,12 @@ const CAVEATS = [
             campaign never changes a finding.
           </p>
           <p class="ab-body ab-gov-note" id="publisher">
-            Academic Safeguard Europe is a programme of <strong>{ORG_NAME}</strong> — legal name
-            {ORG_NAME_LEGAL}, short name {ORG_SHORT} — a voluntary, non-profit, independent association
-            based in {ORG_SEAT}, working across the European Higher Education Area.
+            <strong>{ORG_NAME}</strong> is the association: legal name {ORG_NAME_LEGAL}, short name
+            {ORG_SHORT}, based in {ORG_SEAT} and working across the European Higher Education Area.
+            {PROGRAMME_NAME} is its research programme, {CAMPAIGN_NAME} its public campaign, and the
+            {STANDARD_NAME} its published framework — earlier versions of which were named the
+            {STANDARD_NAME_LEGACY}. Registration status, officers and a contact address are not published
+            here because they are not yet confirmed.
           </p>
           <p class="ab-gov-links">
             <a href={url('/methodology/')}>Methodology</a>
@@ -196,7 +200,7 @@ const CAVEATS = [
       <div class="ab-scope-grid">
         <div id="limits">
           <h2 id="scope-h">What this project does not do</h2>
-          <p class="ab-body ab-body--tight">Academic Safeguard Europe does not:</p>
+          <p class="ab-body ab-body--tight">{ORG_NAME} does not:</p>
           <ul class="ab-bounds" role="list">
             {BOUNDARIES.map((b) => <li>{b}</li>)}
           </ul>

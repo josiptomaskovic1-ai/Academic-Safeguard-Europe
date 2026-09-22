@@ -84,7 +84,7 @@ const NODES = [
     font: 700 0.8125rem/1.3 var(--sans);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--bone);
+    color: var(--ink);
   }
   .af-edge::before {
     content: '';
@@ -124,13 +124,13 @@ const NODES = [
   .af-core-text {
     margin: 0;
     font: 700 clamp(1.15rem, 1.7vw, 1.5rem)/1.2 var(--serif);
-    color: var(--bone);
+    color: var(--ink);
     text-wrap: balance;
   }
   .af-core-note {
     margin: 0.5rem 0 0;
     font: 400 0.8125rem/1.45 var(--sans);
-    color: var(--muted-d);
+    color: var(--ink-3);
   }
 
   .af-nodes { display: contents; list-style: none; margin: 0; padding: 0; }
@@ -139,7 +139,7 @@ const NODES = [
   .af-label {
     display: block;
     font: 700 clamp(0.9375rem, 1.05vw, 1.0625rem)/1.25 var(--sans);
-    color: var(--bone);
+    color: var(--ink);
     text-decoration-color: var(--rule-d);
     text-underline-offset: 0.25em;
   }
@@ -149,7 +149,7 @@ const NODES = [
   .af-text {
     margin: 0.3rem 0 0;
     font: 400 0.875rem/1.45 var(--sans);
-    color: var(--muted-d);
+    color: var(--ink-3);
     text-wrap: pretty;
   }
 
@@ -203,9 +203,9 @@ const NODES = [
     max-width: 44rem;
     margin: clamp(1.5rem, 2.6vw, 2.25rem) 0 0;
     font: 400 1rem/1.6 var(--sans);
-    color: var(--muted-d);
+    color: var(--ink-3);
   }
-  .af-foot a { color: var(--bone); }
+  .af-foot a { color: var(--ink); }
 
   /* One orchestrated reveal: the boundary draws once, then the stations appear. */
   .af[data-animate='pending'] .af-ring { stroke-dasharray: 100; stroke-dashoffset: 100; }

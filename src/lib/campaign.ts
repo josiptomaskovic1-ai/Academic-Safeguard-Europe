@@ -17,6 +17,20 @@ export const ORG_NAME_LEGAL = 'StudentSafe Europa';
 export const ORG_SHORT = 'StudentSafe';
 export const ORG_SEAT = 'Zagreb, Croatia';
 
+/** One-line descriptor under the wordmark. Statute Art. 7 (mission) and Art. 8 (field). */
+export const ORG_DESCRIPTOR = 'Student protection in higher education';
+
+/**
+ * The statutory name of the methodology (Statute Art. 9, which lists "transparent
+ * methodologies ... including the StudentSafe Standard"). Published as v0.1.1.
+ * "ASE Standard" is the legacy name of the same framework and is documented, not erased.
+ */
+export const STANDARD_NAME = 'StudentSafe Standard';
+export const STANDARD_NAME_LEGACY = 'ASE Standard';
+
+/** The research programme. Subordinate to the association, never the organisation. */
+export const PROGRAMME_NAME = 'Academic Safeguard Europe';
+
 /** The key sentence, split so the homepage can accent its closing phrase. Advocacy, not a finding. */
 export const KEY_SENTENCE_LEAD = 'A complaint mechanism is not protection if using it can cost you your ';
 export const KEY_SENTENCE_ACCENT = 'academic future.';

@@ -42,29 +42,29 @@
 
 :root {
   /* Campaign palette */
-  --navy: #0a1628;           /* ground of header, footer and dark campaign sections */
-  --navy-2: #13223d;         /* raised navy (menu panel, hover) */
-  --bone: #f3efe6;           /* text on navy: 15.8:1 */
-  --muted-d: #b3bdcd;        /* secondary text on navy: 9.5:1 (8.3:1 on navy-2) */
-  --link-d: #bcd1f0;         /* links inside navy research text: 11.6:1 */
-  --rule-d: #34425a;         /* decorative dividers on navy */
-  --signal: #f5c518;         /* the one accent; navy on signal 11.1:1 */
-  --signal-ink: #0a1628;
+  --navy: #1F4A45;           /* brand ground: masthead, footer, brand band */
+  --navy-2: #173935;         /* raised brand ground (menu panel, hover) */
+  --bone: #F7F9F8;           /* text on brand ground: 11.6:1 */
+  --muted-d: #C3D6D1;        /* secondary text on brand ground: 7.4:1 */
+  --link-d: #DDEBE7;         /* links on brand ground: 9.6:1 */
+  --rule-d: #3A6660;         /* dividers on brand ground */
+  --signal: #2D645D;         /* deep mineral: primary actions, selected marks */
+  --signal-ink: #F7F9F8;     /* text on --signal: 6.6:1 */
 
   /* Paper and ink (shared with research pages) */
-  --paper: #f3efe6;
-  --surface: #fbf9f4;
-  --surface-2: #e9e4d9;
-  --ink: #0a1628;
-  --ink-2: #3a4458;
-  --ink-3: #4e5768;          /* ≥4.5:1 on paper, surface, surface-2 and accent-soft */
-  --rule: #d6d0c3;           /* decorative dividers only */
-  --rule-strong: #aba495;    /* decorative outlines only */
-  --control: #7a756b;        /* ≥3:1 edges of form controls and empty score pips (WCAG 1.4.11) */
-  --accent: #1d4b87;
-  --accent-ink: #12325e;
-  --accent-soft: #e2e8f0;
-  --focus: #0a1628;          /* per context: navy on paper and signal, signal on navy */
+  --paper: #F7F9F8;          /* cool porcelain page ground */
+  --surface: #FFFFFF;
+  --surface-2: #DDEBE7;      /* pale mineral panels */
+  --ink: #193239;            /* body and headings: 13.1:1 on paper */
+  --ink-2: #3C5C63;          /* secondary prose: 7.4:1 on paper */
+  --ink-3: #4A6A71;          /* metadata and captions: 5.7:1 on paper */
+  --rule: #C9D8D4;           /* hairlines only */
+  --rule-strong: #9DB5AF;    /* decorative outlines only */
+  --control: #6A8A8F;        /* >=3:1 control edges and empty pips (WCAG 1.4.11) */
+  --accent: #2D645D;         /* links: 5.4:1 on paper */
+  --accent-ink: #1F4A45;
+  --accent-soft: #DDEBE7;
+  --focus: #193239;          /* ink on light grounds, paper on the brand ground */
   --ctx-bg: var(--paper);    /* background of the current colour context (used by inverted hovers) */
   --line: var(--ink);        /* thick structural rules */
   --mark: var(--ink);        /* folio numerals and article numbers */
@@ -74,39 +74,39 @@
   --btn-hover-fg: var(--bone);
 
   /* Research-depth scale: one hue, increasing weight. Always paired with a glyph and a text label. */
-  --s0: #e4dccb;
-  --s1: #cbd8ea;
-  --s2: #8badd5;
-  --s3: #2a5a99;
-  --s-ink-light: #0a1628;
+  --s0: #E3E9E7;
+  --s1: #C4DCD6;
+  --s2: #7FB3A9;
+  --s3: #2D645D;
+  --s-ink-light: #193239;
   --s-ink-dark: #ffffff;
 
-  --provisional: #7c5100;
-  --provisional-soft: #f8ecd2;
-  --disputed: #8b2f2f;
-  --disputed-soft: #f5e3e0;
-  --verified: #23603e;
-  --verified-soft: #e0eee5;
+  --provisional: #7A5218;    /* 6.0:1 on paper */
+  --provisional-soft: #F6ECDC;
+  --disputed: #9A4A41;       /* also the alert colour; cautions only */
+  --disputed-soft: #F6E4E1;
+  --verified: #24614B;
+  --verified-soft: #DDEDE6;
 
   --serif: 'Literata', 'Literata Fallback', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, 'Times New Roman', serif;
   --sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --mono: ui-monospace, 'Cascadia Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
 
   /* Display scale */
-  --fs-hero: clamp(2.5rem, 12vw, 6.5rem);
-  --fs-display: clamp(2.4rem, 6.4vw, 5.75rem);
-  --fs-statement: clamp(2rem, 6vw, 6rem);
+  --fs-hero: clamp(2rem, 6vw, 3.5rem);
+  --fs-display: clamp(1.85rem, 4.2vw, 3rem);
+  --fs-statement: clamp(1.7rem, 3.6vw, 2.6rem);
   --fs-label: 0.8125rem;
   /* Inner-page scale */
-  --fs-h1-c: clamp(2.6rem, 7.4vw, 6.75rem);   /* navy campaign hero */
-  --fs-h1-r: clamp(2.25rem, 5.4vw, 4.5rem);   /* paper research hero */
-  --fs-title: clamp(2rem, 4.8vw, 4rem);       /* campaign section title */
+  --fs-h1-c: clamp(1.9rem, 4vw, 2.9rem);     /* campaign hero */
+  --fs-h1-r: clamp(1.75rem, 3.4vw, 2.5rem);  /* research hero */
+  --fs-title: clamp(1.5rem, 2.8vw, 2.1rem);  /* section title */
   --fs-h2-r: clamp(1.6rem, 3vw, 2.25rem);     /* research section heading */
   --fs-h3: 1.25rem;
   --fs-lede: clamp(1.2rem, 2vw, 1.6rem);
   --fs-read: 1.125rem;                         /* serif long reading */
-  --sec-pad: clamp(3.5rem, 8vw, 7rem);
-  --sec-pad-r: clamp(2.25rem, 4.5vw, 3.75rem);
+  --sec-pad: clamp(2.25rem, 4vw, 3.75rem);
+  --sec-pad-r: clamp(1.75rem, 3vw, 2.75rem);
   --split: minmax(0, 5fr) minmax(0, 7fr);
 
   --measure: 42rem;          /* reading columns only */
@@ -114,53 +114,34 @@
   --wide-c: 82.5rem;         /* every page, header and footer */
   --gutter: clamp(1rem, 4vw, 2rem);
   --gutter-c: clamp(1rem, 4.5vw, 4.5rem);
-  --pad: clamp(4.5rem, 10vw, 9.5rem);
+  --pad: clamp(2.5rem, 5vw, 4.5rem);
   --radius: 2px;
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --navy: #08111f;
-    --navy-2: #13203a;
-    --bone: #eeeae1;
-    --paper: #12151b;
-    --surface: #191d24;
-    --surface-2: #222731;
-    --ink: #eeeae1;
-    --ink-2: #bcc1cb;
-    --ink-3: #9ca2ad;
-    --rule: #2f3541;
-    --rule-strong: #485061;
-    --control: #6f7785;
-    --accent: #9dbfea;
-    --accent-ink: #c2d7f3;
-    --accent-soft: #1d2838;
-    --focus: #f5c518;
-    --btn-bg: var(--signal);
-    --btn-fg: var(--signal-ink);
-    --btn-hover-bg: var(--bone);
-    --btn-hover-fg: var(--signal-ink);
-    --s0: #2a2e36;
-    --s1: #2d3e56;
-    --s2: #3f6394;
-    --s3: #8fb4e6;
-    --s-ink-light: #eeeae1;
-    --s-ink-dark: #10141b;
-    --provisional: #e3b35c;
-    --provisional-soft: #332812;
-    --disputed: #e79a92;
-    --disputed-soft: #3a1f1d;
-    --verified: #8fd0a8;
-    --verified-soft: #19302a;
-    color-scheme: dark;
-  }
-}
+/* The dark-mode override that shipped with the navy identity is retired: the
+   redesign is light-first and each context now carries its own ground. */
 
 /* Colour contexts. Tokens are re-pointed, so any text, rule, link, button or focus ring inside follows. */
+/* Pale mineral panel. Keeps the name .on-navy so every existing page goes on
+   working unchanged, but it is a LIGHT context now: the page no longer alternates
+   full-bleed dark and light slabs. The dark ground lives in .on-brand below. */
 .on-navy {
+  background: var(--surface-2);
+  color: var(--ink);
+  --ctx-bg: var(--surface-2);
+  --line: var(--ink);
+  --mark: var(--signal);
+  --btn-bg: var(--signal);
+  --btn-fg: var(--signal-ink);
+  --btn-hover-bg: var(--accent-ink);
+  --btn-hover-fg: var(--bone);
+}
+
+/* The brand ground: masthead, footer, and at most one band per page. */
+.on-brand {
   background: var(--navy);
-  color: var(--bone);
+  color: var(--ink);
   --ctx-bg: var(--navy);
   --ink: var(--bone);
   --ink-2: var(--muted-d);
@@ -169,15 +150,19 @@
   --accent-ink: var(--bone);
   --rule: var(--rule-d);
   --rule-strong: var(--rule-d);
-  --focus: var(--signal);
+  --control: var(--muted-d);
+  --focus: var(--bone);
   --line: var(--bone);
-  --mark: var(--signal);
-  --btn-bg: var(--signal);
-  --btn-fg: var(--signal-ink);
-  --btn-hover-bg: var(--bone);
-  --btn-hover-fg: var(--signal-ink);
+  --mark: var(--bone);
+  --surface: var(--navy-2);
+  --surface-2: var(--navy-2);
+  --btn-bg: var(--bone);
+  --btn-fg: var(--navy);
+  --btn-hover-bg: var(--muted-d);
+  --btn-hover-fg: var(--navy);
 }
 .on-paper { background: var(--paper); color: var(--ink); --ctx-bg: var(--paper); }
+/* Solid mineral band. Used once per page at most. */
 .on-signal {
   background: var(--signal);
   color: var(--signal-ink);
@@ -187,14 +172,16 @@
   --ink-3: var(--signal-ink);
   --accent: var(--signal-ink);
   --accent-ink: var(--signal-ink);
-  --rule: rgba(10, 22, 40, 0.35);
+  --rule: rgba(247, 249, 248, 0.38);
+  --rule-strong: rgba(247, 249, 248, 0.55);
+  --control: rgba(247, 249, 248, 0.65);
   --focus: var(--signal-ink);
   --line: var(--signal-ink);
   --mark: var(--signal-ink);
   --btn-bg: var(--signal-ink);
   --btn-fg: var(--signal);
-  --btn-hover-bg: transparent;
-  --btn-hover-fg: var(--signal-ink);
+  --btn-hover-bg: var(--muted-d);
+  --btn-hover-fg: var(--navy);
   color-scheme: light;
 }
 
@@ -302,9 +289,9 @@ main { padding-block: 0; counter-reset: folio; }
 }
 
 /* ---------- footer ---------- */
-.site-footer { padding-block: clamp(3.5rem, 7vw, 5.5rem) 2.5rem; font-size: 0.9375rem; color: var(--muted-d); }
-.footer-trust { margin: 0; padding-top: 1.1rem; border-top: 6px solid var(--bone); max-width: 30ch; font: 400 clamp(1.4rem, 2.8vw, 2.25rem)/1.25 var(--serif); color: var(--bone); letter-spacing: -0.01em; }
-.footer-row { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1.25rem 2.5rem; margin-top: clamp(2.5rem, 5vw, 4rem); padding-top: 1.5rem; border-top: 1px solid var(--rule-d); }
+.site-footer { padding-block: clamp(2rem, 3.5vw, 3rem) 1.75rem; font-size: 0.9375rem; color: var(--muted-d); }
+.footer-trust { margin: 0; padding-top: 0.9rem; border-top: 3px solid var(--bone); max-width: 46ch; font: 400 clamp(1.05rem, 1.5vw, 1.25rem)/1.4 var(--serif); color: var(--bone); letter-spacing: -0.005em; }
+.footer-row { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1.25rem 2.5rem; margin-top: clamp(1.4rem, 2.6vw, 2rem); padding-top: 1.1rem; border-top: 1px solid var(--rule-d); }
 .footer-id { display: grid; gap: 1.1rem; justify-items: start; max-width: 36rem; }
 .footer-id p { margin: 0; }
 .site-footer .disclaimer { color: var(--muted-d); }
@@ -656,7 +643,7 @@ main.campaign { padding-block: 0; }
 /* ---------- inner pages: PageHero, folios, sections, closers ----------
    One template for every inner page. Navy = campaign pages and the Evidence bridge; paper = research and utility pages. */
 .page-hero { padding-block: clamp(2rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4.5rem); background: var(--paper); }
-.page-hero.on-navy { background: var(--navy); }
+/* .on-navy supplies the pale mineral ground; no override needed. */
 .page-hero .breadcrumbs { margin: 0 0 clamp(1.5rem, 4vw, 3rem); }
 .hero-kicker, .page-hero .c-kicker { display: flex; align-items: center; gap: 0.8rem; margin: 0 0 1.25rem; font: 700 var(--fs-label)/1.2 var(--sans); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); }
 .hero-kicker::before, .page-hero .c-kicker::before { content: ''; flex: none; width: 2.5rem; height: 6px; background: var(--mark); }
@@ -670,8 +657,8 @@ main.campaign { padding-block: 0; }
 .page-hero:not(.on-navy) { padding-bottom: 0; }
 .page-hero:not(.on-navy) > .container::after { content: ''; display: block; height: 6px; margin-top: clamp(1.75rem, 4vw, 2.75rem); background: var(--line); }
 /* Navy tone: the homepage hero at inner-page scale. */
-.page-hero--navy h1 { font: 700 var(--fs-h1-c)/0.95 var(--serif); letter-spacing: -0.03em; max-width: 15ch; color: var(--bone); }
-.page-hero--navy .hero-lede { max-width: 36ch; margin: clamp(2rem, 4vw, 3.25rem) 0 0; padding-top: clamp(1.25rem, 2.5vw, 2rem); border-top: 1px solid var(--rule-d); font: 400 var(--fs-lede)/1.35 var(--serif); color: var(--bone); }
+.page-hero--navy h1 { font: 700 var(--fs-h1-c)/0.95 var(--serif); letter-spacing: -0.03em; max-width: 15ch; color: var(--ink); }
+.page-hero--navy .hero-lede { max-width: 36ch; margin: clamp(2rem, 4vw, 3.25rem) 0 0; padding-top: clamp(1.25rem, 2.5vw, 2rem); border-top: 1px solid var(--rule); font: 400 var(--fs-lede)/1.35 var(--serif); color: var(--ink-2); }
 .hero-foot { display: grid; gap: 1.5rem 3rem; margin-top: clamp(2rem, 4vw, 3.25rem); padding-top: clamp(1.25rem, 2.5vw, 2rem); border-top: 1px solid var(--rule-d); }
 .hero-foot .hero-lede { margin: 0; padding: 0; border: 0; }
 .hero-foot .actions { margin: 0; }
@@ -812,7 +799,7 @@ main.campaign { padding-block: 0; }
 .accept-yes li::before { content: '+'; color: var(--verified); }
 .accept-no li::before { content: '\00D7'; color: var(--disputed); }
 .on-navy .accept-yes li::before { color: var(--signal); }
-.on-navy .accept-no li::before { color: var(--bone); }
+.on-navy .accept-no li::before { color: var(--ink); }
 .on-navy .accept li { font-size: clamp(1rem, 1.3vw, 1.125rem); }
 
 /* Take Action: the mechanism statement under the hero, then ruled action grids. */
@@ -852,9 +839,9 @@ main.campaign { padding-block: 0; }
 /* Hero */
 .m-hero { padding-block: clamp(3.5rem, 9vw, 4.5rem) clamp(4rem, 9vw, 5rem); }
 .m-hero .ss-mark { margin-bottom: clamp(2.25rem, 4.5vw, 2.25rem); }
-.m-hero h1 { max-width: 12ch; margin: 0; font: 700 var(--fs-hero)/0.88 var(--serif); letter-spacing: -0.035em; color: var(--bone); text-wrap: balance; }
+.m-hero h1 { max-width: 12ch; margin: 0; font: 700 var(--fs-hero)/0.88 var(--serif); letter-spacing: -0.035em; color: var(--ink); text-wrap: balance; }
 .m-hero-foot { display: grid; gap: 2rem; margin-top: clamp(2.75rem, 6vw, 3.25rem); padding-top: clamp(1.75rem, 3vw, 2rem); border-top: 1px solid var(--rule-d); }
-.m-lede { max-width: 34ch; margin: 0; font: 400 clamp(1.25rem, 2.1vw, 1.75rem)/1.35 var(--serif); color: var(--bone); }
+.m-lede { max-width: 34ch; margin: 0; font: 400 clamp(1.25rem, 2.1vw, 1.75rem)/1.35 var(--serif); color: var(--ink); }
 .m-hero .actions { margin: 0; gap: 0.9rem; }
 @media (min-width: 60rem) { .m-hero-foot { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 3rem; } }
 
@@ -867,7 +854,7 @@ main.campaign { padding-block: 0; }
 .m-articles li { margin: 0; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); align-items: baseline; gap: 1rem; padding-block: clamp(1.4rem, 3vw, 2.25rem); border-bottom: 1px solid var(--rule); }
 .m-art-num { font: italic 700 clamp(1.8rem, 5vw, 4.25rem)/1 var(--serif); color: var(--mark); }
 .m-articles h3 { margin: 0; font: 400 clamp(1.6rem, 3.4vw, 3rem)/1.08 var(--serif); letter-spacing: -0.015em; text-wrap: pretty; hyphens: manual; }
-.m-art-text { max-width: 44ch; margin: 0.6rem 0 0; font: 400 clamp(0.9375rem, 1.1vw, 1.0625rem)/1.5 var(--sans); color: var(--muted-d); }
+.m-art-text { max-width: 44ch; margin: 0.6rem 0 0; font: 400 clamp(0.9375rem, 1.1vw, 1.0625rem)/1.5 var(--sans); color: var(--ink-3); }
 @media (min-width: 56rem) {
   .m-articles { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(2rem, 5vw, 5rem); border-top: 0; }
   .m-articles li { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 1.25rem; min-height: 11rem; border-top: 1px solid var(--rule); border-bottom: 0; }
@@ -889,15 +876,15 @@ main.campaign { padding-block: 0; }
 .m-evidence .m-title { margin-bottom: 1.75rem; }
 .m-evidence .m-more { margin-top: 0; }
 .m-evidence .m-links { margin-top: 2.5rem; }
-.m-body { max-width: 36ch; margin: 0; font: 400 clamp(1.2rem, 1.8vw, 1.5rem)/1.45 var(--serif); color: var(--bone); }
+.m-body { max-width: 36ch; margin: 0; font: 400 clamp(1.2rem, 1.8vw, 1.5rem)/1.45 var(--serif); color: var(--ink); }
 .m-scope { margin: 0; }
 .m-scope-figure { display: flex; align-items: flex-end; gap: 1.1rem; margin: 0 0 1.5rem; }
 .m-scope-num { font: 700 clamp(6.5rem, 20vw, 14rem)/0.78 var(--serif); letter-spacing: -0.04em; color: var(--signal); }
-.m-scope-cap { padding-bottom: 0.3rem; font: 700 0.875rem/1.3 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--bone); }
+.m-scope-cap { padding-bottom: 0.3rem; font: 700 0.875rem/1.3 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
 .m-grid { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: clamp(3px, 0.6vw, 5px); max-width: 34rem; }
 .m-cell { aspect-ratio: 1; border: 2px solid var(--muted-d); }
 .m-cell[data-on] { background: var(--signal); border-color: var(--signal); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-.m-legend { display: grid; gap: 0.6rem; margin-top: 1.25rem; font-size: 0.9375rem; line-height: 1.4; color: var(--muted-d); }
+.m-legend { display: grid; gap: 0.6rem; margin-top: 1.25rem; font-size: 0.9375rem; line-height: 1.4; color: var(--ink-3); }
 .m-key { display: flex; align-items: flex-start; gap: 0.7rem; margin: 0; }
 .m-sw { flex: none; width: 14px; height: 14px; margin-top: 0.2em; border: 2px solid var(--muted-d); }
 .m-sw[data-on] { background: var(--signal); border-color: var(--signal); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
@@ -1259,9 +1246,9 @@ main.campaign { padding-block: 0; }
 .about {
   --ab-max: 78rem;
   --ab-gut: clamp(1.25rem, 4vw, 3.5rem);
-  --ab-sec: clamp(2.15rem, 3.3vw, 3.4rem);
-  --ab-h1: clamp(2.5rem, 5.4vw, 4.75rem);
-  --ab-h2: clamp(1.75rem, 3vw, 2.75rem);
+  --ab-sec: clamp(1.9rem, 3vw, 2.9rem);
+  --ab-h1: clamp(1.9rem, 4vw, 2.9rem);
+  --ab-h2: clamp(1.4rem, 2.4vw, 1.85rem);
   --ab-h3: clamp(1.1875rem, 1.45vw, 1.4375rem);
   --ab-body: clamp(1.0625rem, 0.95rem + 0.32vw, 1.1875rem);
   --ab-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -1318,11 +1305,12 @@ main.campaign { padding-block: 0; }
   .about .ab-hero-side { margin-top: 0.5rem; }
   .about .ab-actions { margin-top: 0; }
 }
+.about .ab-kicker { margin: 0 0 0.6rem; font: 700 0.8125rem/1.3 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
 .about .ab-hero h1 {
   margin: 0;
   font: 700 var(--ab-h1)/1.03 var(--serif);
   letter-spacing: -0.032em;
-  color: var(--bone);
+  color: var(--ink);
   max-width: 16ch;
   text-wrap: balance;
 }
@@ -1330,7 +1318,7 @@ main.campaign { padding-block: 0; }
   max-width: 48ch;
   margin: clamp(1.25rem, 2.2vw, 1.85rem) 0 0;
   font: 400 clamp(1.0625rem, 1.35vw, 1.25rem)/1.55 var(--sans);
-  color: var(--bone);
+  color: var(--ink);
 }
 .about .ab-actions { display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; margin-top: clamp(1.25rem, 2.1vw, 1.75rem); }
 .about .ab-hero-side {
@@ -1339,7 +1327,7 @@ main.campaign { padding-block: 0; }
   padding-top: 1.15rem;
   border-top: 3px solid var(--signal);
   font: 400 clamp(1rem, 1.15vw, 1.0625rem)/1.6 var(--sans);
-  color: var(--muted-d);
+  color: var(--ink-3);
 }
 
 /* ---- 2 + 3. Why protection is structural, and the field it has to form ---- */
@@ -1355,8 +1343,8 @@ main.campaign { padding-block: 0; }
   .about .ab-field-intro { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .about .ab-field-intro .ab-body { max-width: 52ch; }
-.about .ab-field-sec h2 { color: var(--bone); }
-.about .ab-field-sec .ab-body { color: var(--muted-d); }
+.about .ab-field-sec h2 { color: var(--ink); }
+.about .ab-field-sec .ab-body { color: var(--ink-3); }
 
 /* ---- 4. How evidence turns into protection: genuinely sequential, so it is numbered ---- */
 .about .ab-path {
@@ -1438,7 +1426,7 @@ main.campaign { padding-block: 0; }
 }
 
 /* ---- 6. Governance charter ---- */
-.about .ab-gov-sec h2 { color: var(--bone); }
+.about .ab-gov-sec h2 { color: var(--ink); }
 .about .ab-gov-grid {
   display: grid;
   gap: clamp(1.75rem, 3vw, 2.75rem) clamp(2rem, 5vw, 5rem);
@@ -1448,7 +1436,7 @@ main.campaign { padding-block: 0; }
 @media (min-width: 62rem) {
   .about .ab-gov-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
 }
-.about .ab-gov-note { color: var(--muted-d); max-width: 34ch; }
+.about .ab-gov-note { color: var(--ink-3); max-width: 34ch; }
 .about .ab-charter { margin: 0; display: grid; gap: 0; }
 .about .ab-charter > div {
   display: grid;
@@ -1459,8 +1447,8 @@ main.campaign { padding-block: 0; }
 .about .ab-charter > div:first-child { border-top: 3px solid var(--signal); }
 @media (min-width: 26rem) { .about .ab-charter > div { grid-template-columns: 7.5rem minmax(0, 1fr); } }
 @media (min-width: 62rem) { .about .ab-charter > div { grid-template-columns: 9.5rem minmax(0, 1fr); } }
-.about .ab-charter dt { font: 700 1.0625rem/1.4 var(--sans); color: var(--bone); }
-.about .ab-charter dd { margin: 0; font: 400 0.9375rem/1.55 var(--sans); color: var(--muted-d); }
+.about .ab-charter dt { font: 700 1.0625rem/1.4 var(--sans); color: var(--ink); }
+.about .ab-charter dd { margin: 0; font: 400 0.9375rem/1.55 var(--sans); color: var(--ink-3); }
 .about .ab-gov-links {
   display: flex;
   flex-wrap: wrap;
@@ -1474,7 +1462,7 @@ main.campaign { padding-block: 0; }
   align-items: center;
   min-height: 2.75rem;
   font: 700 0.9375rem/1.4 var(--sans);
-  color: var(--bone);
+  color: var(--ink);
   text-underline-offset: 0.25em;
 }
 .about .ab-gov-links a:hover { color: var(--signal); }
@@ -1628,8 +1616,8 @@ main.campaign { padding-block: 0; }
 .evidence {
   --ev-max: 76rem;
   --ev-gut: clamp(1.25rem, 4vw, 3.5rem);
-  --ev-sec: clamp(2.25rem, 3.6vw, 3.75rem);
-  --ev-quote: clamp(1.85rem, 5vw, 4.25rem);
+  --ev-sec: clamp(1.9rem, 3vw, 2.9rem);
+  --ev-quote: clamp(1.4rem, 2.6vw, 2rem);
   --ev-h1: clamp(1.8rem, 3.3vw, 2.85rem);
   --ev-h2: clamp(1.5rem, 2.7vw, 2.25rem);
   --ev-h3: clamp(1.125rem, 1.5vw, 1.35rem);
@@ -1682,7 +1670,7 @@ main.campaign { padding-block: 0; }
   border-bottom: 2px solid var(--signal);
 }
 .evidence .ev-link:hover, .evidence .ev-link:focus-visible { border-bottom-width: 4px; }
-.evidence .on-navy .ev-link, .evidence .ev-check .ev-link { color: var(--bone); }
+.evidence .on-navy .ev-link, .evidence .ev-check .ev-link { color: var(--ink); }
 
 /* ---- the exhibit ---- */
 .evidence .ev-exhibit { padding-block: clamp(0.85rem, 1.5vw, 1.35rem) clamp(2.5rem, 4.5vw, 4.25rem); }
@@ -1946,6 +1934,259 @@ main.campaign { padding-block: 0; }
 .evidence .ev-cta .ev-body { margin-top: 0; color: var(--signal-ink); }
 .evidence .ev-cta .btn { margin-top: clamp(1.25rem, 2.2vw, 1.75rem); }
 @media (max-width: 30rem) { .evidence .ev-cta .btn { display: flex; width: 100%; } }
+
+
+/* ---------- Home ----------
+   Scoped to body.home in its own hm-* namespace, like .about and .evidence, so
+   nothing here reaches another page. Four blocks, light-first, no full-bleed
+   dark slabs and no ticker.
+   --------------------------- */
+.home {
+  --hm-gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.home .hm-sec {
+  padding-block: clamp(2.25rem, 4vw, 3.5rem);
+  border-top: 1px solid var(--rule);
+}
+.home .hm-sec--panel {
+  border-top: 0;
+}
+.home .hm-h2 {
+  margin: 0 0 clamp(1.25rem, 2.4vw, 1.9rem);
+  font: 700 clamp(1.35rem, 2.2vw, 1.75rem)/1.2 var(--sans);
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.home .hm-body {
+  max-width: 62ch;
+  margin: 0;
+  font: 400 clamp(1.0625rem, 1.15vw, 1.125rem)/1.6 var(--sans);
+  color: var(--ink-2);
+}
+
+/* Shared link: an underline that thickens, no appended arrow. */
+.home .hm-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font: 700 0.9375rem/1.4 var(--sans);
+  color: var(--accent);
+  text-underline-offset: 0.25em;
+  text-decoration-thickness: 1px;
+}
+.home .hm-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ---- 1. Hero ---- */
+.home .hm-hero {
+  padding-block: clamp(2rem, 4vw, 3.5rem) clamp(1.75rem, 3.4vw, 3rem);
+}
+.home .hm-hero-grid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 5vw, 4.5rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+}
+@media (min-width: 60rem) {
+  .home .hm-hero-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  }
+}
+.home .hm-hero h1 {
+  max-width: 18ch;
+  margin: 0;
+  font: 700 clamp(2rem, 4.4vw, 3.25rem)/1.1 var(--serif);
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.home .hm-lede {
+  max-width: 56ch;
+  margin: clamp(1rem, 2vw, 1.5rem) 0 0;
+  font: 400 clamp(1.125rem, 1.5vw, 1.3rem)/1.55 var(--sans);
+  color: var(--ink-2);
+}
+.home .hm-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: clamp(1.25rem, 2.2vw, 1.75rem);
+}
+/* The open channel: a rule that breaks and resumes. The one brand motif. */
+.home .hm-provenance {
+  position: relative;
+  max-width: 40ch;
+  margin: 0;
+  padding-top: 1.1rem;
+  font: 400 0.9375rem/1.6 var(--sans);
+  color: var(--ink-3);
+  background-image: linear-gradient(var(--signal), var(--signal)), linear-gradient(var(--signal), var(--signal));
+  background-repeat: no-repeat;
+  background-size: 2.5rem 3px, calc(100% - 3.5rem) 3px;
+  background-position: 0 0, 3.5rem 0;
+}
+
+/* ---- 2. Workstreams ---- */
+.home .hm-work {
+  display: grid;
+  gap: 0 var(--hm-gap);
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 52rem) {
+  .home .hm-work {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.home .hm-work > li {
+  margin: 0;
+  padding: 1.1rem 0 1.4rem;
+  border-top: 3px solid var(--ink);
+}
+@media (max-width: 51.999rem) {
+  .home .hm-work > li + li {
+    border-top-width: 1px;
+  }
+}
+.home .hm-work h3 {
+  margin: 0 0 0.7rem;
+  font: 700 clamp(1.125rem, 1.5vw, 1.3rem)/1.25 var(--sans);
+  color: var(--ink);
+}
+.home .hm-now,
+.home .hm-next {
+  margin: 0 0 0.5rem;
+  font: 400 0.9375rem/1.55 var(--sans);
+  color: var(--ink-2);
+}
+.home .hm-next {
+  color: var(--ink-3);
+}
+/* Status is never carried by colour alone: each line is labelled. */
+.home .hm-tag {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--signal);
+  background: var(--signal);
+  color: var(--signal-ink);
+  font: 700 0.6875rem/1.5 var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: 0.05em;
+}
+.home .hm-tag--next {
+  background: transparent;
+  border-color: var(--control);
+  color: var(--ink-3);
+}
+
+/* ---- 3. Scope and status ---- */
+.home .hm-sec--panel {
+  padding-block: clamp(2.25rem, 4vw, 3.5rem);
+}
+.home .hm-scope {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+@media (min-width: 56rem) {
+  .home .hm-scope {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+.home .hm-figures {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+.home .hm-figures > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--rule-strong);
+}
+.home .hm-figures dt {
+  font: 600 0.9375rem/1.4 var(--sans);
+  color: var(--ink-2);
+}
+.home .hm-figures dd {
+  margin: 0;
+  font: 700 clamp(1.5rem, 2.4vw, 2rem)/1 var(--serif);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.home .hm-caution {
+  max-width: 68ch;
+  margin: clamp(1.25rem, 2.4vw, 1.9rem) 0 0;
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid var(--alert, #9A4A41);
+  background: var(--surface);
+  font: 400 0.9375rem/1.6 var(--sans);
+  color: var(--ink-2);
+}
+
+/* ---- 4. Paths ---- */
+.home .hm-paths {
+  display: grid;
+  gap: 0 var(--hm-gap);
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 44rem) {
+  .home .hm-paths {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 72rem) {
+  .home .hm-paths {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.home .hm-paths > li {
+  margin: 0;
+  padding: 0.9rem 0 1.1rem;
+  border-top: 1px solid var(--rule);
+}
+.home .hm-paths h3 {
+  margin: 0 0 0.4rem;
+  font: 700 1rem/1.3 var(--sans);
+  color: var(--ink);
+}
+.home .hm-paths p {
+  margin: 0;
+  font: 400 0.9375rem/1.55 var(--sans);
+  color: var(--ink-3);
+}
+.home .hm-boundary {
+  max-width: 72ch;
+  margin: clamp(1.25rem, 2.4vw, 1.9rem) 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font: 400 0.9375rem/1.6 var(--sans);
+  color: var(--ink-2);
+}
+
+
+/* Masthead at narrow widths: the wordmark must never collapse into a stack.
+   The descriptor is dropped below 30rem (it remains in the page and in metadata)
+   and the wordmark is stepped down below 24rem so it stays on one line at 320px. */
+@media (max-width: 29.999rem) {
+  .brand-sub { display: none; }
+}
+@media (max-width: 23.999rem) {
+  .brand-name { font-size: 0.95rem; }
+  .brand-mark { width: 28px; height: 28px; }
+}
 
 /* ---------- print ---------- */
 @media print {

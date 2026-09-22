@@ -3,7 +3,7 @@ import '../styles/global.css';
 import '../styles/motion.css';
 import { url, REPO_URL, repoFile } from '../lib/url';
 import { getRubric } from '../lib/data';
-import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SEAT } from '../lib/campaign';
+import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SEAT, ORG_DESCRIPTOR, PROGRAMME_NAME, STANDARD_NAME } from '../lib/campaign';
 
 interface Props {
   title: string;
@@ -16,18 +16,18 @@ interface Props {
   /** Optional class on <body>, so one page can scope layout overrides to itself (e.g. "page-about"). */
   pageClass?: string;
 }
-const { title, description = 'Academic power needs safeguards. Academic Safeguard Europe turns evidence about academic power into a European demand for enforceable student safeguards.', crumbs, noindex = false, campaign = false, pageClass } = Astro.props;
-const fullTitle = title === 'Home' ? 'Academic Safeguard Europe' : `${title} · Academic Safeguard Europe`;
+const { title, description = 'StudentSafe Europe is an independent association working to make protection from retaliation, fair complaint procedures and effective remedies part of higher education across Europe.', crumbs, noindex = false, campaign = false, pageClass } = Astro.props;
+// The organisation leads every title. "StudentSafe Europe | Page name".
+const fullTitle = title === 'Home' ? `${ORG_NAME} — ${ORG_DESCRIPTOR}` : `${ORG_NAME} | ${title}`;
 const rubric = getRubric();
 
 // Public hierarchy: campaign first, evidence one level down. Research utilities keep their URLs and
 // highlight the section they now belong to.
 const nav = [
-  { href: '/problem/', label: 'The Problem' },
-  { href: '/demands/', label: 'Our Demands' },
-  { href: '/europe/', label: 'Europe', also: ['/countries/', '/institutions/'] },
-  { href: '/evidence/', label: 'Evidence', also: ['/standard/', '/methodology/', '/sources/', '/compare/', '/corrections/', '/data/'] },
-  { href: '/take-action/', label: 'Take Action', also: ['/contribute/'], action: true },
+  { href: '/problem/', label: 'Our mission', also: ['/demands/'] },
+  { href: '/standard/', label: 'Safeguards' },
+  { href: '/evidence/', label: 'Research', also: ['/europe/', '/countries/', '/institutions/', '/methodology/', '/sources/', '/compare/', '/corrections/', '/data/'] },
+  { href: '/take-action/', label: 'Get involved', also: ['/contribute/'], action: true },
   { href: '/about/', label: 'About' },
 ];
 const current = Astro.url.pathname;
@@ -78,11 +78,11 @@ const csp = [
   <body class:list={[pageClass]}>
     <div class="reading-progress" aria-hidden="true"></div>
     <a class="skip-link" href="#main">Skip to content</a>
-    <header class="site-header on-navy" data-site-header>
+    <header class="site-header on-brand" data-site-header>
       <div class="container container--wide bar">
         <a class="brand" href={url('/')}>
           <svg class="brand-mark" viewBox="0 0 40 40" width="36" height="36" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="37" height="37" fill="none" stroke="currentColor" stroke-width="3"/><rect x="9" y="9" width="22" height="3" fill="currentColor"/><rect x="9" y="16" width="14" height="3" fill="currentColor"/><rect class="mark-bar" x="9" y="25" width="22" height="6"/></svg>
-          <span><span class="brand-name">Academic Safeguard Europe</span><span class="brand-sub">{CAMPAIGN_NAME}</span></span>
+          <span><span class="brand-name">{ORG_NAME}</span><span class="brand-sub">{ORG_DESCRIPTOR}</span></span>
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
           <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
@@ -106,19 +106,19 @@ const csp = [
       <slot />
     </main>
 
-    <footer class="site-footer on-navy">
+    <footer class="site-footer on-brand">
       <div class="container container--wide">
-        <p class="footer-trust">Independent. Open methodology. Public sources. Versioned evidence. Corrections welcome.</p>
+        <p class="footer-trust">Independent. Open methodology. Public sources. Corrections welcome.</p>
         <div class="footer-row">
           <div class="footer-id">
-            <p class="ss-mark ss-mark--sm">{CAMPAIGN_NAME}</p>
-            <p class="disclaimer">Academic Safeguard Europe is a programme of {ORG_NAME} ({ORG_NAME_LEGAL}), a non-profit association based in {ORG_SEAT}. Not affiliated with the European Union, any government, quality-assurance agency or university. ASE evaluates published rules; it does not rate individuals, judge allegations or give legal advice.</p>
+            <p class="ss-mark ss-mark--sm">{ORG_NAME}</p>
+            <p class="disclaimer">{ORG_NAME} ({ORG_NAME_LEGAL}) is an independent non-profit association based in {ORG_SEAT}. {PROGRAMME_NAME} is its research programme and {CAMPAIGN_NAME} its public campaign. Not affiliated with the European Union, any government, quality-assurance agency or university. We evaluate published rules; we do not rate individuals, judge allegations or give legal advice.</p>
             <p class="footer-facts">No cookies · No analytics · Code MIT · Data and texts <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a></p>
           </div>
           <nav aria-label="Footer">
             <ul class="footer-links">
               <li><a href={url('/about/')}>About</a></li>
-              <li><a href={url('/standard/')}>ASE Standard v{rubric.methodology_version}</a></li>
+              <li><a href={url('/standard/')}>{STANDARD_NAME} v{rubric.methodology_version}</a></li>
               <li><a href={url('/methodology/')}>Methodology</a></li>
               <li><a href={url('/sources/')}>Sources</a></li>
               <li><a href={url('/data/')}>Open data</a></li>
@@ -132,7 +132,6 @@ const csp = [
     </footer>
     <script is:inline src={url('/scripts/print.js')} defer></script>
     <script>
-      import '../scripts/pointer.ts';
 
       const siteHeader = document.querySelector<HTMLElement>('[data-site-header]');
       const menuButton = siteHeader?.querySelector<HTMLButtonElement>('.nav-toggle');
