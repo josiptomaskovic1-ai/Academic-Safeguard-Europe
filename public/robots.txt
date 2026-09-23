@@ -1,2 +1,6 @@
 User-agent: *
 Allow: /
+
+# Note: on github.io this file is served from the project sub-path, so it does not
+# govern the whole host. It is here for crawlers that do read sub-path robots files.
+Sitemap: https://josiptomaskovic1-ai.github.io/Academic-Safeguard-Europe/sitemap.xml
