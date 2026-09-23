@@ -120,6 +120,18 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
         Records as at <LastReviewed date={asAt} />. Assessed against StudentSafe Standard v{recordVersion}, a {rubric.status.replace(/-/g, ' ')}{recordVersion !== rubric.methodology_version && <> — the current rubric is v{rubric.methodology_version}, which changed only a publication rule</>}.
       </p>
 
+      <nav class="ev-jump" aria-label="On this page">
+        <h2 class="ev-jump-h" id="ev-jump-h">On this page</h2>
+        <ul aria-labelledby="ev-jump-h">
+          <li><a href="#judgement">Why this level</a></li>
+          <li><a href="#provenance">The source</a></li>
+          <li><a href="#crosscheck">Cross-check</a></li>
+          <li><a href="#answers">What a result means</a></li>
+          <li><a href="#all">All {researched.length} findings</a></li>
+          <li><a href="#limits">Limits</a></li>
+        </ul>
+      </nav>
+
       <div class="ev-mount">
         <dl class="ev-plate">
           <div>
