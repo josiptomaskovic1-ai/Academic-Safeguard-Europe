@@ -1,5 +1,5 @@
 ---
-title: ASE Safeguarding Standard (independent draft)
+title: StudentSafe Standard
 version: "0.1.1"
 status: Draft for public consultation
 published: 2026-09-13
@@ -7,7 +7,7 @@ published: 2026-09-13
 
 ## Purpose
 
-The ASE Safeguarding Standard is an independent draft published for consultation by Academic Safeguard Europe. It is not an instrument of the European Union, the European Higher Education Area or any government or quality-assurance agency. It describes the published institutional safeguards that allow students to raise concerns about the conduct of people who hold academic authority over them, without risking their education.
+The StudentSafe Standard (formerly the ASE Safeguarding Standard) is an independent draft published for consultation by StudentSafe Europe under its Academic Safeguard Europe research programme. It is not an instrument of the European Union, the European Higher Education Area or any government or quality-assurance agency. It describes the published institutional safeguards that allow students to raise concerns about the conduct of people who hold academic authority over them, without risking their education.
 
 Academic authority is the power to assess, supervise, admit, progress, examine, recommend or credit a student. It is necessary and, in the great majority of cases, exercised responsibly. The Standard exists because, when it is misused, the student often depends on the person or unit they would need to complain about.
 

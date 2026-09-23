@@ -165,33 +165,6 @@
   }
 }
 
-/* =============================================================================
-   6. Guarantees — the Roman numerals stamp in, each row's rule draws
-   ============================================================================= */
-
-.m-articles li {
-  position: relative;
-}
-.m-articles li::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  background: var(--signal);
-  transform: scaleX(0);
-  transform-origin: left;
-}
-[data-reveal='in'] .m-articles li::before {
-  animation: rule-draw 420ms var(--ease-out-quart) calc(var(--i, 0) * 90ms) forwards;
-}
-[data-reveal='in'] .m-art-num {
-  animation: stamp-num 180ms var(--ease-out-quart) calc(var(--i, 0) * 90ms) backwards;
-}
-[data-reveal='in'] .m-articles h3,
-[data-reveal='in'] .m-art-text {
-  animation: rise-in 420ms var(--ease-out-expo) calc(120ms + var(--i, 0) * 90ms) backwards;
-}
-
 /* Down from 1.15, never up: a stamp presses, it does not spring. */
 @keyframes stamp-num {
   from {
@@ -236,39 +209,11 @@
   animation: rise-in 420ms var(--ease-out-expo) calc(200ms + var(--i, 0) * 110ms) backwards;
 }
 
-/* =============================================================================
-   8. Evidence — the 27 squares arrive as a wave, Croatia lights up once
-   ============================================================================= */
-
-[data-reveal='in'] .m-cell {
-  animation: cell-in 260ms var(--ease-out-quart) calc(var(--i, 0) * 16ms) backwards;
-}
-
 @keyframes cell-in {
   from {
     opacity: 0;
     transform: scale(0.72);
   }
-}
-
-/* Two rings leave the researched square and stop. No infinite pulse anywhere. */
-.m-cell[data-on] {
-  position: relative;
-}
-.m-cell[data-on]::before,
-.m-cell[data-on]::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border: 2px solid var(--signal);
-  opacity: 0;
-  pointer-events: none;
-}
-[data-reveal='in'] .m-cell[data-on]::before {
-  animation: ring 900ms var(--ease-out-quart) 620ms 1 forwards;
-}
-[data-reveal='in'] .m-cell[data-on]::after {
-  animation: ring 900ms var(--ease-out-quart) 820ms 1 forwards;
 }
 
 @keyframes ring {
@@ -280,20 +225,6 @@
     opacity: 0;
     transform: scale(3.2);
   }
-}
-
-/* =============================================================================
-   9. Take action — the triad wipes in line by line, then the ink block
-   ============================================================================= */
-
-/* Each line wipes in left to right. The last line is the navy ink block, and its
-   block and its type are revealed by the same clip, deliberately: the type is
-   signal yellow on a signal-yellow band, so wiping the block in *behind* type that
-   was already painted would leave yellow on yellow — invisible, and a contrast
-   failure mid-transition. Revealing them together keeps 11.1:1 at every frame and
-   still reads as the block landing last. */
-[data-reveal='in'] .m-triad > span {
-  animation: wipe-in 520ms var(--ease-out-quart) calc(var(--i, 0) * 150ms) backwards;
 }
 
 @keyframes wipe-in {
@@ -745,28 +676,4 @@
       height: auto;
     }
   }
-}
-
-/* =============================================================================
-   20. 404 — lost for words
-   The only loop on the site, on a page with nothing to read but a way out.
-   ============================================================================= */
-
-.lost-dots {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.34em;
-}
-.lost-dots i {
-  width: 0.34em;
-  height: 0.34em;
-  border-radius: 50%;
-  background: var(--signal-ink);
-  animation: dot-blink 1400ms steps(2, end) infinite;
-}
-.lost-dots i:nth-child(2) {
-  animation-delay: 220ms;
-}
-.lost-dots i:nth-child(3) {
-  animation-delay: 440ms;
 }

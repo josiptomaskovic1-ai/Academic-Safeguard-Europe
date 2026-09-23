@@ -10,7 +10,7 @@ interface Props { safeguards: Record<string, SafeguardResult>; idPrefix?: string
 const { safeguards, idPrefix = 'sg', correctionTarget } = Astro.props;
 const { safeguards: defs } = getRubric();
 ---
-<ul class="matrix">
+<ul class="matrix" role="list">
   {defs.map((def, index) => {
     const r = safeguards[def.id] ?? { result: 'NR' };
     const badge = r.result !== 'NR' && r.verification !== 'verified';

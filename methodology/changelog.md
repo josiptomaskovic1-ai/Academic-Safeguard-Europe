@@ -2,6 +2,17 @@
 title: Methodology changelog
 ---
 
+## Naming note — 23 September 2026
+
+The framework now carries its statutory name, the **StudentSafe Standard** (Statute Art. 9,
+which lists the association's transparent methodologies "including the StudentSafe Standard").
+It was previously published as the *ASE Safeguarding Standard*, and earlier pages and this
+changelog keep that name where they record the history.
+
+This is a rename only. No safeguard, level, criterion, rubric rule, score, source ID or
+research status changed, and the methodology version is deliberately **not** bumped: records
+stay stamped with the version they were researched under.
+
 ## v0.1.1 — 19 September 2026
 
 A clarification to one publication rule. No safeguard, level, score or published finding changed, so records

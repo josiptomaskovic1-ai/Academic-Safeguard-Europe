@@ -17,6 +17,7 @@
  */
 import { getRubric } from '../lib/data';
 import { url } from '../lib/url';
+import { STANDARD_NAME } from '../lib/campaign';
 
 const rubric = getRubric();
 const byId = (id: string) => {
@@ -66,8 +67,8 @@ const NODES = [
   <p class="af-edge af-edge--out">A reasoned outcome, or a documented gap</p>
 
   <p class="af-foot">
-    The eight are interdependent, not a sequence: a student meets them as one system, or meets the gap
-    where one is missing. Each is scored in the <a href={url('/standard/')}>ASE Standard</a>.
+    These eight of the Standard's twelve are interdependent, not a sequence: a student meets them as one system, or meets the gap
+    where one is missing. Each is scored in the <a href={url('/standard/')}>{STANDARD_NAME}</a>.
   </p>
 </div>
 

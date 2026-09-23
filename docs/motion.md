@@ -1,5 +1,9 @@
 # Motion
 
+> Updated after the 2026 StudentSafe Europe rebrand. The homepage hero sequence, the slogan
+> marquee, the cursor spotlight and the magnetic-pull effect were removed, and their scripts
+> deleted. The tables below describe only what still ships.
+
 How this site moves, and the rules that keep it accessible, private and fast.
 
 ## Principles
@@ -38,15 +42,15 @@ Defined once at the top of `src/styles/motion.css`.
 | `--dur-ui-out` | `165ms` | Exit ≈ 75% of `--dur-ui` |
 | `--dur-reveal-out` | `450ms` | Exit ≈ 75% of `--dur-reveal` |
 
-Layers are semantic, never `999`: `--z-base`, `--z-spotlight`, `--z-raised`,
-`--z-menu`, `--z-header`, `--z-progress`.
+Layers are semantic, never `999`: `--z-base`, `--z-raised`, `--z-menu`, `--z-header`,
+`--z-progress`.
 
 ## Guards
 
 - `@media (prefers-reduced-motion: reduce)` in `global.css` already disables every
   transition and animation. `motion.css` adds what that rule cannot reach: view
   transitions, `animation-timeline`, and `view-transition-name`.
-- `@media print` disables animation and hides the marquee, progress bar and spotlight.
+- `@media print` disables animation and hides the reading-progress rail.
 - **A CSS rule cannot stop the Web Animations API.** Every JavaScript effect therefore
   checks `matchMedia('(prefers-reduced-motion: reduce)')` itself, listens for changes,
   and renders its final state instantly when motion is unwelcome.
@@ -70,13 +74,6 @@ build time is built in Astro. No CDN, no remote font, no `fetch`, no `data:` URI
 | Site | `::view-transition-old(root)` | Navigation | 150 ms | `--ease-out-quart` | CSS `@view-transition` | Disabled |
 | Site | `::view-transition-new(root)` | Navigation | 280 ms | `--ease-out-quart` | CSS `@view-transition` | Disabled |
 | Site | `.site-header` | Navigation | — | — | `view-transition-name`, held still | Name removed |
-| Home | `.ss-mark` | Load | 160 ms | `--ease-out-quart` | CSS `stamp-in`, scale 0.92→1 | Static mark |
-| Home | `.ss-dots` | Load | 500 ms then out | steps | CSS, gated by `hero.ts` | Never rendered |
-| Home | `.ss-word` | Load + 560 ms | 140 ms | `--ease-out-quart` | CSS `word-in` | Visible immediately |
-| Home | `#hero-title` words | Load | 800 ms, 70 ms stagger | `--ease-out-expo` | CSS `word-rise` behind a mask | Static headline |
-| Home | `.m-hero .m-bar` | Load + 900 ms | 420 ms | `--ease-out-quart` | CSS `bar-draw`, `background-size` 0→100% | Full underline |
-| Home | `.m-hero-foot::before` | Load + 220 ms | 500 ms | `--ease-out-quart` | CSS `rule-draw`, `scaleX` | Full rule |
-| Home | `.m-lede`, hero CTAs | Load + 260–380 ms | 420 ms | `--ease-out-expo` | CSS `rise-in` | Visible immediately |
 
 The hero sequence finishes at 1.32 s. The lede and both buttons are fully opaque by
 700 ms and are clickable for the whole sequence, because nothing clips or overlays them.
@@ -87,17 +84,6 @@ The `h1` is the LCP element and starts at 0 ms.
 
 | Element | Trigger | Duration | Easing | How | Reduced motion |
 | --- | --- | --- | --- | --- | --- |
-| `.mq-track` | Load | 40 s loop | linear | CSS `mq-scroll`, duplicated track at −50% | Static, control removed |
-| `.mq-toggle` | Click | 220 ms | `--ease-out-quart` | CSS; `marquee.ts` owns the state | Not rendered |
-| `.m-statement .sw` | Scroll | scroll-linked | linear | `view-timeline`, per-word `animation-range` from `--i` | Fully inked |
-| `.m-statement .m-bar` | Scroll | scroll-linked | linear | `view-timeline`, `background-size` | Full underline |
-| `.m-art-num` | In view | 180 ms, 90 ms stagger | `--ease-out-quart` | CSS `stamp-num`, scale 1.15 → 1 | Static |
-| `.m-articles li::before` | In view | 420 ms | `--ease-out-quart` | CSS `rule-draw`, `scaleX` | Full rule |
-| `.m-dem-num > span` | In view | 700 ms, 110 ms stagger | `--ease-out-expo` | CSS `word-rise` behind a mask | Static |
-| `.m-cell` | In view | 260 ms, 16 ms per cell | `--ease-out-quart` | CSS `cell-in` | Static |
-| `.m-cell[data-on]::before/after` | In view | 900 ms ×2 | `--ease-out-quart` | CSS `ring`, exactly two, then stop | Not shown |
-| `.m-scope-num` copy | In view | 900 ms | quartic out | `reveal.ts`, `textContent` on an aria-hidden copy | Final number at once |
-| `.m-triad > span` | In view | 520 ms, 150 ms stagger | `--ease-out-quart` | CSS `wipe-in`, `clip-path` | Static |
 
 ### Site-wide
 
@@ -105,13 +91,11 @@ The `h1` is the LCP element and starts at 0 ms.
 | --- | --- | --- | --- | --- | --- |
 | `.btn-primary::before` | Hover / focus-visible | 220 ms | `--ease-out-quart` | CSS `scaleX` fill wipe | No wipe |
 | `.btn` | Press | 120 ms | `--ease-out-quart` | CSS `--press: 0.97` | No scale |
-| `[data-magnetic]` | Pointer move | ≤6 px, 400 ms back | `--ease-out-quart` | `pointer.ts` writes `--mx`/`--my` | Disabled |
 | `.m-more span` | Hover / focus-visible | 350 ms | `--ease-out-quart` | CSS `arrow-cycle`, out right, in from left | Static |
 | `.m-more::after` | Hover / focus-visible | 220 ms | `--ease-out-quart` | CSS `scaleX` rule redraw | Static |
 | `.nav a::after` | Hover / focus-visible | 220 ms | `--ease-out-quart` | CSS `scaleX` from the left | Static |
 | `.mark-bar` | Hover | 220 ms | `--ease-out-quart` | CSS `scaleX(1.35)`, `transform-box: fill-box` | Static |
 | `.reading-progress` | Scroll | scroll-linked | linear | `animation-timeline: scroll(root)` | `display: none` |
-| `section.on-navy::before` | Pointer move | 220 ms fade | `--ease-out-quart` | `pointer.ts` writes `--sx`/`--sy` | `display: none` |
 | `.nav[data-open]` | Menu toggle | 240 ms | `--ease-out-quart` | CSS `clip-path` + `@starting-style` | Instant |
 | `.nav li` | Menu open | 260 ms, 30 ms stagger | `--ease-out-quart` | CSS `nav-item` | Static |
 | `.nav-toggle svg path` | Menu toggle | 220 ms | `--ease-out-quart` | CSS opacity + rotate morph | Instant swap |
@@ -130,14 +114,13 @@ The `h1` is the LCP element and starts at 0 ms.
 | Records | `.score-pips i.on` | In view | 200 ms, 70 ms stagger | `--ease-out-quart` | CSS `pip-in` | Filled |
 | Records | `.matrix details` | Toggle | 220 ms | `--ease-out-quart` | `interpolate-size` + `::details-content` | Snaps, as before |
 | Records | `.matrix .chev` | Toggle | 220 ms | `--ease-out-quart` | CSS rotate | Static |
-| 404 | `.lost-dots i` | Load | 1400 ms loop | steps | CSS `dot-blink` | Static dots |
 
-## The one loop on the site
+## Nothing loops
 
-The 404 typing dots are the only animation that repeats forever. They sit on a page
-with nothing to read and a way out, they are `aria-hidden`, and they carry no
-meaning. Everything else that repeats — the marquee — has a pause control, and
-everything else that plays does so once.
+No animation on the site repeats indefinitely. The marquee that once did was removed with
+the 2026 rebrand, along with the cursor spotlight, the magnetic pull on buttons and the
+homepage hero sequence; `marquee.ts`, `pointer.ts` and `hero.ts` were deleted with them.
+What remains plays once, on entry, or responds to an interaction.
 
 ## What is deliberately still
 

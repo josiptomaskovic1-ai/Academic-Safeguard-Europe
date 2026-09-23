@@ -65,6 +65,13 @@ const libraryCount = getEvidence().length;
 // How much of this university's picture rests on the one 2007 document.
 const restOnThisSource = Object.values(inst.safeguards).filter((x) => x.source_ids?.includes(src.id)).length;
 const asAt = [croatia.last_reviewed, inst.last_reviewed].filter(Boolean).sort().at(-1) ?? null;
+// Records keep the methodology version they were researched under; v0.1.1 only clarified a
+// publication rule (methodology/changelog.md). Never print the rubric's version as the version
+// the findings were assessed against. Asserted so the copy cannot drift from the data.
+const recordVersion = croatia.methodology_version;
+if (inst.methodology_version !== recordVersion) {
+  throw new Error('Evidence page: specimen records carry different methodology versions; the dateline can no longer name one.');
+}
 const lowerLevelRule = rubric.general_rules.find((g) => g.startsWith('Where two levels are plausible'));
 const verifiedMeaning = rubric.verification_statuses.find((v) => v.value === 'verified')?.meaning ?? '';
 
@@ -110,7 +117,7 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
         Nobody has checked it yet. That is true of all {researched.length}.
       </p>
       <p class="ev-dateline">
-        Records as at <LastReviewed date={asAt} />. Assessed against StudentSafe Standard v{rubric.methodology_version}, a {rubric.status.replace(/-/g, ' ')}.
+        Records as at <LastReviewed date={asAt} />. Assessed against StudentSafe Standard v{recordVersion}, a {rubric.status.replace(/-/g, ' ')}{recordVersion !== rubric.methodology_version && <> — the current rubric is v{rubric.methodology_version}, which changed only a publication rule</>}.
       </p>
 
       <div class="ev-mount">
@@ -442,7 +449,7 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
           </p>
           <p class="ev-links">
             <a class="ev-link" href={url('/take-action/#not-a-reporting-service')}>Where to get help instead</a>
-            <a class="ev-link" href={url('/methodology/#11-known-limitations-of-v01')}>Known limitations of v{rubric.methodology_version}</a>
+            <a class="ev-link" href={url('/methodology/#11-known-limitations-of-v01')}>Known limitations of v0.1</a>
           </p>
         </div>
 

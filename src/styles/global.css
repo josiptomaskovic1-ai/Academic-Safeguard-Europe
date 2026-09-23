@@ -820,13 +820,7 @@ main.campaign { padding-block: 0; }
 .help-block .subhead { margin-top: 0; color: var(--ink); }
 .help-text { font: 400 clamp(1.1rem, 1.6vw, 1.3rem)/1.5 var(--serif); }
 .on-navy .muted { color: var(--ink-2); }
-
-
-/* ---------- home: the Manifesto ---------- */
-.m-section { padding-block: var(--pad); }
 .m-folio { display: flex; align-items: baseline; gap: 1.1rem; margin: 0 0 clamp(2.5rem, 6vw, 5rem); padding-top: 1.1rem; border-top: 6px solid var(--line); font: 700 var(--fs-label)/1.2 var(--sans); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); }
-.m-folio-num { font: 700 1.5rem/1 var(--serif); letter-spacing: 0; color: var(--mark); }
-.m-title { max-width: 14ch; margin: 0 0 clamp(2.5rem, 6vw, 4.5rem); font: 700 var(--fs-display)/0.98 var(--serif); letter-spacing: -0.025em; text-wrap: balance; }
 /* Underline bar: the signal accent under one phrase. Decorative; the phrase is plain text. */
 .m-bar { font-style: inherit; background-image: linear-gradient(var(--signal), var(--signal)); background-repeat: no-repeat; background-size: 100% 0.11em; background-position: 0 96%; padding-bottom: 0.02em; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .m-more { display: inline-flex; min-height: 3rem; align-items: center; gap: 0.6rem; margin-top: clamp(2.5rem, 5vw, 4rem); border-bottom: 3px solid var(--line); color: var(--ink); font: 700 0.9375rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; }
@@ -835,32 +829,12 @@ main.campaign { padding-block: 0; }
 .m-more span { transition: transform 160ms ease; }
 .m-more:hover span { transform: translateX(5px); }
 .m-links { display: flex; flex-wrap: wrap; gap: 0 2.25rem; }
-
-/* Hero */
-.m-hero { padding-block: clamp(3.5rem, 9vw, 4.5rem) clamp(4rem, 9vw, 5rem); }
 .m-hero .ss-mark { margin-bottom: clamp(2.25rem, 4.5vw, 2.25rem); }
-.m-hero h1 { max-width: 12ch; margin: 0; font: 700 var(--fs-hero)/0.88 var(--serif); letter-spacing: -0.035em; color: var(--ink); text-wrap: balance; }
-.m-hero-foot { display: grid; gap: 2rem; margin-top: clamp(2.75rem, 6vw, 3.25rem); padding-top: clamp(1.75rem, 3vw, 2rem); border-top: 1px solid var(--rule-d); }
-.m-lede { max-width: 34ch; margin: 0; font: 400 clamp(1.25rem, 2.1vw, 1.75rem)/1.35 var(--serif); color: var(--ink); }
 .m-hero .actions { margin: 0; gap: 0.9rem; }
-@media (min-width: 60rem) { .m-hero-foot { grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 3rem; } }
 
 /* 01 Problem */
 .m-statement { max-width: 18ch; margin: 0; font: 400 var(--fs-statement)/1.04 var(--serif); letter-spacing: -0.02em; text-wrap: pretty; }
 .m-statement em { font-style: italic; font-weight: 700; }
-
-/* 02 Guarantees */
-.m-articles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--rule); }
-.m-articles li { margin: 0; display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); align-items: baseline; gap: 1rem; padding-block: clamp(1.4rem, 3vw, 2.25rem); border-bottom: 1px solid var(--rule); }
-.m-art-num { font: italic 700 clamp(1.8rem, 5vw, 4.25rem)/1 var(--serif); color: var(--mark); }
-.m-articles h3 { margin: 0; font: 400 clamp(1.6rem, 3.4vw, 3rem)/1.08 var(--serif); letter-spacing: -0.015em; text-wrap: pretty; hyphens: manual; }
-.m-art-text { max-width: 44ch; margin: 0.6rem 0 0; font: 400 clamp(0.9375rem, 1.1vw, 1.0625rem)/1.5 var(--sans); color: var(--ink-3); }
-@media (min-width: 56rem) {
-  .m-articles { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: clamp(2rem, 5vw, 5rem); border-top: 0; }
-  .m-articles li { grid-template-columns: minmax(0, 1fr); align-items: start; gap: 1.25rem; min-height: 11rem; border-top: 1px solid var(--rule); border-bottom: 0; }
-  .m-articles li:nth-last-child(-n+2) { border-bottom: 1px solid var(--rule); }
-}
-@media (max-width: 44.999rem) { .m-articles li { grid-template-columns: 3rem minmax(0, 1fr); } }
 
 /* 03 Demands: huge numerals */
 .m-demands { list-style: none; margin: 0; padding: 0; }
@@ -868,43 +842,16 @@ main.campaign { padding-block: 0; }
 .m-demands li:last-child { border-bottom: 3px solid var(--line); }
 .m-dem-num { font: 700 clamp(4rem, 14vw, 12rem)/0.85 var(--serif); letter-spacing: -0.05em; color: var(--mark); }
 .m-demands h3 { max-width: 26ch; margin: 0; font: 800 clamp(1.25rem, 2.8vw, 2.4rem)/1.1 var(--sans); letter-spacing: -0.01em; text-wrap: balance; }
-.m-dem-text { max-width: 52ch; margin: 0.55rem 0 0; font: 400 clamp(0.9375rem, 1.1vw, 1.0625rem)/1.55 var(--sans); color: var(--ink-2); }
-
-/* 04 Evidence */
-.m-evidence { display: grid; gap: clamp(3rem, 6vw, 5rem); }
-.m-evidence > * { min-width: 0; }
-.m-evidence .m-title { margin-bottom: 1.75rem; }
 .m-evidence .m-more { margin-top: 0; }
 .m-evidence .m-links { margin-top: 2.5rem; }
-.m-body { max-width: 36ch; margin: 0; font: 400 clamp(1.2rem, 1.8vw, 1.5rem)/1.45 var(--serif); color: var(--ink); }
-.m-scope { margin: 0; }
-.m-scope-figure { display: flex; align-items: flex-end; gap: 1.1rem; margin: 0 0 1.5rem; }
-.m-scope-num { font: 700 clamp(6.5rem, 20vw, 14rem)/0.78 var(--serif); letter-spacing: -0.04em; color: var(--signal); }
-.m-scope-cap { padding-bottom: 0.3rem; font: 700 0.875rem/1.3 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
-.m-grid { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: clamp(3px, 0.6vw, 5px); max-width: 34rem; }
-.m-cell { aspect-ratio: 1; border: 2px solid var(--muted-d); }
-.m-cell[data-on] { background: var(--signal); border-color: var(--signal); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-.m-legend { display: grid; gap: 0.6rem; margin-top: 1.25rem; font-size: 0.9375rem; line-height: 1.4; color: var(--ink-3); }
-.m-key { display: flex; align-items: flex-start; gap: 0.7rem; margin: 0; }
-.m-sw { flex: none; width: 14px; height: 14px; margin-top: 0.2em; border: 2px solid var(--muted-d); }
-.m-sw[data-on] { background: var(--signal); border-color: var(--signal); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-@media (min-width: 60rem) { .m-evidence { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: end; } }
-
-/* 05 Take action */
-.m-triad { margin: 0 0 clamp(2.75rem, 6vw, 4.5rem); font: 700 clamp(2.3rem, 7.4vw, 7rem)/1.02 var(--serif); letter-spacing: -0.03em; }
-.m-triad > span { display: block; }
-.m-triad > span + span { margin-top: 0.04em; }
 /* Ink bar behind the last line: navy block, signal type. */
 .m-triad .m-ink { display: inline; padding: 0 0.12em; background: var(--signal-ink); color: var(--signal); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 .m-triad .m-ink-line { margin-top: 0.2em; line-height: 1.24; }
-/* Keep "Safe from retaliation." on one ink bar on the narrowest phones. */
-@media (max-width: 24rem) { .m-triad { font-size: 9.4vw; } }
 @media (max-width: 30rem) { .m-hero .actions .btn, .m-action .actions .btn { width: 100%; } }
 @media (forced-colors: active) {
   .m-bar { text-decoration: underline; }
   .m-triad .m-ink { border: 2px solid CanvasText; }
   .ss-mark, .nav a.nav-action { border: 2px solid CanvasText; }
-  .m-cell[data-on], .m-sw[data-on] { background: CanvasText; }
   .hero-kicker::before, .page-hero .c-kicker::before, .folio { forced-color-adjust: auto; }
   .hero-kicker::before, .page-hero .c-kicker::before { background: CanvasText; }
   .badge.needs_review { border-color: CanvasText; }
@@ -2237,15 +2184,12 @@ main.campaign { padding-block: 0; }
   .doc-grid, .record-head { display: block; }
   body { font-size: 11pt; }
   a { color: inherit; }
-  .m-section, .m-hero { padding-block: 1.5rem; break-inside: avoid; }
   .m-bar { background: none; text-decoration: underline; }
   .m-triad .m-ink { background: none; color: #000; text-decoration: underline; }
   .ss-mark { border: 1.5pt solid #000; }
   .brand-sub, .m-scope-num { color: #000; }
   .brand-mark .mark-bar { fill: #000; }
   .ss-mark::after { display: none; }
-  .m-cell, .m-sw { border-color: #000; }
-  .m-cell[data-on], .m-sw[data-on] { background: #000; }
   .prose a[href^='http']::after, .citation a[href^='http']::after { content: ' <' attr(href) '>'; font-size: 0.8em; word-break: break-all; }
   /* Show closed evidence panels even without JavaScript (Chromium 131+); print.js opens them elsewhere. */
   details::details-content { content-visibility: visible; display: block; }

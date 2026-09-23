@@ -92,7 +92,7 @@ const csp = [
           <span>Menu</span>
         </button>
         <nav class="nav" id="site-navigation" aria-label="Main" data-site-navigation>
-          <ul>
+          <ul role="list">
             {nav.map((n, i) => {
               const active = isCurrent(n);
               return <li style={`--i: ${i}`}><a href={url(n.href)} class:list={{ 'nav-action': n.action }} aria-current={active ? 'page' : undefined}>{n.label}{active && <span class="nav-current" aria-hidden="true">Current</span>}</a></li>;
@@ -102,7 +102,7 @@ const csp = [
       </div>
     </header>
 
-    <main id="main" class:list={{ campaign }}>
+    <main id="main" tabindex="-1" class:list={{ campaign }}>
       <slot />
     </main>
 
@@ -116,7 +116,7 @@ const csp = [
             <p class="footer-facts">No cookies · No analytics · Code MIT · Data and texts <a href={repoFile('LICENSE-DATA.md')}>CC BY 4.0</a></p>
           </div>
           <nav aria-label="Footer">
-            <ul class="footer-links">
+            <ul class="footer-links" role="list">
               <li><a href={url('/about/')}>About</a></li>
               <li><a href={url('/standard/')}>{STANDARD_NAME} v{rubric.methodology_version}</a></li>
               <li><a href={url('/methodology/')}>Methodology</a></li>

@@ -33,11 +33,11 @@ const statuses = Object.keys(COUNTRY_STATUS_LABELS).filter((s) => !compact || co
 const anyProvisional = countries.some(({ cov }) => cov.provisional > 0);
 ---
 <div class="tilemap-block">
-  <ul class="tilemap" data-reveal aria-label="EU Member States; larger layouts are arranged approximately by geography">
+  <ul class="tilemap" role="list" data-reveal aria-label="EU Member States; larger layouts are arranged approximately by geography">
     {countries.map(({ c, cov }) => {
       const [col, row] = GRID[c.iso_code];
       const provisional = cov.provisional > 0;
-      const text = `${c.name}: ${COUNTRY_STATUS_LABELS[c.research_status]}${provisional ? (cov.verified === 0 ? ', all findings provisional' : ', some findings provisional') : ''}`;
+      const text = `${c.iso_code} — ${c.name}: ${COUNTRY_STATUS_LABELS[c.research_status]}${provisional ? (cov.verified === 0 ? ', all findings provisional' : ', some findings provisional') : ''}`;
       return (
         <li style={`grid-column:${col};grid-row:${row};--d:${rippleDelay(col, row)}`}>
           <a href={url(`/countries/${c.slug}/`)} data-status={c.research_status} aria-label={text} title={text}>
@@ -49,7 +49,7 @@ const anyProvisional = countries.some(({ cov }) => cov.provisional > 0);
       );
     })}
   </ul>
-  <ul class="legend" aria-label="Legend">
+  <ul class="legend" role="list" aria-label="Legend">
     {statuses.map((s) => (
       <li>
         <span class="swatch tilemap-swatch" data-status={s} aria-hidden="true"></span>

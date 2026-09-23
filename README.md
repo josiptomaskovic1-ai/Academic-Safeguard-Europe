@@ -13,7 +13,7 @@ ASE evaluates institutional safeguards and published rules. **It does not rate i
 
 | Path | Contents |
 |---|---|
-| `standard/` | ASE Safeguarding Standard v0.1, independent draft (prose) |
+| `standard/` | StudentSafe Standard v0.1, independent draft (prose) |
 | `methodology/` | Scoring methodology, the machine-readable **scoring rubric** (`scoring-rubric.yml`) and the changelog |
 | `data/countries/` | One record per EU Member State (all 27) |
 | `data/institutions/` | Institution profiles, one folder per country |

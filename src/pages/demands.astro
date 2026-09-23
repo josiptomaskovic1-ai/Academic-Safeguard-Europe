@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Folio from '../components/Folio.astro';
 import ActionBand from '../components/ActionBand.astro';
 import { url } from '../lib/url';
-import { DEMANDS, CAMPAIGN_NAME } from '../lib/campaign';
+import {DEMANDS, CAMPAIGN_NAME, STANDARD_NAME } from '../lib/campaign';
 import { getRubric } from '../lib/data';
 
 const rubric = getRubric();
@@ -33,7 +33,7 @@ const actors = [
   { who: 'Universities and student representatives', role: 'Adopting and monitoring safeguards now, without waiting for legislation.' },
 ];
 ---
-<Base title="Our Demands" description="What Academic Safeguard Europe wants Europe to do: minimum safeguards against abuse of academic power, safeguarding in higher-education quality, and public monitoring." campaign>
+<Base title="Our Demands" description="What StudentSafe Europe wants Europe to do: minimum safeguards against abuse of academic power, safeguarding in higher-education quality, and public monitoring." campaign>
   <PageHero tone="navy" crumbs={[{ label: 'Our Demands' }]} kicker={`${CAMPAIGN_NAME} · Our demands`}>
     Enforceable safeguards for <span class="m-bar">every student</span> in Europe.
     <Fragment slot="lede">Three reforms: safer to report, fairer to decide, easier to put right.</Fragment>
@@ -98,7 +98,7 @@ const actors = [
       <ul class="ruled-index ruled-index--4" role="list">
         {actors.map((a) => <li><h3>{a.who}</h3><p>{a.role}</p></li>)}
       </ul>
-      <p class="c-note distinction-note">These demands are advocacy and can be argued with. The <a href={url('/standard/')}>ASE Standard v{rubric.methodology_version}</a> is the separate research framework, so findings follow the evidence, not the campaign.</p>
+      <p class="c-note distinction-note">These demands are advocacy and can be argued with. The <a href={url('/standard/')}>{STANDARD_NAME} v{rubric.methodology_version}</a> is the separate research framework, so findings follow the evidence, not the campaign.</p>
     </div>
   </section>
 
