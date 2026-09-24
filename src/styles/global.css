@@ -243,7 +243,7 @@ main { padding-block: 0; counter-reset: folio; }
 .brand:hover { color: var(--bone); }
 .brand > span { min-width: 0; }
 .brand-mark { width: 36px; height: 36px; flex: none; color: var(--bone); }
-.brand-mark .mark-bar { fill: var(--signal); }
+.brand-mark .mark-bar { fill: var(--bone); }
 .brand-name { display: block; font: 700 1.08rem/1.15 var(--serif); letter-spacing: -0.005em; }
 .brand-sub { display: block; margin-top: 0.15rem; font: 600 0.8125rem/1.2 var(--sans); color: var(--muted-d); letter-spacing: 0.02em; }
 .nav-toggle { display: none; min-width: 5.25rem; min-height: 2.75rem; align-items: center; justify-content: center; gap: 0.45rem; padding: 0.55rem 0.8rem; border: 2px solid var(--bone); border-radius: 0; background: transparent; color: var(--bone); font: 700 0.95rem/1 var(--sans); cursor: pointer; }
@@ -646,7 +646,7 @@ main.campaign { padding-block: 0; }
 /* .on-navy supplies the pale mineral ground; no override needed. */
 .page-hero .breadcrumbs { margin: 0 0 clamp(1.5rem, 4vw, 3rem); }
 .hero-kicker, .page-hero .c-kicker { display: flex; align-items: center; gap: 0.8rem; margin: 0 0 1.25rem; font: 700 var(--fs-label)/1.2 var(--sans); letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); }
-.hero-kicker::before, .page-hero .c-kicker::before { content: ''; flex: none; width: 2.5rem; height: 6px; background: var(--mark); }
+.hero-kicker::before, .page-hero .c-kicker::before { content: ''; flex: none; width: clamp(3rem, 8vw, 3.75rem); height: 6px; background-color: transparent; background-image: linear-gradient(var(--mark), var(--mark)), linear-gradient(var(--mark), var(--mark)); background-repeat: no-repeat; background-size: 1.25rem 100%, calc(100% - 1.75rem) 100%; background-position: 0 0, 1.75rem 0; }
 .hero-kicker .sg-icon { width: 1.25rem; height: 1.25rem; }
 .hero-grid { display: grid; gap: 2rem 4rem; grid-template-columns: minmax(0, 1fr); }
 .hero-grid > * { min-width: 0; }
@@ -853,7 +853,7 @@ main.campaign { padding-block: 0; }
   .m-triad .m-ink { border: 2px solid CanvasText; }
   .ss-mark, .nav a.nav-action { border: 2px solid CanvasText; }
   .hero-kicker::before, .page-hero .c-kicker::before, .folio { forced-color-adjust: auto; }
-  .hero-kicker::before, .page-hero .c-kicker::before { background: CanvasText; }
+  .hero-kicker::before, .page-hero .c-kicker::before { background-color: transparent; background-image: linear-gradient(CanvasText, CanvasText), linear-gradient(CanvasText, CanvasText); }
   .badge.needs_review { border-color: CanvasText; }
   .band-title .m-ink, .featured-tag { border: 2px solid CanvasText; }
 }
@@ -1252,7 +1252,8 @@ main.campaign { padding-block: 0; }
   .about .ab-hero-side { margin-top: 0.5rem; }
   .about .ab-actions { margin-top: 0; }
 }
-.about .ab-kicker { margin: 0 0 0.6rem; font: 700 0.8125rem/1.3 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.about .ab-kicker { display: flex; align-items: center; gap: 0.8rem; margin: 0 0 0.75rem; font: 700 0.8125rem/1.3 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); }
+.about .ab-kicker::before { content: ''; flex: none; width: clamp(3rem, 8vw, 3.75rem); height: 6px; background-color: transparent; background-image: linear-gradient(var(--mark), var(--mark)), linear-gradient(var(--mark), var(--mark)); background-repeat: no-repeat; background-size: 1.25rem 100%, calc(100% - 1.75rem) 100%; background-position: 0 0, 1.75rem 0; }
 .about .ab-hero h1 {
   margin: 0;
   font: 700 var(--ab-h1)/1.03 var(--serif);
@@ -1901,7 +1902,7 @@ main.campaign { padding-block: 0; }
 }
 .home .hm-h2 {
   margin: 0 0 clamp(1.25rem, 2.4vw, 1.9rem);
-  font: 700 clamp(1.35rem, 2.2vw, 1.75rem)/1.2 var(--sans);
+  font: 700 clamp(1.5rem, 2.6vw, 2.1rem)/1.15 var(--serif);
   letter-spacing: -0.01em;
   color: var(--ink);
 }
@@ -2105,13 +2106,13 @@ main.campaign { padding-block: 0; }
   border-top: 1px solid var(--rule);
 }
 .home .hm-paths h3 {
-  margin: 0 0 0.4rem;
-  font: 700 1rem/1.3 var(--sans);
+  margin: 0 0 0.45rem;
+  font: 700 1.125rem/1.3 var(--sans);
   color: var(--ink);
 }
 .home .hm-paths p {
   margin: 0;
-  font: 400 0.9375rem/1.55 var(--sans);
+  font: 400 1rem/1.55 var(--sans);
   color: var(--ink-3);
 }
 .home .hm-boundary {

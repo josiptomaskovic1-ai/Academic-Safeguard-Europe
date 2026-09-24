@@ -391,7 +391,7 @@
 @media (hover: hover) and (pointer: fine) {
   .brand:hover .mark-bar,
   .brand:focus-visible .mark-bar {
-    transform: scaleX(1.35);
+    transform: translateX(3px);
   }
 }
 
