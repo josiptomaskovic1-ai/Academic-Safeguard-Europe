@@ -255,15 +255,15 @@ main { padding-block: 0; counter-reset: folio; }
 .nav ul { list-style: none; display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; margin: 0; padding: 0; }
 .nav li + li { margin: 0; }
 .nav a { display: inline-flex; min-height: 2.75rem; align-items: center; padding: 0 0.75rem; border-bottom: 3px solid transparent; border-top: 3px solid transparent; color: var(--bone); font-size: 0.9375rem; font-weight: 550; text-decoration: none; }
-.nav a:hover { color: var(--bone); border-bottom-color: var(--signal); }
-.nav a[aria-current='page'] { font-weight: 700; border-bottom-color: var(--signal); }
+.nav a:hover { color: var(--bone); border-bottom-color: var(--muted-d); }
+.nav a[aria-current='page'] { font-weight: 700; border-bottom-color: var(--bone); }
 .nav a:focus-visible { outline-offset: -3px; }
 @media (min-width: 75rem) { .nav a { font-size: 1rem; } }
 .nav-current { display: none; }
 /* Take Action: the one persistent call to action, set in signal yellow. */
-.nav a.nav-action { margin-left: 0.5rem; padding: 0 1.1rem; border: 0; background: var(--signal); color: var(--signal-ink); font-weight: 700; }
-.nav a.nav-action:hover { background: var(--bone); color: var(--signal-ink); }
-.nav a.nav-action[aria-current='page'] { box-shadow: inset 0 -4px 0 var(--signal-ink); }
+.nav a.nav-action { margin-left: 0.5rem; padding: 0 1.1rem; border: 0; background: var(--bone); color: var(--navy); font-weight: 700; }
+.nav a.nav-action:hover { background: var(--muted-d); color: var(--navy); }
+.nav a.nav-action[aria-current='page'] { box-shadow: inset 0 -4px 0 var(--navy); }
 .nav a.nav-action:focus-visible { outline-color: var(--bone); outline-offset: 3px; }
 /* Compact navigation: all destinations are in one labelled, keyboard-accessible panel. */
 @media (max-width: 61.999rem) {
@@ -300,7 +300,7 @@ main { padding-block: 0; counter-reset: folio; }
 .footer-links { list-style: none; display: flex; flex-wrap: wrap; gap: 0 0.25rem; max-width: 36rem; margin: -0.6rem 0 0 -0.6rem; padding: 0; }
 .footer-links li { margin: 0; }
 .footer-links a { display: inline-flex; min-height: 2.75rem; align-items: center; padding: 0 0.6rem; color: var(--bone); text-underline-offset: 4px; }
-.footer-links a:hover { color: var(--signal); }
+.footer-links a:hover { color: var(--bone); }
 .footer-links a:hover, .footer-links a:focus-visible { text-decoration-thickness: 2px; }
 @media (min-width: 60rem) { .footer-links { justify-content: flex-end; margin-right: -0.6rem; } }
 /* Phones: a two-column ruled index instead of a ragged inline wrap. */
@@ -657,7 +657,7 @@ main.campaign { padding-block: 0; }
 .page-hero:not(.on-navy) { padding-bottom: 0; }
 .page-hero:not(.on-navy) > .container::after { content: ''; display: block; height: 6px; margin-top: clamp(1.75rem, 4vw, 2.75rem); background: var(--line); }
 /* Navy tone: the homepage hero at inner-page scale. */
-.page-hero--navy h1 { font: 700 var(--fs-h1-c)/0.95 var(--serif); letter-spacing: -0.03em; max-width: 15ch; color: var(--ink); }
+.page-hero--navy h1 { font: 700 var(--fs-h1-c)/1.08 var(--serif); letter-spacing: -0.03em; max-width: 15ch; color: var(--ink); }
 .page-hero--navy .hero-lede { max-width: 36ch; margin: clamp(2rem, 4vw, 3.25rem) 0 0; padding-top: clamp(1.25rem, 2.5vw, 2rem); border-top: 1px solid var(--rule); font: 400 var(--fs-lede)/1.35 var(--serif); color: var(--ink-2); }
 .hero-foot { display: grid; gap: 1.5rem 3rem; margin-top: clamp(2rem, 4vw, 3.25rem); padding-top: clamp(1.25rem, 2.5vw, 2rem); border-top: 1px solid var(--rule-d); }
 .hero-foot .hero-lede { margin: 0; padding: 0; border: 0; }
@@ -1191,8 +1191,8 @@ main.campaign { padding-block: 0; }
    own component-scoped styles.
    --------------------------------- */
 .about {
-  --ab-max: 78rem;
-  --ab-gut: clamp(1.25rem, 4vw, 3.5rem);
+  --ab-max: var(--wide-c);
+  --ab-gut: var(--gutter-c);
   --ab-sec: clamp(1.9rem, 3vw, 2.9rem);
   --ab-h1: clamp(1.9rem, 4vw, 2.9rem);
   --ab-h2: clamp(1.4rem, 2.4vw, 1.85rem);
@@ -2075,7 +2075,7 @@ main.campaign { padding-block: 0; }
   max-width: 68ch;
   margin: clamp(1.25rem, 2.4vw, 1.9rem) 0 0;
   padding: 0.9rem 1.1rem;
-  border-left: 3px solid var(--alert, #9A4A41);
+  border-left: 3px solid var(--disputed);
   background: var(--surface);
   font: 400 0.9375rem/1.6 var(--sans);
   color: var(--ink-2);
@@ -2211,6 +2211,11 @@ main.campaign { padding-block: 0; }
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
+
+/* The campaign mark sits on the brand ground in the footer, where a signal-green
+   field is 1.46:1 against #1F4A45 and the speech-bubble shape disappears. */
+.on-brand .ss-mark { background: var(--bone); color: var(--navy); }
+.on-brand .ss-mark::after { border-top-color: var(--bone); }
 
 /* ---------- print ---------- */
 @media print {

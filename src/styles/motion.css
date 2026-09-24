@@ -364,7 +364,7 @@
   right: 0;
   bottom: -3px;
   height: 3px;
-  background: var(--signal);
+  background: var(--muted-d);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform var(--dur-ui) var(--ease-out-quart);
@@ -373,10 +373,12 @@
 .nav a:focus-visible::after {
   transform: scaleX(1);
 }
-/* The current page keeps its marker with no motion at all. */
+/* The current page keeps its marker with no motion at all, and reads brighter
+   than the hover state so the two are never confused. */
 .nav a[aria-current='page']::after {
   transform: scaleX(1);
   transition: none;
+  background: var(--bone);
 }
 /* The action pill and the mobile panel draw their own current-page marks. */
 .nav a.nav-action::after {
