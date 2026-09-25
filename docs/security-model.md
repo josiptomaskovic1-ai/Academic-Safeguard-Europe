@@ -8,7 +8,7 @@ Reviewed 2026-09-15 against Astro 7.3.2.
 
 ASE is prerendered HTML, CSS and four small same-origin scripts (mobile menu and evidence accordion, Evidence Library filter, table-of-contents collapse, and a forwarder on `/evidence/` that sends old `#item` links to `/evidence/library/` only when the fragment matches a known item id) plus `public/scripts/print.js`. There is no server code, database, login, cookie, form submission, analytics, third-party script, font, embed or iframe. The five `/data/*.json` exports are static files.
 
-The serif typeface, Literata (SIL Open Font License 1.1, licence text in `public/fonts/Literata-OFL.txt`), is self-hosted as three WOFF2 files under `public/fonts/` and loaded from `'self'` (`font-src 'self'`); no font service is contacted.
+The serif typeface, Literata (SIL Open Font License 1.1, licence text in `public/fonts/Literata-OFL.txt`), is self-hosted as three WOFF2 files under `src/assets/fonts/`. Astro bundles them with base-aware URLs and loads them from `'self'` (`font-src 'self'`); no font service is contacted.
 
 | Asset | Realistic threat | Main controls |
 |---|---|---|
