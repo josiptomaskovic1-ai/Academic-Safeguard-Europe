@@ -52,6 +52,7 @@ Existing English routes are preserved; nothing moves in this pass.
 /standard/            The StudentSafe Standard
 /methodology/         Method, + /methodology/changelog/
 /evidence/            Overview: scope, status, one specimen, index
+/evidence/inside-a-finding/  Optional, source-by-source S02 case study
 /evidence/library/    The reading library
 /europe/ /countries/ /institutions/ /compare/ /sources/ /data/ /corrections/
 ```
@@ -143,6 +144,20 @@ Target: 3–4 desktop viewports, down from 9.3.
 **What stays deliberately unfashionable:** no rounded cards everywhere, no shadows,
 hairline rules instead of borders on everything, and research pages that look like
 documents rather than dashboards.
+
+## Evidence gateway revision (2026-09-25)
+
+The evidence overview is intentionally short: research status, two record routes, one
+quoted finding, an optional 12-safeguard schedule, and a compact limits section. The
+full S02 reasoning, provenance, automated cross-check, and caveats remain available
+on `/evidence/inside-a-finding/`. This keeps the first visit scannable while leaving
+the underlying research inspectable.
+
+The evidence routes use a scoped navy `#112947`, cobalt `#2858C8`, pale blue
+`#EAF0FF`, and coral `#FF7561` palette. Coral marks the provisional status and a
+single decorative edge; text labels carry the meaning. The rest of the site retains
+the light mineral-green system above. Square editorial panels, strong type, and
+ruled records keep the evidence surface part of the same publication.
 
 ## Visual signature
 

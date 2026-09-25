@@ -4,6 +4,7 @@ import '../styles/motion.css';
 import { url, REPO_URL, repoFile } from '../lib/url';
 import { getRubric } from '../lib/data';
 import { CAMPAIGN_NAME, ORG_NAME, ORG_NAME_LEGAL, ORG_SEAT, ORG_DESCRIPTOR, PROGRAMME_NAME, STANDARD_NAME } from '../lib/campaign';
+import literataRomanUrl from '../assets/fonts/literata-latin-opsz-normal.woff2?url';
 
 interface Props {
   title: string;
@@ -67,8 +68,8 @@ const csp = [
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
-    <!-- Self-hosted Literata (OFL, public/fonts): same URL as the @font-face in global.css, served from 'self'. -->
-    <link rel="preload" href={url('/fonts/literata-latin-opsz-normal.woff2')} as="font" type="font/woff2" crossorigin />
+    <!-- Vite gives this self-hosted font the same base-aware URL used by global.css. -->
+    <link rel="preload" href={literataRomanUrl} as="font" type="font/woff2" crossorigin />
 
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
