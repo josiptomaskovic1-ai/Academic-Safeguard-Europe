@@ -1,11 +1,10 @@
 ---
 /**
- * Evidence — the section landing page, built as an exhibit rather than an index.
+ * Evidence — a readable index followed by one source-backed finding in full.
  *
- * The page mounts one real finding (University of Zagreb S02) at full size and then supplies the
- * apparatus a reader needs to check it: the rubric level that was rejected, the document record with
- * its missing archive, the automated cross-check that is explicitly not verification, the live
- * distribution of every result value, the whole schedule of findings, and the limits.
+ * The page opens with the research status and complete schedule, then mounts one real finding
+ * (University of Zagreb S02) at full size with the rubric level that was rejected, document
+ * provenance, automated cross-check, result guide, and limits.
  *
  * Nothing here is hardcoded except the two quoted sentences, which are asserted against the record at
  * build time so the page can never drift from the YAML. Every count is derived.
@@ -52,6 +51,9 @@ if (!croatia) throw new Error('Evidence page: the Croatia record is missing.');
 const allResults = [...countries, ...institutions].flatMap((x) => Object.values(x.safeguards));
 const researched = allResults.filter((x) => x.result !== 'NR');
 const verifiedCount = researched.filter((x) => x.verification === 'verified').length;
+if (researched.some((x) => x.verification !== 'needs_review')) {
+  throw new Error('Evidence page: status copy assumes every published finding is provisional. Update the page before publishing another status.');
+}
 const countOf = (v: ResultValue) => allResults.filter((x) => x.result === v).length;
 const confidenceCount = (v: string) => researched.filter((x) => x.confidence === v).length;
 const startedCountries = countries.filter((c) => hasFindings(c.safeguards)).length;
@@ -106,33 +108,146 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
   campaign
   pageClass="evidence"
 >
-  {/* The exhibit. The document is set larger than our own headline. */}
-  <section class="ev-sec ev-exhibit on-navy" aria-labelledby="page-title">
+  {/* Lead with what can be explored and with the limits of the published work. */}
+  <section class="ev-sec ev-hero on-paper" aria-labelledby="page-title">
     <div class="ev-wrap">
       <Breadcrumbs crumbs={[{ label: 'Evidence' }]} />
-      <h1 id="page-title">Every finding here is one document, one article and a reason.</h1>
-      <p class="ev-lede">
-        Here is one of the {researched.length} in full: the whole of the University of Zagreb’s university-wide
-        protection for a student who reports, as far as we could find it in the university’s own published rules.
-        Nobody has checked it yet. That is true of all {researched.length}.
-      </p>
+      <div class="ev-hero-grid">
+        <div class="ev-hero-copy">
+          <p class="ev-section-tag">Research / Evidence</p>
+          <h1 id="page-title">Explore the evidence behind each finding.</h1>
+          <p class="ev-lede">
+            Read the published rules, see why each level was assigned, and inspect what remains uncertain.
+            This first body of research covers Croatia’s national framework and one university.
+          </p>
+          <div class="ev-actions">
+            <a class="btn btn-primary" href="#all">Browse all {researched.length} findings</a>
+            <a class="ev-link" href="#specimen">See one finding in full</a>
+          </div>
+        </div>
+        <aside class="ev-status" aria-label="Current research status">
+          <p class="ev-status-title">Current research status</p>
+          <p class="ev-status-main"><strong>{researched.length}</strong><span>published findings<br />all provisional</span></p>
+          <dl>
+            <div><dt>Member States researched</dt><dd>{startedCountries} / {countries.length}</dd></div>
+            <div><dt>Independently verified</dt><dd>{verifiedCount}</dd></div>
+          </dl>
+          <p class="ev-status-note">Each finding links to its source and reasoning. A human second reviewer has not yet confirmed any of them.</p>
+        </aside>
+      </div>
       <p class="ev-dateline">
         Records as at <LastReviewed date={asAt} />. Assessed against StudentSafe Standard v{recordVersion}, a {rubric.status.replace(/-/g, ' ')}{recordVersion !== rubric.methodology_version && <> — the current rubric is v{rubric.methodology_version}, which changed only a publication rule</>}.
       </p>
+    </div>
+  </section>
 
-      <nav class="ev-jump" aria-label="On this page">
-        <h2 class="ev-jump-h" id="ev-jump-h">On this page</h2>
-        <ul aria-labelledby="ev-jump-h">
-          <li><a href="#judgement">Why this level</a></li>
-          <li><a href="#provenance">The source</a></li>
-          <li><a href="#crosscheck">Cross-check</a></li>
-          <li><a href="#answers">What a result means</a></li>
-          <li><a href="#all">All {researched.length} findings</a></li>
-          <li><a href="#limits">Limits</a></li>
-        </ul>
-      </nav>
+  <nav class="ev-jump" aria-label="Evidence sections">
+    <div class="ev-wrap ev-jump-inner">
+      <span class="ev-jump-h">Explore</span>
+      <ul>
+        <li><a href="#all">All findings</a></li>
+        <li><a href="#specimen">A finding in full</a></li>
+        <li><a href="#judgement">Why this level</a></li>
+        <li><a href="#provenance">The source</a></li>
+        <li><a href="#crosscheck">Cross-check</a></li>
+        <li><a href="#answers">Result guide</a></li>
+        <li><a href="#limits">Limits</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  {/* The whole evidence base is available before the long-form example. */}
+  <section class="ev-sec ev-overview on-paper" aria-labelledby="all">
+    <div class="ev-wrap">
+      <div class="ev-overview-head">
+        <div>
+          <p class="ev-section-tag">The published record</p>
+          <h2 id="all">All {researched.length} findings.</h2>
+          <p class="ev-intro">
+            Croatia’s national framework and one university are different objects: one sets what institutions must do,
+            the other is what this university has written for itself. Read them side by side, not against each other.
+            Every result shown here is provisional; follow one to inspect its source and reasoning.
+          </p>
+        </div>
+        <a class="ev-link" href="#specimen">How to read a finding</a>
+      </div>
+
+      {/* On phones, house styles turn each row into a labelled stack. */}
+      <div class="ev-table-wrap stack-table" role="region" aria-label="Schedule of findings" tabindex="0">
+        <table class="ev-schedule">
+          <caption class="visually-hidden">Every safeguard in the Standard, with the result recorded for Croatia’s national framework and for the University of Zagreb. All results are provisional.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Safeguard</th>
+              <th scope="col"><a href={url('/countries/croatia/')}>Croatia</a><span class="ev-sub">national framework</span></th>
+              <th scope="col"><a href={url('/institutions/hr-unizg/')}>University of Zagreb</a><span class="ev-sub">university-wide rules</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {schedule.map((row) => (
+              <tr>
+                <th scope="row">
+                  <span class="ev-id">{row.def.id}</span>
+                  <a href={url(`/standard/#${row.def.slug}`)}>{row.def.name}</a>
+                </th>
+                <td data-label="Croatia, national framework">
+                  <a href={url(`/countries/croatia/#sg-${row.def.id.toLowerCase()}`)}>
+                    <SafeguardScore result={row.nat?.result ?? 'NR'} verification={row.nat?.verification} />
+                  </a>
+                </td>
+                <td data-label="University of Zagreb">
+                  <a href={url(`/institutions/hr-unizg/#sg-${row.def.id.toLowerCase()}`)}>
+                    <SafeguardScore result={row.ins?.result ?? 'NR'} verification={row.ins?.verification} />
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ev-coverage">
+        <div>
+          <h3 class="ev-minor">How small this is</h3>
+          <p class="ev-body">{blankCountries} Member States have a record and no research. Nobody has opened their rules. That says how far this work has got, not whether a safeguard is missing.</p>
+        </div>
+        <ResearchLedger items={ledger} label="The scale of the evidence base" />
+      </div>
+
+      <ul class="ev-index" role="list">
+        <li>
+          <a href={url('/evidence/library/')}>Evidence Library</a>
+          <p>{libraryCount} background standards, laws and studies we read for context. Nothing in it sets a score.</p>
+        </li>
+        <li>
+          <a href={url('/data/')}>Open data</a>
+          <p>Every finding, source and rubric entry. The YAML in the repository is canonical. Our own text and data are CC BY 4.0; the documents we cite are not ours to license.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  {/* A real finding remains the page's visual centerpiece. */}
+  <section class="ev-sec ev-exhibit on-navy" aria-labelledby="specimen">
+    <div class="ev-wrap">
+      <p class="ev-section-tag">One finding, opened up / {def.id}</p>
+      <h2 id="specimen">From an article to an assessment.</h2>
+      <p class="ev-intro">This is the University of Zagreb’s university-wide protection for a student who reports, as far as we could find it in its published rules. The assessment is provisional.</p>
 
       <div class="ev-mount">
+        <div class="ev-object">
+          <p class="ev-question"><span class="ev-fieldlabel">We asked</span>{def.question}</p>
+          {/* No cite="" here: check-security.mjs treats any external URL in an attribute as a remote
+              resource. The document is linked, with its access date, in the provenance record below. */}
+          <blockquote class="ev-quote" lang="hr">{QUOTE_HR}</blockquote>
+          <p class="ev-trans"><span class="ev-fieldlabel">Translation</span>{QUOTE_EN}</p>
+          <div class="ev-verdict">
+            <SafeguardScore result={r.result} verification={r.verification} badgeShown />
+            <VerificationBadge status={r.verification} />
+            <span class="ev-reviewed">Reviewed <LastReviewed date={r.reviewed} /></span>
+          </div>
+        </div>
+
         <dl class="ev-plate">
           <div>
             <dt>Safeguard</dt>
@@ -160,18 +275,6 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
           </div>
         </dl>
 
-        <div class="ev-object">
-          <p class="ev-question"><span class="ev-fieldlabel">We asked</span>{def.question}</p>
-          {/* No cite="" here: check-security.mjs treats any external URL in an attribute as a remote
-              resource. The document is linked, with its access date, in the provenance record below. */}
-          <blockquote class="ev-quote" lang="hr">{QUOTE_HR}</blockquote>
-          <p class="ev-trans"><span class="ev-fieldlabel">Translation</span>{QUOTE_EN}</p>
-          <div class="ev-verdict">
-            <SafeguardScore result={r.result} verification={r.verification} badgeShown />
-            <VerificationBadge status={r.verification} />
-            <span class="ev-reviewed">Reviewed <LastReviewed date={r.reviewed} /></span>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -359,81 +462,6 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
     </div>
   </section>
 
-  {/* The whole evidence base at once: the schedule, the ledger, and the number that matters. */}
-  <section class="ev-sec on-paper" aria-labelledby="all">
-    <div class="ev-wrap">
-      <h2 id="all">All {researched.length} findings.</h2>
-      <p class="ev-intro">
-        Croatia’s national framework and one university are different objects: one sets what institutions must do, the
-        other is what this university has written for itself. Read them side by side, not against each other.
-      </p>
-
-      {/* stack-table is the house behaviour under 40rem: each row becomes a labelled card (labels come
-          from the data-label attributes below), so a phone never scrolls this sideways. */}
-      <div class="ev-table-wrap stack-table" role="region" aria-label="Schedule of findings" tabindex="0">
-        <table class="ev-schedule">
-          <caption class="visually-hidden">Every safeguard in the Standard, with the result recorded for Croatia’s national framework and for the University of Zagreb. All results are provisional.</caption>
-          <thead>
-            <tr>
-              <th scope="col">Safeguard</th>
-              <th scope="col"><a href={url('/countries/croatia/')}>Croatia</a><span class="ev-sub">national framework</span></th>
-              <th scope="col"><a href={url('/institutions/hr-unizg/')}>University of Zagreb</a><span class="ev-sub">university-wide rules</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            {schedule.map((row) => (
-              <tr>
-                <th scope="row">
-                  <span class="ev-id">{row.def.id}</span>
-                  <a href={url(`/standard/#${row.def.slug}`)}>{row.def.name}</a>
-                </th>
-                <td data-label="Croatia, national framework">
-                  <a href={url(`/countries/croatia/#sg-${row.def.id.toLowerCase()}`)}>
-                    <SafeguardScore result={row.nat?.result ?? 'NR'} verification={row.nat?.verification} compact />
-                  </a>
-                </td>
-                <td data-label="University of Zagreb">
-                  <a href={url(`/institutions/hr-unizg/#sg-${row.def.id.toLowerCase()}`)}>
-                    <SafeguardScore result={row.ins?.result ?? 'NR'} verification={row.ins?.verification} compact />
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <h3 class="ev-minor">How small this is</h3>
-      <ResearchLedger items={ledger} label="The scale of the evidence base" />
-
-      <div class="ev-bottomline">
-        <p class="ev-bottomline-label">Findings independently verified</p>
-        <p class="ev-bottomline-figure">{verifiedCount}</p>
-        <p class="ev-bottomline-note">
-          No human second reviewer has confirmed a single finding. Until that changes, everything here is a proposal
-          with its sources attached.
-        </p>
-      </div>
-
-      <p class="ev-absence">
-        {blankCountries} Member States have a record and no research. Nobody has opened their rules. That is a statement
-        about how far we have got, not about their students’ protection, and it is never evidence that a safeguard
-        is missing.
-      </p>
-
-      <ul class="ev-index" role="list">
-        <li>
-          <a href={url('/evidence/library/')}>Evidence Library</a>
-          <p>{libraryCount} background standards, laws and studies we read for context. Nothing in it sets a score.</p>
-        </li>
-        <li>
-          <a href={url('/data/')}>Open data</a>
-          <p>Every finding, source and rubric entry. The YAML in the repository is canonical. Our own text and data are CC BY 4.0; the documents we cite are not ours to license.</p>
-        </li>
-      </ul>
-    </div>
-  </section>
-
   {/* The limits, and the route to challenge any of it. */}
   <section class="ev-sec on-paper" aria-labelledby="limits">
     <div class="ev-wrap">
@@ -513,6 +541,18 @@ const libraryIds = getEvidence().map((e) => e.id).join(' ');
 
   <div hidden data-legacy-library={libraryIds} data-library-url={url('/evidence/library/')}></div>
   <script>
+    // Keep the schedule keyboard-scrollable only when it actually overflows.
+    // Without JavaScript the focusable region remains usable in Safari.
+    const scheduleRegion = document.querySelector<HTMLElement>('.ev-table-wrap');
+    if (scheduleRegion) {
+      const syncScheduleFocus = () => {
+        scheduleRegion.tabIndex = scheduleRegion.scrollWidth > scheduleRegion.clientWidth + 1 ? 0 : -1;
+      };
+      syncScheduleFocus();
+      window.addEventListener('resize', syncScheduleFocus);
+      document.fonts?.ready.then(syncScheduleFocus);
+    }
+
     // Compatibility: /evidence/ used to be the Evidence Library, so forward old item links (#<item-id>).
     // The fragment is only compared against the pre-rendered list of item ids, never used as markup or a selector.
     const holder = document.querySelector<HTMLElement>('[data-legacy-library]');

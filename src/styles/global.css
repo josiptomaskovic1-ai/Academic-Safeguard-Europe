@@ -196,6 +196,14 @@ body {
   font: 1.0625rem/1.6 var(--sans);
   text-rendering: optimizeLegibility;
 }
+/* Keep document and nested scrollers visible and usable across colour contexts. */
+* { scrollbar-color: var(--control) var(--ctx-bg); }
+*::-webkit-scrollbar { width: 12px; height: 8px; }
+*::-webkit-scrollbar-track { background: var(--ctx-bg); }
+*::-webkit-scrollbar-thumb { background: var(--control); border: 2px solid var(--ctx-bg); }
+*::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+*::-webkit-scrollbar-thumb:active { background: var(--accent-ink); }
+@media (forced-colors: active) { * { scrollbar-color: auto; } }
 img, svg { max-width: 100%; height: auto; }
 
 h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.2; color: var(--ink); text-wrap: balance; }
@@ -1548,26 +1556,17 @@ main.campaign { padding-block: 0; }
 }
 
 /* ---------- Evidence page ----------
-   Scoped to body.evidence. Like the About page, this one drops PageHero, the folio counter and the
-   shared .sec rhythm and runs on its own grid, so nothing here can reach another page.
-
-   The page's one idea: the document outranks our own voice. The quoted provision is the only thing
-   set above 2.5rem — larger than the h1 — and everything else is a hairline-ruled record. The
-   serif/sans split carries meaning rather than mood: serif is reserved for quoted text and for the
-   Standard's own words, sans for our voice (ledes, glosses, labels, links).
-
-   Colour comes only from the .on-navy / .on-paper / .on-signal contexts, which re-point --ink,
-   --rule, --line, --mark and --focus, so print and dark mode follow without a single extra rule.
-   Meaning is never carried by colour: every state is a word first (SafeguardScore, VerificationBadge,
-   "None", "Level 2 — not reached"), with a border style as the second channel.
+   An inspectable research dossier: a concise status and schedule first, followed by one
+   source-backed finding opened to its quotation, judgement and provenance. All styles stay
+   in the evidence namespace; the paper, mineral and ruled-record language is site-wide.
    --------------------------------- */
 .evidence {
   --ev-max: 76rem;
   --ev-gut: clamp(1.25rem, 4vw, 3.5rem);
-  --ev-sec: clamp(1.9rem, 3vw, 2.9rem);
-  --ev-quote: clamp(1.4rem, 2.6vw, 2rem);
-  --ev-h1: clamp(1.8rem, 3.3vw, 2.85rem);
-  --ev-h2: clamp(1.5rem, 2.7vw, 2.25rem);
+  --ev-sec: clamp(2.75rem, 5vw, 4.75rem);
+  --ev-quote: clamp(1.8rem, 3vw, 2.8rem);
+  --ev-h1: clamp(2.6rem, 5vw, 4.6rem);
+  --ev-h2: clamp(1.7rem, 3vw, 2.6rem);
   --ev-h3: clamp(1.125rem, 1.5vw, 1.35rem);
   --ev-lede: clamp(1.1rem, 1.7vw, 1.35rem);
   --ev-body: clamp(1.0625rem, 0.95rem + 0.3vw, 1.1875rem);
@@ -1582,18 +1581,26 @@ main.campaign { padding-block: 0; }
   padding-inline: var(--ev-gut);
 }
 .evidence .ev-sec { padding-block: var(--ev-sec); }
+.evidence .ev-sec.on-paper + .ev-sec.on-paper { border-top: 1px solid var(--rule); }
+.evidence :target { scroll-margin-top: 7.5rem; }
 
-.evidence h1 { margin: 0; font: 700 var(--ev-h1)/1.1 var(--serif); letter-spacing: -0.02em; text-wrap: balance; max-width: 22ch; }
+.evidence h1 { margin: 0; font: 650 var(--ev-h1)/1.03 var(--serif); letter-spacing: -0.035em; text-wrap: balance; max-width: 13ch; }
 .evidence h2 { margin: 0; font: 700 var(--ev-h2)/1.15 var(--serif); letter-spacing: -0.018em; text-wrap: balance; max-width: 26ch; }
 .evidence .ev-minor { margin: clamp(2rem, 3.5vw, 3rem) 0 0; font: 700 var(--ev-h3)/1.3 var(--sans); }
-.evidence .ev-lede { margin: 1.1rem 0 0; max-width: 54ch; font: 400 var(--ev-lede)/1.5 var(--serif); }
+.evidence .ev-lede { margin: clamp(1.25rem, 2.5vw, 2rem) 0 0; max-width: 57ch; font: 400 var(--ev-lede)/1.55 var(--sans); color: var(--ink-2); }
 .evidence .ev-intro { margin: 0.9rem 0 0; max-width: 62ch; font: 400 var(--ev-body)/1.6 var(--sans); color: var(--ink-2); }
 .evidence .ev-body { margin: 1rem 0 0; max-width: 58ch; font: 400 var(--ev-body)/1.6 var(--sans); color: var(--ink-2); }
 .evidence .ev-body strong { color: var(--ink); }
 .evidence .ev-sub { display: block; font: 400 0.8125rem/1.35 var(--sans); color: var(--ink-3); }
+.evidence .ev-section-tag {
+  margin: 0 0 1rem;
+  color: var(--mark);
+  font: 700 0.76rem/1.3 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
 
-/* The one small label style on the page. Sentence case: it names a field, it is not an eyebrow, and
-   it never sits above a heading. */
+/* Field labels name real record fields; section tags show a place in the research. */
 .evidence .ev-fieldlabel {
   display: block;
   margin: 0 0 0.35rem;
@@ -1620,26 +1627,72 @@ main.campaign { padding-block: 0; }
 .evidence .ev-link:hover, .evidence .ev-link:focus-visible { border-bottom-width: 4px; }
 .evidence .on-navy .ev-link, .evidence .ev-check .ev-link { color: var(--ink); }
 
+/* ---- fast entry: a real status, then direct access to the schedule ---- */
+.evidence .ev-hero { padding-block: clamp(1.2rem, 2vw, 1.8rem) clamp(2.5rem, 4vw, 3.75rem); }
+.evidence .ev-hero .breadcrumbs { margin: 0 0 clamp(2rem, 3.5vw, 3.5rem); }
+.evidence .ev-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: end;
+}
+@media (min-width: 60rem) {
+  .evidence .ev-hero-grid { grid-template-columns: minmax(0, 7fr) minmax(18rem, 3.7fr); }
+}
+.evidence .ev-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; margin-top: clamp(1.5rem, 2.7vw, 2.25rem); }
+.evidence .ev-actions .ev-link { min-height: 2.9rem; }
+.evidence .ev-status {
+  padding: clamp(1.35rem, 2.4vw, 2rem);
+  background: var(--surface-2);
+  border-top: 4px solid var(--signal);
+}
+.evidence .ev-status-title { margin: 0 0 1.15rem; font: 700 0.8rem/1.3 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; }
+.evidence .ev-status-main { display: flex; align-items: flex-end; gap: 1rem; margin: 0; padding-bottom: 1rem; border-bottom: 1px solid var(--rule-strong); }
+.evidence .ev-status-main strong { font: 600 clamp(3.8rem, 6vw, 5.5rem)/0.8 var(--serif); letter-spacing: -0.05em; font-variant-numeric: lining-nums tabular-nums; }
+.evidence .ev-status-main span { font: 650 1rem/1.4 var(--sans); }
+.evidence .ev-status dl { margin: 0; }
+.evidence .ev-status dl > div { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; padding-block: 0.75rem; border-bottom: 1px solid var(--rule); }
+.evidence .ev-status dt { font: 500 0.875rem/1.35 var(--sans); color: var(--ink-2); }
+.evidence .ev-status dd { margin: 0; white-space: nowrap; font: 700 1.1rem/1.1 var(--serif); font-variant-numeric: tabular-nums; }
+.evidence .ev-status-note { margin: 1rem 0 0; font: 400 0.875rem/1.5 var(--sans); color: var(--ink-2); }
+.evidence .ev-dateline { margin: clamp(2rem, 3vw, 3rem) 0 0; padding-top: 0.8rem; border-top: 1px solid var(--rule); font: 400 0.875rem/1.5 var(--sans); color: var(--ink-3); }
+
+/* A short, sticky contents strip keeps long-form evidence easy to navigate. */
+.evidence .ev-jump { position: sticky; top: 0; z-index: var(--z-raised); background: var(--surface); border-block: 1px solid var(--rule); }
+.evidence .ev-jump-inner { display: flex; align-items: center; gap: 1.25rem; }
+.evidence .ev-jump-h { flex: none; color: var(--ink-3); font: 700 0.75rem/1.2 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; }
+.evidence .ev-jump ul { display: flex; gap: 0 1.35rem; align-items: center; min-width: 0; margin: 0; padding: 0; list-style: none; overflow-x: auto; scrollbar-width: thin; }
+.evidence .ev-jump li { flex: none; margin: 0; }
+.evidence .ev-jump a { display: inline-flex; align-items: center; min-height: 3.35rem; border-bottom: 3px solid transparent; color: var(--ink-2); font: 650 0.875rem/1.2 var(--sans); text-decoration: none; white-space: nowrap; }
+.evidence .ev-jump a:hover, .evidence .ev-jump a:focus-visible { border-bottom-color: var(--signal); color: var(--ink); }
+
+.evidence .ev-overview { padding-top: clamp(2.5rem, 4.4vw, 4rem); }
+.evidence .ev-overview-head { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; align-items: flex-end; justify-content: space-between; }
+.evidence .ev-overview-head .ev-intro { max-width: 64ch; }
+.evidence .ev-coverage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem 2.5rem; align-items: end; margin-top: clamp(2rem, 4vw, 3rem); padding-top: 1rem; border-top: 3px solid var(--line); }
+@media (min-width: 70rem) { .evidence .ev-coverage { grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); } }
+.evidence .ev-coverage .ev-minor { margin: 0; }
+.evidence .ev-coverage .ev-body { margin-top: 0.65rem; }
+.evidence .ev-coverage .research-ledger { margin: 0; }
+
 /* ---- the exhibit ---- */
-.evidence .ev-exhibit { padding-block: clamp(0.85rem, 1.5vw, 1.35rem) clamp(2.5rem, 4.5vw, 4.25rem); }
-.evidence .ev-exhibit .breadcrumbs { margin: 0 0 clamp(1.35rem, 2.6vw, 2.25rem); }
-.evidence .ev-dateline { margin: 1.1rem 0 0; font: 400 0.9375rem/1.5 var(--sans); color: var(--ink-3); }
+.evidence .ev-exhibit { border-block: 1px solid var(--rule); }
+.evidence .ev-exhibit .ev-intro { max-width: 68ch; }
 
 .evidence .ev-mount {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem) clamp(2rem, 4vw, 4rem);
+  gap: clamp(1.5rem, 3vw, 2.5rem) clamp(1.75rem, 3.5vw, 3.5rem);
   margin-top: clamp(1.75rem, 3vw, 2.75rem);
-  padding-top: clamp(1.5rem, 2.6vw, 2.25rem);
-  border-top: 3px solid var(--signal);
+  align-items: start;
 }
-@media (min-width: 64rem) {
-  .evidence .ev-mount { grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); }
+@media (min-width: 58rem) {
+  .evidence .ev-mount { grid-template-columns: minmax(0, 7fr) minmax(15rem, 3fr); }
 }
 
-.evidence .ev-plate { margin: 0; }
+.evidence .ev-object { min-width: 0; padding: clamp(1.5rem, 3.5vw, 3.25rem); background: var(--surface); border-left: 4px solid var(--signal); }
+.evidence .ev-plate { margin: 0; border-top: 3px solid var(--line); }
 .evidence .ev-plate > div { padding-block: 0.7rem; border-bottom: 1px solid var(--rule); }
-.evidence .ev-plate > div:first-child { padding-top: 0; }
 .evidence .ev-plate dt { font: 700 0.8125rem/1.3 var(--sans); color: var(--ink-3); }
 .evidence .ev-plate dd { margin: 0.2rem 0 0; font: 400 1rem/1.45 var(--sans); }
 
@@ -1654,12 +1707,12 @@ main.campaign { padding-block: 0; }
 
 /* The one bold thing on the page. Weight 500, not 700: a statute is quoted, not shouted. */
 .evidence .ev-quote {
-  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  margin: clamp(1.75rem, 3vw, 2.5rem) 0 0;
   padding: 0;
   border: 0;
   font: 500 var(--ev-quote)/1.16 var(--serif);
   letter-spacing: -0.015em;
-  max-width: 26ch;
+  max-width: 31ch;
   hyphens: none;
   text-wrap: pretty;
 }
@@ -1806,6 +1859,9 @@ main.campaign { padding-block: 0; }
 .evidence .ev-table-wrap:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 .evidence .ev-schedule { width: 100%; border-collapse: collapse; font-family: var(--sans); }
 .evidence .ev-schedule th, .evidence .ev-schedule td { text-align: left; vertical-align: top; padding: 0.7rem 1rem 0.7rem 0; border-bottom: 1px solid var(--rule); }
+.evidence .ev-schedule tbody tr:hover,
+.evidence .ev-schedule tbody tr:focus-within { background: var(--surface-2); }
+.evidence .ev-schedule tbody th { padding-left: 0.45rem; }
 .evidence .ev-schedule thead th {
   border-bottom: 3px solid var(--line);
   font: 700 0.9375rem/1.3 var(--sans);
@@ -1825,40 +1881,10 @@ main.campaign { padding-block: 0; }
 }
 .evidence .ev-schedule a { text-decoration-thickness: 1px; }
 
-/* ---- the ledger and its bottom line ---- */
-.evidence .ev-bottomline {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 0.2rem 2rem;
-  align-items: start;
-  margin-top: 0;
-  padding-top: 1.1rem;
-  border-top: 6px solid var(--line);
-}
-@media (min-width: 46rem) {
-  .evidence .ev-bottomline { grid-template-columns: minmax(0, 1fr) auto; }
-  .evidence .ev-bottomline-note { grid-column: 1; }
-}
-.evidence .ev-bottomline-label { margin: 0; font: 700 var(--ev-h3)/1.3 var(--sans); }
-.evidence .ev-bottomline-figure {
-  margin: 0;
-  grid-row: 1;
-  font: 700 clamp(2.75rem, 7vw, 5rem)/0.95 var(--serif);
-  font-variant-numeric: lining-nums tabular-nums;
-  letter-spacing: -0.03em;
-  justify-self: start;
-}
-@media (min-width: 46rem) { .evidence .ev-bottomline-figure { grid-column: 2; grid-row: 1 / span 2; justify-self: end; } }
-.evidence .ev-bottomline-note { margin: 0.5rem 0 0; max-width: 52ch; font: 400 var(--ev-body)/1.6 var(--sans); color: var(--ink-2); }
-
-.evidence .ev-absence {
-  margin: clamp(2rem, 3.5vw, 3rem) 0 0;
-  max-width: 34rem;
-  font: 400 clamp(1.2rem, 2vw, 1.6rem)/1.4 var(--serif);
-}
-
-.evidence .ev-index { list-style: none; margin: clamp(2rem, 3.5vw, 3rem) 0 0; padding: 0; border-top: 3px solid var(--line); }
-.evidence .ev-index > li { padding-block: 0.9rem; border-bottom: 1px solid var(--rule); }
+/* ---- further records ---- */
+.evidence .ev-index { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem 2.5rem; list-style: none; margin: clamp(2rem, 3.5vw, 3rem) 0 0; padding: 0; }
+@media (min-width: 46rem) { .evidence .ev-index { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.evidence .ev-index > li { padding-block: 1rem; border-top: 3px solid var(--line); }
 .evidence .ev-index a { font: 650 1.25rem/1.3 var(--serif); }
 .evidence .ev-index p { margin: 0.25rem 0 0; max-width: 62ch; font: 400 0.9375rem/1.55 var(--sans); color: var(--ink-2); }
 
@@ -2169,49 +2195,6 @@ main.campaign { padding-block: 0; }
 .m-triad .m-ink { background: var(--signal); color: var(--signal-ink); }
 
 
-/* Jump bar: the page is long by design, so give a reader a way straight to the
-   schedule of findings instead of twelve phone-screens of apparatus. Plain links,
-   no script, and it prints as a list like any other. */
-.evidence .ev-jump {
-  margin-top: clamp(1.4rem, 2.6vw, 2rem);
-  padding-top: 0.9rem;
-  border-top: 1px solid var(--rule);
-}
-.evidence .ev-jump-h {
-  margin: 0 0 0.6rem;
-  font: 700 0.8125rem/1.3 var(--sans);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-.evidence .ev-jump ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem 0.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.evidence .ev-jump li { margin: 0; }
-.evidence .ev-jump a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0 0.8rem;
-  border: 1px solid var(--rule-strong);
-  color: var(--ink-2);
-  font: 600 0.9375rem/1 var(--sans);
-  text-decoration: none;
-}
-.evidence .ev-jump a:hover,
-.evidence .ev-jump a:focus-visible {
-  border-color: var(--ink);
-  background: var(--surface);
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-}
-
 /* The campaign mark sits on the brand ground in the footer, where a signal-green
    field is 1.46:1 against #1F4A45 and the speech-bubble shape disappears. */
 .on-brand .ss-mark { background: var(--bone); color: var(--navy); }
@@ -2230,7 +2213,7 @@ main.campaign { padding-block: 0; }
     color-scheme: light;
   }
   body, .on-navy, .on-signal { background: #fff !important; color: #000 !important; }
-  .site-header .nav, .nav-toggle, .skip-link, .actions, .filters, .breadcrumbs, .toc, .footer-links { display: none !important; }
+  .site-header .nav, .nav-toggle, .skip-link, .actions, .filters, .breadcrumbs, .toc, .footer-links, .ev-jump { display: none !important; }
   .doc-grid, .record-head { display: block; }
   body { font-size: 11pt; }
   a { color: inherit; }
